@@ -1,0 +1,12 @@
+{
+  "name": "@lvtd-games/site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev --host",
+    "build": "astro build"
+  },
+  "dependencies": {
+    "astro": "7.3.2"
+  }
+}

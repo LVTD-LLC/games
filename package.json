@@ -1,0 +1,21 @@
+{
+  "name": "lvtd-games",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "setup": "node scripts/packages.mjs install",
+    "build": "node scripts/packages.mjs build",
+    "dev": "npm run build && npm run preview",
+    "preview": "node scripts/serve.mjs",
+    "test": "node --test games/wordle/src/engine.test.mjs scripts/deploy-caprover.test.mjs",
+    "test:e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "prettier": "3.9.6",
+    "prettier-plugin-astro": "1.0.0"
+  }
+}
