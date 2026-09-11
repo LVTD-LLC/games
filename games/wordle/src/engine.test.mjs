@@ -45,9 +45,14 @@ test('saved rounds reject malformed, duplicate, and post-win guesses', () => {
   ]);
 });
 test('share text includes score and colours without revealing the answer', () => {
-  const text = shareText(['маска', 'слово'], 'слово', '2026-09-11');
+  const text = shareText(
+    ['маска', 'слово'],
+    'слово',
+    '2026-09-11',
+    'https://games.example.test/wordle/',
+  );
   assert.match(text, /2\/6/);
   assert.match(text, /🟩🟩🟩🟩🟩/);
   assert.ok(!text.includes('слово'));
-  assert.match(text, /https:\/\/games.lvtd.dev\/wordle\//);
+  assert.ok(text.endsWith('https://games.example.test/wordle/'));
 });
