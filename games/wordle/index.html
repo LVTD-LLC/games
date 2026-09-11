@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f7f7f0" />
+    <meta
+      name="description"
+      content="Русская версия Wordle: угадайте слово из пяти букв за шесть попыток. Слово дня и бесконечная практика."
+    />
+    <title>Пять букв — LVTD Games</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Все игры LVTD"
+        ><span class="mark">L<span>•</span></span> LVTD
+        <span class="muted">/ games</span></a
+      ><a class="back" href="/">← Все игры</a>
+    </header>
+    <main>
+      <div class="game-top">
+        <div class="eyebrow">СЛОВА И ЛОГИКА <span>№ 001</span></div>
+        <div class="title-row">
+          <h1>Пять букв<span>.</span></h1>
+          <div class="tools">
+            <button
+              id="stats"
+              class="icon-button"
+              aria-label="Статистика"
+              title="Статистика"
+            >
+              ▥</button
+            ><button
+              id="help"
+              class="icon-button"
+              aria-label="Как играть"
+              title="Как играть"
+            >
+              ?
+            </button>
+          </div>
+        </div>
+        <p class="subtitle">Маленькое слово. Хорошая разминка.</p>
+      </div>
+      <div class="modes" role="group" aria-label="Режим игры">
+        <button id="daily" aria-pressed="true">
+          Слово дня <span class="dot"></span></button
+        ><button id="practice" aria-pressed="false">
+          Практика <span>∞</span>
+        </button>
+      </div>
+      <div class="puzzle-meta">
+        <span id="puzzle-label"></span><span id="attempts">0 / 6 попыток</span>
+      </div>
+      <div
+        id="board"
+        class="board"
+        role="group"
+        aria-label="Поле: пять букв, шесть попыток"
+      ></div>
+      <p id="message" class="message" role="status" aria-live="polite">
+        Начните с любого слова из пяти букв
+      </p>
+      <div id="result" class="result" hidden>
+        <p id="result-text"></p>
+        <div class="result-actions">
+          <button id="share" class="primary">Поделиться ↗</button
+          ><button id="next" class="secondary">Ещё слово →</button>
+        </div>
+        <textarea
+          id="share-fallback"
+          aria-label="Результат для копирования"
+          readonly
+          hidden
+        ></textarea>
+      </div>
+      <div
+        id="keyboard"
+        class="keyboard"
+        role="group"
+        aria-label="Русская клавиатура"
+      ></div>
+      <div class="legend" aria-label="Значения цветов">
+        <span><i class="correct"></i>На месте</span
+        ><span><i class="present"></i>В другом месте</span
+        ><span><i class="absent"></i>Нет в слове</span>
+      </div>
+      <p class="footnote">
+        Е и Ё считаются одной буквой.
+        <span id="mode-note">Новое слово каждый день в 00:00 UTC.</span>
+      </p>
+      <button id="new-practice" class="text-button" hidden>
+        Начать другое слово ↻
+      </button>
+      <noscript
+        ><p>
+          Для игры нужен JavaScript. Включите его в настройках браузера.
+        </p></noscript
+      >
+    </main>
+    <footer>
+      <span>Пауза с пользой для ума.</span><a href="/">LVTD Games ↗</a>
+    </footer>
+    <dialog id="help-dialog" aria-labelledby="help-title">
+      <div class="dialog-top">
+        <span class="eyebrow">НЕБОЛЬШАЯ ПОДСКАЗКА</span
+        ><button class="close" aria-label="Закрыть">×</button>
+      </div>
+      <h2 id="help-title">Пять букв. Шесть шансов.</h2>
+      <p>
+        Угадайте русское существительное из пяти букв. После каждой попытки
+        цвета подскажут, куда двигаться.
+      </p>
+      <div class="example">
+        <b class="correct">С</b><b>Л</b><b class="present">О</b
+        ><b class="absent">В</b><b>О</b>
+      </div>
+      <ul>
+        <li><strong>Зелёный:</strong> буква на своём месте.</li>
+        <li><strong>Жёлтый:</strong> буква есть, но в другом месте.</li>
+        <li><strong>Серый:</strong> такой буквы больше нет в слове.</li>
+      </ul>
+      <p>
+        Повторяющиеся буквы учитываются по количеству: если в ответе одна О,
+        только одна О получит цвет.
+      </p>
+      <p>
+        <strong>Е = Ё.</strong> Можно вводить русской клавиатурой или кнопками
+        на экране. Латинские клавиши работают как русская раскладка.
+      </p>
+      <p>
+        Слово дня одинаково для всех и меняется в 00:00 UTC. В практике можно
+        играть сколько угодно. Прогресс и статистика сохраняются только в этом
+        браузере.
+      </p>
+      <a class="license" href="/wordle/dictionary-license.txt"
+        >Словарь Harrix/Russian-Nouns · MIT</a
+      >
+    </dialog>
+    <dialog id="stats-dialog" aria-labelledby="stats-title">
+      <div class="dialog-top">
+        <span class="eyebrow">СЛОВО ДНЯ</span
+        ><button class="close" aria-label="Закрыть">×</button>
+      </div>
+      <h2 id="stats-title">Ваша статистика</h2>
+      <div id="stats-content"></div>
+      <p class="footnote">
+        Только завершённые ежедневные игры в этом браузере. Практика не
+        учитывается.
+      </p>
+    </dialog>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
