@@ -86,6 +86,11 @@ test('practice has independent saves, loss reveal, sharing fallback and replay',
   await expect(
     page.getByRole('textbox', { name: 'Результат для копирования' }),
   ).not.toHaveValue(/СЛОВО|маска/);
+  expect(
+    await page
+      .getByRole('textbox', { name: 'Результат для копирования' })
+      .inputValue(),
+  ).toContain(new URL('/wordle/', page.url()).href);
   await page.getByRole('button', { name: /Ещё слово/ }).click();
   await expect(page.locator('#result')).toBeHidden();
   await expect(page.locator('#attempts')).toHaveText('0 / 6 попыток');

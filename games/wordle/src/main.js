@@ -277,7 +277,12 @@ document.querySelectorAll('dialog').forEach((dialog) => {
   });
 });
 $('share').onclick = async () => {
-  const text = shareText(guesses, answer, mode === 'daily' ? date : 'Практика');
+  const text = shareText(
+    guesses,
+    answer,
+    mode === 'daily' ? date : 'Практика',
+    new URL('/wordle/', window.location.origin).href,
+  );
   try {
     await navigator.clipboard.writeText(text);
     announce('Результат скопирован — можно отправлять друзьям');

@@ -51,7 +51,7 @@ export function restore(raw, answer, allowed) {
     return [];
   }
 }
-export function shareText(guesses, answer, label) {
+export function shareText(guesses, answer, label, gameUrl) {
   const squares = { correct: '🟩', present: '🟨', absent: '⬜' };
   return (
     `Пять букв · ${label}\n${guesses.includes(answer) ? guesses.length : 'X'}/6\n\n` +
@@ -62,6 +62,7 @@ export function shareText(guesses, answer, label) {
           .join(''),
       )
       .join('\n') +
-    '\n\nhttps://games.lvtd.dev/wordle/'
+    '\n\n' +
+    gameUrl
   );
 }
