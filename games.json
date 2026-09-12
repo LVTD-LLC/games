@@ -2,9 +2,11 @@
   {
     "slug": "wordle",
     "title": "Пять букв",
-    "description": "Одно слово. Шесть попыток. Маленькая разминка для большого ума.",
-    "category": "Слова и логика",
-    "duration": "3–5 минут",
-    "path": "games/wordle"
+    "description": "Guess the five-letter Russian word in six tries.",
+    "category": "Word games",
+    "duration": "3–5 minutes",
+    "path": "games/wordle",
+    "language": "ru",
+    "logo": "/logos/wordle.svg"
   }
 ]

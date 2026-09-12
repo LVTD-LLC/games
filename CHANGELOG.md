@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-12 — Purple game catalogue
+
+- Switched the Astro catalogue and not-found page to English while keeping Пять букв and its gameplay in Russian.
+- Replaced the marketing layout with a purple, logo-led game list; removed eyebrows, small notes, metadata badges, and placeholder cards.
+- Added registry-driven game logos and a matching purple site icon.
+- Added repository, design, technical, and Wordle steering docs; simplified the README to the collection and released-games table.
+
 ## 2026-09-11 — Share-link hosting fix
 
 - Shared results now link to the current game origin, so links work on the CapRover hostname before custom-domain DNS is available and automatically use the custom hostname once accessed there.
