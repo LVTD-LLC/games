@@ -2,7 +2,8 @@ import { getTrack, projectOnTrack } from './tracks.mjs';
 import { getScenery } from './scenery.mjs';
 import { solveContacts, contact } from './collisions.mjs';
 export { TRACKS, getTrack } from './tracks.mjs';
-export const COLORS = ['#e87351', '#6c91b6', '#80a080', '#d9b14d', '#a68ac4'];
+import { COLORS, carTypeFrom } from './vehicles.mjs';
+export { COLORS } from './vehicles.mjs';
 export const MAX_SPEED = 25,
   MAX_CARS = 12,
   MAX_LAPS = 5,
@@ -25,6 +26,8 @@ export function settingsFrom(value) {
       : 3,
     color,
     color2,
+    model: carTypeFrom(value?.model),
+    model2: carTypeFrom(value?.model2),
     map: getTrack(value?.map).id,
     assist: value?.assist !== false,
     difficulty: value?.difficulty === 'real' ? 'real' : 'easy',

@@ -917,3 +917,60 @@ select:focus-visible {
     top: calc(50% + 66px);
   }
 }
+
+/* Twelve paints and picture-based body choices fit without shrinking touch targets. */
+.type-options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+  margin: 0 0 13px;
+}
+.type-options button {
+  border: 1px solid #d7decd;
+  background: #edf0e3;
+  border-radius: 12px;
+  padding: 7px 5px 9px;
+  min-height: 70px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.type-options button[aria-pressed='true'] {
+  border-color: #365e50;
+  box-shadow: 0 0 0 1px #365e50;
+  background: #e0e8d8;
+}
+.type-options svg {
+  display: block;
+  width: 100%;
+  max-width: 86px;
+  height: 37px;
+  margin: 0 auto 4px;
+  fill: var(--player-one);
+}
+#models-two svg {
+  fill: var(--player-two);
+}
+.types-note {
+  font-size: 10px;
+  color: #647466;
+  margin: -3px 0 12px;
+}
+.color-options {
+  display: grid;
+  grid-template-columns: repeat(6, 44px);
+  justify-content: space-between;
+  gap: 10px 6px;
+}
+.color-options button {
+  width: 44px;
+  height: 44px;
+}
+.color-options button[aria-pressed='true']:after {
+  color: var(--swatch-ink, white);
+  text-shadow: none;
+}
+@media (max-width: 370px) {
+  .color-options {
+    grid-template-columns: repeat(4, 44px);
+  }
+}

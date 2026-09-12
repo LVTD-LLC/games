@@ -75,7 +75,7 @@ Both are graphics APIs; actual hardware acceleration depends on the browser/devi
 If neither initializes, the page explains recovery and keeps the catalogue link.
 Renderer selection is available for diagnostics as `#world.dataset.renderer`, not in
 the child's interface. No remote models, fonts, textures or runtime services are used.
-The standalone renderer bundle is approximately 235 KB gzipped; it is never loaded
+The standalone renderer bundle is approximately 236 KB gzipped; it is never loaded
 by the catalogue or Wordle.
 
 The simulation in `games/city-racers/src/race.mjs` is independent of rendering.
@@ -114,8 +114,19 @@ Escape pauses/resumes. Focus or visibility loss pauses and clears held input for
 players. Physical `KeyboardEvent.code` WASD works regardless of text layout (including
 Russian). Each player has a color, lap counter, HUD and simultaneous-input touch pad.
 Human colors stay distinct and AI body colors cycle through the remaining palette.
-The optional saved fields include `players`, `map`, `color2`, `assist`, `difficulty`
-and `laps` under the existing namespaced storage key.
+The optional saved fields include `players`, `map`, `color2`, `model`, `model2`, `assist`,
+`difficulty` and `laps` under the existing namespaced storage key.
+
+`vehicles.mjs` defines twelve named paints and three appearance-only body IDs:
+Racer (the original), Rally (a tall hatchback) and Pickup (an open cargo bed).
+Both human drivers can select a body independently; AI traffic cycles through the
+styles. Old or invalid body settings default to Racer. `car-model.js` builds one
+shared chassis/wheel set per car, with cached switchable upper-body groups and a
+shared paint material. Changing paint/body never rebuilds geometry or changes the
+simulation. All variants stay inside the same bumper/wheel footprint and have
+identical acceleration, braking, grip, speed limit and collision response.
+Garage picture buttons and wrapping paint grids retain 44 px touch targets on
+320 px screens; light swatches use dark selection marks.
 
 A locally drawn CanvasTexture billboard advertises Rowset on both maps; it makes no
 remote request and does not navigate away from the child's game. Free-driving chase

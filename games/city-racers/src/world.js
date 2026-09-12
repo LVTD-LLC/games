@@ -3,6 +3,8 @@ import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { COLORS, MAX_CARS, getTrack } from './race.mjs';
 import { getScenery } from './scenery.mjs';
 import { START } from './race.mjs';
+import { CAR_TYPES } from './vehicles.mjs';
+import { makeCar, setCarType } from './car-model.js';
 
 const UP = new THREE.Vector3(0, 1, 0);
 
@@ -275,76 +277,10 @@ export async function createWorld(container, settings) {
     for (const [map, group] of environments) group.visible = map === id;
   }
 
-  function makeCar(color) {
-    const car = new THREE.Group();
-    const body = new THREE.MeshLambertMaterial({ color });
-    function part(w, h, d, x, y, z, mat) {
-      const mesh = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
-      mesh.position.set(x, y, z);
-      car.add(mesh);
-      return mesh;
-    }
-    part(2.1, 0.5, 4.2, 0, 0.72, 0, body);
-    part(1.95, 0.16, 3.95, 0, 1.02, 0, body);
-    const cabinShape = new THREE.Shape();
-    cabinShape.moveTo(-1.15, 1.08);
-    cabinShape.lineTo(-0.8, 1.58);
-    cabinShape.lineTo(0.2, 1.58);
-    cabinShape.lineTo(0.95, 1.08);
-    cabinShape.closePath();
-    const cabinGeometry = new THREE.ExtrudeGeometry(cabinShape, {
-      depth: 1.65,
-      bevelEnabled: false,
-    });
-    cabinGeometry.rotateY(-Math.PI / 2);
-    cabinGeometry.translate(0.825, 0, 0);
-    car.add(new THREE.Mesh(cabinGeometry, material('#536d78')));
-    part(1.72, 0.1, 1.06, 0, 1.61, -0.3, body);
-    part(1.82, 0.13, 0.35, 0, 1.35, -1.82, body);
-    for (const x of [-0.65, 0.65])
-      part(0.12, 0.28, 0.14, x, 1.17, -1.82, material('#354346'));
-    part(0.25, 0.025, 0.95, 0, 1.115, 1.47, material('#f5ebd3'));
-    for (const x of [-0.72, 0.72]) {
-      part(0.42, 0.2, 0.08, x, 0.86, 2.13, material('#fff0bf'));
-      part(0.42, 0.17, 0.08, x, 0.85, -2.13, material('#ac5948'));
-    }
-    for (const x of [-1.04, 1.04])
-      for (const z of [-1.25, 1.25]) {
-        const wheel = new THREE.Mesh(
-          new THREE.CylinderGeometry(0.47, 0.47, 0.3, 12),
-          material('#354346'),
-        );
-        wheel.rotation.z = Math.PI / 2;
-        wheel.position.set(x, 0.5, z);
-        car.add(wheel);
-        const hub = new THREE.Mesh(
-          new THREE.CylinderGeometry(0.22, 0.22, 0.32, 12),
-          material('#d7d9d0'),
-        );
-        hub.rotation.z = Math.PI / 2;
-        hub.position.copy(wheel.position);
-        car.add(hub);
-      }
-    const shadow = new THREE.Mesh(
-      new THREE.CircleGeometry(1, 24),
-      new THREE.MeshBasicMaterial({
-        color: '#394e48',
-        transparent: true,
-        opacity: 0.18,
-        depthWrite: false,
-      }),
-    );
-    shadow.rotation.x = -Math.PI / 2;
-    shadow.scale.set(1.5, 2.65, 1);
-    shadow.position.y = 0.17;
-    car.add(shadow);
-    car.userData.body = body;
-    scene.add(car);
-    return car;
-  }
   const cars = Array.from({ length: MAX_CARS }, (_, i) =>
-    makeCar(COLORS[i % COLORS.length]),
+    makeCar(COLORS[i % COLORS.length], material),
   );
+  cars.forEach((car) => scene.add(car));
   const looks = [new THREE.Vector3(), new THREE.Vector3()];
   const desired = new THREE.Vector3(),
     target = new THREE.Vector3();
@@ -391,7 +327,7 @@ export async function createWorld(container, settings) {
   }
   function draw(race, settings, dt, garage) {
     const still = garage || ['paused', 'finished'].includes(race.phase);
-    const signature = `${race.phase}:${settings.count}:${settings.color}:${settings.color2}:${settings.players}:${settings.map}`;
+    const signature = `${race.phase}:${settings.count}:${settings.color}:${settings.color2}:${settings.players}:${settings.map}:${settings.model}:${settings.model2}`;
     if (still && lastStillFrame === signature) return;
     lastStillFrame = still ? signature : null;
     if (activeMap !== race.map) {
@@ -417,8 +353,16 @@ export async function createWorld(container, settings) {
       ),
     ];
     cars.forEach((car, i) => {
-      car.visible = i < racers.length;
+      car.visible = i < racers.length && (!garage || i < settings.players);
       if (car.visible) {
+        setCarType(
+          car,
+          i < settings.players
+            ? i
+              ? settings.model2
+              : settings.model
+            : CAR_TYPES[(i - settings.players) % CAR_TYPES.length].id,
+        );
         car.userData.body.color.set(
           i < settings.players
             ? colors[i]
@@ -446,7 +390,7 @@ export async function createWorld(container, settings) {
         camera.setViewOffset(
           width,
           height,
-          -Math.round(width * 0.16),
+          -Math.round(width * 0.23),
           0,
           width,
           height,
@@ -454,8 +398,14 @@ export async function createWorld(container, settings) {
       else camera.clearViewOffset();
       camera.updateProjectionMatrix();
       if (garage) {
-        desired.set(p.x + 15, 11, p.z - 17);
-        target.set(p.x, 1, p.z + (innerWidth > 760 ? -5 : 0));
+        const centerX =
+          race.drivers.reduce((sum, car) => sum + car.x, 0) /
+          race.drivers.length;
+        const centerZ =
+          race.drivers.reduce((sum, car) => sum + car.z, 0) /
+          race.drivers.length;
+        desired.set(centerX + 11, 8, centerZ - 12);
+        target.set(centerX, 1, centerZ + (innerWidth > 760 ? -2 : 0));
       } else {
         desired.set(p.x - p.tx * 15, 10, p.z - p.tz * 15);
         const ahead = track.point(

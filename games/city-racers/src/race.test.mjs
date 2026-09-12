@@ -24,6 +24,8 @@ test('settings recover from corrupt or missing storage and bound the number of c
       count: 3,
       color: COLORS[0],
       color2: COLORS[1],
+      model: 'racer',
+      model2: 'racer',
       players: 1,
       map: 'park',
       assist: true,
@@ -128,6 +130,8 @@ test('old saves migrate and two drivers always fit in the total car count with d
     count: 4,
     color: COLORS[2],
     color2: COLORS[0],
+    model: 'racer',
+    model2: 'racer',
     players: 1,
     map: 'park',
     assist: true,
@@ -455,4 +459,92 @@ test('the fountain rim collider follows the visible circular edge on both maps',
     );
     assert.ok(Math.abs(car.speed) < 0.01);
   }
+});
+
+import { CAR_TYPES, PAINTS } from './vehicles.mjs';
+import { makeCar, setCarType } from './car-model.js';
+import { Box3, MeshLambertMaterial } from 'three/webgpu';
+test('body choices and all paints migrate safely without altering assisted or free-driving physics', () => {
+  for (const paint of PAINTS)
+    assert.equal(settingsFrom({ color: paint.color }).color, paint.color);
+  for (const value of [null, {}, 'missing', '__proto__'])
+    assert.equal(settingsFrom({ model: value, model2: value }).model, 'racer');
+  assert.equal(
+    settingsFrom({ model: 'pickup', model2: 'rally' }).model2,
+    'rally',
+  );
+  for (const assist of [true, false]) {
+    const results = CAR_TYPES.map((type) => {
+      const race = createRace({
+        players: 2,
+        count: 12,
+        assist,
+        model: type.id,
+        model2: type.id,
+      });
+      race.phase = 'racing';
+      advance(
+        race,
+        [
+          { accelerate: true, right: true },
+          { accelerate: true, left: true },
+        ],
+        8,
+      );
+      return race;
+    });
+    for (const race of results.slice(1)) assert.deepEqual(race, results[0]);
+  }
+});
+test('all three rendered bodies retain the bumper footprint and switching reuses geometry', () => {
+  const materials = new Map();
+  const material = (color) => {
+    if (!materials.has(color))
+      materials.set(color, new MeshLambertMaterial({ color }));
+    return materials.get(color);
+  };
+  const car = makeCar(COLORS[0], material),
+    geometries = new Set();
+  car.traverse((node) => {
+    if (node.geometry) geometries.add(node.geometry);
+  });
+  const profiles = [];
+  for (const { id } of CAR_TYPES) {
+    setCarType(car, id);
+    car.updateMatrixWorld(true);
+    const bounds = new Box3();
+    car.traverseVisible((node) => {
+      if (node.geometry && !node.userData.groundShadow) {
+        node.geometry.computeBoundingBox();
+        bounds.union(
+          node.geometry.boundingBox.clone().applyMatrix4(node.matrixWorld),
+        );
+      }
+    });
+    assert.ok(bounds.min.x >= -1.201 && bounds.max.x <= 1.201);
+    assert.ok(bounds.min.z >= -2.171 && bounds.max.z <= 2.171);
+    assert.ok(bounds.min.z <= -2.16 && bounds.max.z >= 2.16);
+    assert.equal(
+      Object.values(car.userData.variants).filter((group) => group.visible)
+        .length,
+      1,
+    );
+    assert.ok(car.userData.variants[id].visible);
+    profiles.push(bounds.max.y);
+  }
+  assert.ok(
+    profiles[1] > profiles[0] + 0.25 && profiles[2] > profiles[0] + 0.2,
+  );
+  for (let i = 0; i < 30; i++) {
+    setCarType(car, CAR_TYPES[i % 3].id);
+    car.userData.body.color.set(COLORS[i % COLORS.length]);
+  }
+  const after = new Set();
+  car.traverse((node) => {
+    if (node.geometry) after.add(node.geometry);
+  });
+  assert.deepEqual(after, geometries);
+  for (const geometry of geometries) geometry.dispose();
+  for (const mat of materials.values()) mat.dispose();
+  car.userData.body.dispose();
 });

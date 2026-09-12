@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-12 — More paints and car styles
+
+- Expanded the paint palette from five to twelve colors, preserving saved favorites and adding clear selection marks on light paints.
+- Added Rally and Pickup body styles alongside the original Racer, with independent picture-based choices for both players and mixed-style AI traffic.
+- Kept all styles on the same chassis, collision footprint and driving physics; body/color choices persist safely across reloads and solo/two-player changes.
+- Added appearance/physics parity, model footprint, geometry reuse and narrow-screen garage regression checks.
+
 ## 2026-09-12 — Race rules and solid bumpers
 
 - Increased the field to 12 cars and added 1–5 laps plus independent Easy / Real opponent and auto-assist settings, preserving beginner defaults.

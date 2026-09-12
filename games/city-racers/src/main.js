@@ -1,6 +1,5 @@
 import './style.css';
 import {
-  COLORS,
   MAX_CARS,
   recoverDriver,
   createRace,
@@ -10,6 +9,7 @@ import {
 } from './race.mjs';
 import { KEY_ACTIONS, readInputs } from './input.mjs';
 import { createWorld } from './world.js';
+import { PAINTS, CAR_TYPES } from './vehicles.mjs';
 const $ = (id) => document.getElementById(id);
 const STORAGE = 'lvtd-city-racers-v1:settings';
 let saved;
@@ -26,7 +26,6 @@ let resumePhase = 'racing',
   lastCount = '';
 const keys = new Set(),
   pointers = new Map();
-const colorNames = ['Coral', 'Blue', 'Green', 'Yellow', 'Purple'];
 
 // Both touch pads use the same pointer pipeline, including simultaneous holds.
 const secondPad = $('touch-controls').cloneNode(true);
@@ -75,7 +74,7 @@ function updateSettings() {
   $('duo').setAttribute('aria-pressed', String(settings.players === 2));
   $('player-two-color').hidden = settings.players !== 2;
   $('color-label').textContent =
-    settings.players === 2 ? 'Player 1 · Arrow keys' : 'Pick your color';
+    settings.players === 2 ? 'Player 1 · Arrow keys' : 'Choose your car';
   $('count-note').textContent =
     settings.players === 2 ? 'including both drivers' : 'including you';
   $('players-help').textContent =
@@ -109,6 +108,15 @@ function updateSettings() {
     );
     button.disabled = second && button.dataset.color === settings.color;
   });
+  document.querySelectorAll('[data-model]').forEach((button) => {
+    button.setAttribute(
+      'aria-pressed',
+      String(
+        button.dataset.model ===
+          settings[button.dataset.player === '1' ? 'model2' : 'model'],
+      ),
+    );
+  });
   $('game').style.setProperty('--player-one', settings.color);
   $('game').style.setProperty('--player-two', settings.color2);
   race = createRace(settings);
@@ -123,21 +131,36 @@ function updateSettings() {
   }
 }
 for (const player of [0, 1])
-  COLORS.forEach((color, i) => {
+  PAINTS.forEach(({ color, name, ink }) => {
     const button = document.createElement('button');
     button.dataset.color = color;
     button.dataset.player = String(player);
     button.style.backgroundColor = color;
-    button.setAttribute(
-      'aria-label',
-      `${player ? 'Player 2 ' : ''}${colorNames[i]}`,
-    );
+    button.style.setProperty('--swatch-ink', ink || '#fff');
+    button.title = name;
+    button.setAttribute('aria-label', `${player ? 'Player 2 ' : ''}${name}`);
     button.addEventListener('click', () => {
       settings[player ? 'color2' : 'color'] = color;
       updateSettings();
     });
     $(player ? 'colors-two' : 'colors').append(button);
   });
+for (const player of [0, 1])
+  for (const type of CAR_TYPES) {
+    const button = document.createElement('button');
+    button.dataset.model = type.id;
+    button.dataset.player = String(player);
+    button.setAttribute(
+      'aria-label',
+      `${player ? 'Player 2 ' : ''}${type.name}`,
+    );
+    button.innerHTML = `<svg viewBox="0 0 88 42" aria-hidden="true"><path d="${type.silhouette}" stroke="#536d68" stroke-width="1.5" stroke-linejoin="round"/><circle cx="23" cy="30" r="7" fill="#354346"/><circle cx="65" cy="30" r="7" fill="#354346"/><circle cx="23" cy="30" r="3" fill="#d7d9d0"/><circle cx="65" cy="30" r="3" fill="#d7d9d0"/></svg><span>${type.name}</span>`;
+    button.addEventListener('click', () => {
+      settings[player ? 'model2' : 'model'] = type.id;
+      updateSettings();
+    });
+    $(player ? 'models-two' : 'models').append(button);
+  }
 $('solo').addEventListener('click', () => {
   settings.players = 1;
   updateSettings();

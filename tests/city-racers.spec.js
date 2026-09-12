@@ -446,3 +446,79 @@ test('a two-lap race shows the second lap before celebrating and replay resets t
     '0',
   );
 });
+
+test('expanded paints and independent car bodies persist and remain usable on a narrow screen', async ({
+  page,
+}) => {
+  const errors = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await page.goto('/city-racers/');
+  await expect(page.locator('#start')).toBeEnabled({ timeout: 30000 });
+  await expect(page.locator('#colors button')).toHaveCount(12);
+  await page.getByRole('button', { name: 'Pickup', exact: true }).click();
+  await page.getByRole('button', { name: 'White', exact: true }).click();
+  await page.locator('#duo').click();
+  await page
+    .getByRole('button', { name: 'Player 2 Rally', exact: true })
+    .click();
+  await page
+    .getByRole('button', { name: 'Player 2 Teal', exact: true })
+    .click();
+  await expect(
+    page.getByRole('button', { name: 'Player 2 White', exact: true }),
+  ).toBeDisabled();
+  await page.reload();
+  await expect(page.locator('#start')).toBeEnabled({ timeout: 30000 });
+  for (const name of ['Pickup', 'White', 'Player 2 Rally', 'Player 2 Teal'])
+    await expect(
+      page.getByRole('button', { name, exact: true }),
+    ).toHaveAttribute('aria-pressed', 'true');
+  await page.setViewportSize({ width: 320, height: 740 });
+  for (const name of [
+    'Racer',
+    'Pickup',
+    'Sky',
+    'Player 2 Rally',
+    'Player 2 Graphite',
+  ]) {
+    const button = page.getByRole('button', { name, exact: true });
+    await button.scrollIntoViewIfNeeded();
+    await expect(button).toBeInViewport({ ratio: 1 });
+    const size = await button.boundingBox();
+    expect(size.width).toBeGreaterThanOrEqual(44);
+    expect(size.height).toBeGreaterThanOrEqual(44);
+  }
+  expect(
+    await page.evaluate(() => document.documentElement.scrollWidth),
+  ).toBeLessThanOrEqual(320);
+  await page.locator('#start').click();
+  await expect(page.locator('#game')).toHaveAttribute('data-phase', 'racing', {
+    timeout: 20000,
+  });
+  await page.keyboard.down('ArrowUp');
+  await page.keyboard.down('w');
+  await expect
+    .poll(async () => Number(await page.locator('#speed').textContent()), {
+      timeout: 12000,
+    })
+    .toBeGreaterThan(70);
+  await expect
+    .poll(async () => Number(await page.locator('#speed-two').textContent()), {
+      timeout: 12000,
+    })
+    .toBeGreaterThan(70);
+  await page.keyboard.up('ArrowUp');
+  await page.keyboard.up('w');
+  await page.keyboard.press('Escape');
+  await page.locator('#garage-button').click();
+  await page.locator('#solo').click();
+  await expect(
+    page.getByRole('button', { name: 'Pickup', exact: true }),
+  ).toHaveAttribute('aria-pressed', 'true');
+  await page.getByRole('button', { name: 'Racer', exact: true }).click();
+  await page.getByRole('button', { name: 'Pink', exact: true }).click();
+  await expect(
+    page.getByRole('button', { name: 'Racer', exact: true }),
+  ).toHaveAttribute('aria-pressed', 'true');
+  expect(errors).toEqual([]);
+});
