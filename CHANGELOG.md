@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-12 — Two-driver city adventures
+
+- Added optional local two-player racing: arrow keys for Player 1, physical WASD keys for Player 2, separate colors and stacked third-person views.
+- Added the longer City adventure route with left/right turns and multiple city blocks; kept the original Park loop selectable in either player mode.
+- Counted both human drivers toward the 2–6 car setting, added two touch pads and per-driver progress, and let each player finish at their own pace before replay.
+- Preserved old garage settings and added regression checks for independent controls, both maps, first-finisher waiting, pause, mode changes and simultaneous touch cancellation.
+
 ## 2026-09-12 — Little City Racers
 
 - Added a standalone, low-poly 3D city racing game at `/city-racers/`, with WebGPU-first rendering and automatic WebGL 2 fallback.

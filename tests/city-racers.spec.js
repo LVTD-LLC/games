@@ -49,7 +49,11 @@ test('catalogue, garage customization, saved settings and narrow layout', async 
       () => document.documentElement.scrollWidth <= innerWidth,
     ),
   ).toBe(true);
+  await page.locator('#start').scrollIntoViewIfNeeded();
   await expect(page.locator('#start')).toBeInViewport();
+  await page
+    .getByRole('button', { name: 'Purple', exact: true })
+    .scrollIntoViewIfNeeded();
   await expect(
     page.getByRole('button', { name: 'Purple', exact: true }),
   ).toBeInViewport({ ratio: 1 });
@@ -79,7 +83,9 @@ test('arrow controls, brake, focus-loss pause and replay setup', async ({
     .poll(
       async () =>
         Number(
-          await page.locator('.progress-track').getAttribute('aria-valuenow'),
+          await page
+            .locator('#hud .progress-track')
+            .getAttribute('aria-valuenow'),
         ),
       { timeout: 15000 },
     )
@@ -166,7 +172,7 @@ test('a full lap with the steering held down finishes and can be replayed', asyn
   });
   await page.keyboard.up('ArrowUp');
   await page.keyboard.up('ArrowLeft');
-  await expect(page.locator('.progress-track')).toHaveAttribute(
+  await expect(page.locator('#hud .progress-track')).toHaveAttribute(
     'aria-valuenow',
     '100',
   );
@@ -176,9 +182,180 @@ test('a full lap with the steering held down finishes and can be replayed', asyn
     'countdown',
   );
   await expect(page.locator('#speed')).toHaveText('0');
-  await expect(page.locator('.progress-track')).toHaveAttribute(
+  await expect(page.locator('#hud .progress-track')).toHaveAttribute(
     'aria-valuenow',
     '0',
   );
   expect(errors).toEqual([]);
+});
+
+test('two-player setup persists and independent WASD/arrow controls survive pause and mode changes', async ({
+  page,
+}) => {
+  await page.goto('/city-racers/');
+  await expect(page.locator('#start')).toBeEnabled({ timeout: 30000 });
+  await page.getByRole('button', { name: 'Two players', exact: true }).click();
+  await page.locator('#map').selectOption('city');
+  await page
+    .getByRole('button', { name: 'Player 2 Yellow', exact: true })
+    .click();
+  await page.getByRole('button', { name: 'Fewer cars' }).click();
+  await expect(page.locator('#car-count')).toHaveText('2');
+  await expect(page.getByRole('button', { name: 'Fewer cars' })).toBeDisabled();
+  await expect(
+    page.getByRole('button', { name: 'Player 2 Coral', exact: true }),
+  ).toBeDisabled();
+  await page.reload();
+  await expect(page.locator('#start')).toBeEnabled({ timeout: 30000 });
+  await expect(
+    page.getByRole('button', { name: 'Two players', exact: true }),
+  ).toHaveAttribute('aria-pressed', 'true');
+  await expect(
+    page.getByRole('button', { name: 'Player 2 Yellow', exact: true }),
+  ).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('#map')).toHaveValue('city');
+  await page.locator('#start').click();
+  await expect(page.locator('#world')).toHaveAttribute('data-views', '2');
+  await expect(page.locator('#game')).toHaveAttribute('data-phase', 'racing', {
+    timeout: 20000,
+  });
+  // The physical W key still works if its character is Cyrillic on this keyboard.
+  await page.evaluate(() =>
+    window.dispatchEvent(
+      new KeyboardEvent('keydown', { code: 'KeyW', key: 'ц', bubbles: true }),
+    ),
+  );
+  await expect
+    .poll(async () => Number(await page.locator('#speed-two').textContent()), {
+      timeout: 15000,
+    })
+    .toBeGreaterThan(15);
+  await expect(page.locator('#speed')).toHaveText('0');
+  await page.keyboard.down('ArrowUp');
+  await page.keyboard.down('s');
+  await expect(page.locator('#speed-two')).toHaveText('0', { timeout: 10000 });
+  await expect
+    .poll(async () => Number(await page.locator('#speed').textContent()))
+    .toBeGreaterThan(15);
+  await page.evaluate(() => window.dispatchEvent(new Event('blur')));
+  await expect(page.getByRole('dialog')).toBeVisible();
+  const progress = await page.locator('#progress').getAttribute('style');
+  const progress2 = await page.locator('#progress-two').getAttribute('style');
+  await page.waitForTimeout(350);
+  await expect(page.locator('#progress')).toHaveAttribute('style', progress);
+  await expect(page.locator('#progress-two')).toHaveAttribute(
+    'style',
+    progress2,
+  );
+  await page.keyboard.up('ArrowUp');
+  await page.keyboard.up('s');
+  await page.getByRole('button', { name: 'Keep driving' }).click();
+  await expect(page.locator('#speed')).toHaveText('0', { timeout: 15000 });
+  await expect(page.locator('#speed-two')).toHaveText('0');
+  await page.keyboard.press('Escape');
+  await page.locator('#garage-button').click();
+  await page.getByRole('button', { name: 'One player', exact: true }).click();
+  await page.locator('#map').selectOption('park');
+  await page.locator('#start').click();
+  await expect(page.locator('#world')).toHaveAttribute('data-views', '1');
+  await expect(page.locator('#hud-two')).toBeHidden();
+});
+
+test('both drivers complete the longer city route, with the first finisher waiting for the second', async ({
+  page,
+}) => {
+  test.setTimeout(180000);
+  const errors = [];
+  page.on('pageerror', (error) => errors.push(error.message));
+  await page.goto('/city-racers/');
+  await expect(page.locator('#start')).toBeEnabled({ timeout: 30000 });
+  await page.getByRole('button', { name: 'Two players', exact: true }).click();
+  await page.locator('#map').selectOption('city');
+  await page.locator('#start').click();
+  await page.keyboard.down('ArrowUp');
+  await page.keyboard.down('ArrowRight');
+  await expect
+    .poll(
+      async () =>
+        Number(
+          await page
+            .locator('#progress')
+            .locator('..')
+            .getAttribute('aria-valuenow'),
+        ),
+      { timeout: 25000 },
+    )
+    .toBeGreaterThan(7);
+  await page.keyboard.down('w');
+  await page.keyboard.down('a');
+  await expect(page.locator('#drive-hint')).toHaveText(
+    'Finished! Cheer on Player 2.',
+    { timeout: 110000 },
+  );
+  await expect(page.locator('#game')).toHaveAttribute('data-phase', 'racing');
+  await expect(page.getByRole('dialog')).toBeHidden();
+  await expect(page.getByRole('dialog')).toContainText('Both drivers made it', {
+    timeout: 40000,
+  });
+  for (const key of ['ArrowUp', 'ArrowRight', 'w', 'a'])
+    await page.keyboard.up(key);
+  await page.getByRole('button', { name: 'Race again' }).click();
+  await expect(page.locator('#game')).toHaveAttribute(
+    'data-phase',
+    'countdown',
+  );
+  await expect(page.locator('#speed')).toHaveText('0');
+  await expect(page.locator('#speed-two')).toHaveText('0');
+  await expect(page.locator('#progress-two').locator('..')).toHaveAttribute(
+    'aria-valuenow',
+    '0',
+  );
+  expect(errors).toEqual([]);
+});
+
+test('both on-screen accelerator pads accept simultaneous touches and cancel cleanly', async ({
+  page,
+}) => {
+  await page.goto('/city-racers/');
+  await expect(page.locator('#start')).toBeEnabled({ timeout: 30000 });
+  await page.getByRole('button', { name: 'Two players', exact: true }).click();
+  await page.locator('#start').click();
+  await expect(page.locator('#game')).toHaveAttribute('data-phase', 'racing', {
+    timeout: 20000,
+  });
+  const pads = [
+    page.getByRole('button', { name: 'Accelerate', exact: true }),
+    page.getByRole('button', { name: 'Player 2 accelerate', exact: true }),
+  ];
+  const points = [];
+  for (let i = 0; i < pads.length; i++) {
+    const box = await pads[i].boundingBox();
+    points.push({
+      id: i + 1,
+      x: box.x + box.width / 2,
+      y: box.y + box.height / 2,
+    });
+  }
+  const cdp = await page.context().newCDPSession(page);
+  await cdp.send('Emulation.setTouchEmulationEnabled', {
+    enabled: true,
+    maxTouchPoints: 5,
+  });
+  await cdp.send('Input.dispatchTouchEvent', {
+    type: 'touchStart',
+    touchPoints: points,
+  });
+  for (const id of ['speed', 'speed-two'])
+    await expect
+      .poll(async () => Number(await page.locator(`#${id}`).textContent()), {
+        timeout: 15000,
+      })
+      .toBeGreaterThan(15);
+  await cdp.send('Input.dispatchTouchEvent', {
+    type: 'touchCancel',
+    touchPoints: [],
+  });
+  for (const pad of pads) await expect(pad).not.toHaveClass(/pressed/);
+  for (const id of ['speed', 'speed-two'])
+    await expect(page.locator(`#${id}`)).toHaveText('0', { timeout: 15000 });
 });
