@@ -10,7 +10,7 @@
     "build": "node scripts/packages.mjs build",
     "dev": "npm run build && npm run preview",
     "preview": "node scripts/serve.mjs",
-    "test": "node --test games/wordle/src/engine.test.mjs scripts/deploy-caprover.test.mjs",
+    "test": "node --test games/wordle/src/engine.test.mjs games/city-racers/src/race.test.mjs scripts/deploy-caprover.test.mjs",
     "test:e2e": "playwright test"
   },
   "devDependencies": {
