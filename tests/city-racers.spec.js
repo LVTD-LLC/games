@@ -37,10 +37,10 @@ test('catalogue, garage customization, saved settings and narrow layout', async 
     page.getByRole('button', { name: 'Blue', exact: true }),
   ).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('#car-count')).toHaveText('4');
-  for (let i = 0; i < 2; i++)
+  for (let i = 0; i < 8; i++)
     await page.getByRole('button', { name: 'More cars' }).click();
   await expect(page.getByRole('button', { name: 'More cars' })).toBeDisabled();
-  for (let i = 0; i < 5; i++)
+  for (let i = 0; i < 11; i++)
     await page.getByRole('button', { name: 'Fewer cars' }).click();
   await expect(page.getByRole('button', { name: 'Fewer cars' })).toBeDisabled();
   await page.setViewportSize({ width: 320, height: 740 });
@@ -358,4 +358,91 @@ test('both on-screen accelerator pads accept simultaneous touches and cancel cle
   for (const pad of pads) await expect(pad).not.toHaveClass(/pressed/);
   for (const id of ['speed', 'speed-two'])
     await expect(page.locator(`#${id}`)).toHaveText('0', { timeout: 15000 });
+});
+
+test('race options persist; both unassisted drivers can leave the road and recover independently', async ({
+  page,
+}) => {
+  const errors = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await page.goto('/city-racers/');
+  await expect(page.locator('#start')).toBeEnabled({ timeout: 30000 });
+  await page.locator('#duo').click();
+  for (let i = 0; i < 9; i++) await page.locator('#more').click();
+  await expect(page.locator('#car-count')).toHaveText('12');
+  await expect(page.locator('#more')).toBeDisabled();
+  await page.locator('.race-options summary').click();
+  await page.locator('#assist').uncheck();
+  await page.locator('#difficulty').selectOption('real');
+  await page.locator('#laps').selectOption('3');
+  await page.reload();
+  await expect(page.locator('#start')).toBeEnabled({ timeout: 30000 });
+  await page.locator('.race-options summary').click();
+  await expect(page.locator('#assist')).not.toBeChecked();
+  await expect(page.locator('#difficulty')).toHaveValue('real');
+  await expect(page.locator('#laps')).toHaveValue('3');
+  await expect(page.locator('#car-count')).toHaveText('12');
+  await page.locator('#start').click();
+  await expect(page.locator('#game')).toHaveAttribute('data-phase', 'racing', {
+    timeout: 20000,
+  });
+  await expect(page.locator('#lap-tag-two')).toHaveText('Lap 1 / 3');
+  await page.keyboard.down('ArrowUp');
+  await page.keyboard.down('ArrowRight');
+  await expect(page.locator('#drive-hint')).toContainText('Off road', {
+    timeout: 12000,
+  });
+  await page.keyboard.up('ArrowUp');
+  await page.keyboard.up('ArrowRight');
+  await page.keyboard.press('r');
+  await expect(page.locator('#speed')).toHaveText('0');
+  await expect(page.locator('#speed-two')).toHaveText('0');
+  await page.keyboard.down('w');
+  await page.keyboard.down('a');
+  await expect(page.locator('#drive-hint-two')).toContainText('Off road', {
+    timeout: 12000,
+  });
+  await page.keyboard.up('w');
+  await page.keyboard.up('a');
+  await page.locator('#recover-two').click();
+  await expect(page.locator('#speed-two')).toHaveText('0');
+  await expect(page.locator('#lap-tag-two')).toHaveText('Lap 1 / 3');
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#recover')).toBeHidden();
+  await expect(page.locator('#recover-two')).toBeHidden();
+  await page.locator('#garage-button').click();
+  await page.locator('#assist').check();
+  await page.locator('#start').click();
+  await expect(page.locator('#recover')).toBeHidden();
+  await expect(page.locator('#recover-two')).toBeHidden();
+  expect(errors).toEqual([]);
+});
+
+test('a two-lap race shows the second lap before celebrating and replay resets the counter', async ({
+  page,
+}) => {
+  test.setTimeout(150000);
+  await page.goto('/city-racers/');
+  await expect(page.locator('#start')).toBeEnabled({ timeout: 30000 });
+  await page.locator('#fewer').click();
+  await page.locator('#fewer').click();
+  await page.locator('.race-options summary').click();
+  await page.locator('#laps').selectOption('2');
+  await page.locator('#start').click();
+  await page.keyboard.down('ArrowUp');
+  await expect(page.locator('#lap-tag')).toHaveText('Lap 2 / 2', {
+    timeout: 80000,
+  });
+  await expect(page.locator('#game')).toHaveAttribute('data-phase', 'racing');
+  await expect(page.getByRole('dialog')).toBeHidden();
+  await expect(page.getByRole('dialog')).toContainText('Nice driving!', {
+    timeout: 70000,
+  });
+  await page.keyboard.up('ArrowUp');
+  await page.locator('#continue').click();
+  await expect(page.locator('#lap-tag')).toHaveText('Lap 1 / 2');
+  await expect(page.locator('#progress').locator('..')).toHaveAttribute(
+    'aria-valuenow',
+    '0',
+  );
 });

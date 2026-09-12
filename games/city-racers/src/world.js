@@ -1,6 +1,8 @@
 import * as THREE from 'three/webgpu';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { COLORS, START, getTrack } from './race.mjs';
+import { COLORS, MAX_CARS, getTrack } from './race.mjs';
+import { getScenery } from './scenery.mjs';
+import { START } from './race.mjs';
 
 const UP = new THREE.Vector3(0, 1, 0);
 
@@ -60,6 +62,7 @@ export async function createWorld(container, settings) {
   function makeEnvironment(track) {
     const group = new THREE.Group();
     const batches = new Map();
+    const scenery = getScenery(track.id);
     const TRACK_LENGTH = track.length,
       trackPoint = track.point;
     const samples = Math.ceil(TRACK_LENGTH / 1.8);
@@ -163,28 +166,7 @@ export async function createWorld(container, settings) {
       if (index % 3 === 0)
         box('#bb795f', x, 4, z + d / 2 + 1.1, w - 2, 0.35, 2.4);
     }
-    let index = 0;
-    if (track.id === 'park') {
-      for (const side of [-1, 1])
-        for (let z = -145; z <= 145; z += 30) {
-          building(side * 77, z, index++);
-          if (z % 2) building(side * 113, z + 10, index++);
-        }
-      for (const z of [-155, 155])
-        for (const x of [-38, -9, 20, 49]) building(x, z, index++);
-    } else {
-      // Keep whole building footprints clear of every road segment, including the
-      // inward bends. Sampling every two metres is conservative with this margin.
-      const road = Array.from({ length: Math.ceil(TRACK_LENGTH / 2) }, (_, i) =>
-        trackPoint(i * 2),
-      );
-      for (let x = -185; x <= 230; x += 32)
-        for (let z = -205; z <= 205; z += 32) {
-          if (road.some((p) => Math.hypot(x - p.x, z - p.z) < 34)) continue;
-          if (Math.hypot(x - 20, z - 10) < 35) continue;
-          building(x, z, index++);
-        }
-    }
+    for (const b of scenery.buildings) building(b.x, b.z, b.index);
     const [parkX, parkZ] = track.parkCenter;
     box(
       '#d9d4b9',
@@ -227,20 +209,56 @@ export async function createWorld(container, settings) {
         z,
       );
     }
-    for (let s = 12; s < TRACK_LENGTH; s += 26) {
-      const p = trackPoint(s, -17.5);
-      tree(p.x, p.z, 0.85 + (Math.floor(s) % 3) * 0.12);
-      const q = trackPoint(s, 17.5);
-      tree(q.x, q.z);
-    }
-    if (track.id === 'park')
-      for (const x of [-16, 16])
-        for (const z of [-65, -35, 35, 65]) tree(x, z, 1.2);
-    for (let s = 45; s < TRACK_LENGTH; s += 70) {
-      const p = trackPoint(s, -11.7);
+    for (const t of scenery.trees) tree(t.x, t.z, t.size);
+    for (const p of scenery.lamps) {
       box('#778581', p.x, 3.7, p.z, 0.22, 7.4, 0.22);
       box('#f2ead6', p.x, 7.5, p.z, 1.2, 0.35, 1.2);
     }
+    const ad = scenery.billboard;
+    for (const side of [-1, 1])
+      box(
+        '#536d68',
+        ad.x + Math.cos(ad.heading) * side * 6,
+        4.5,
+        ad.z - Math.sin(ad.heading) * side * 6,
+        0.6,
+        9,
+        0.6,
+        ad.heading,
+      );
+    box('#35584e', ad.x, 9, ad.z, ad.w + 0.6, ad.h + 0.6, 0.4, ad.heading);
+    const canvas = document.createElement('canvas');
+    canvas.width = 1024;
+    canvas.height = 420;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#f6f3e6';
+    ctx.fillRect(0, 0, 1024, 420);
+    ctx.fillStyle = '#35584e';
+    ctx.fillRect(42, 56, 126, 126);
+    ctx.fillStyle = '#f6f3e6';
+    ctx.font = 'bold 100px sans-serif';
+    ctx.fillText('R', 67, 157);
+    ctx.fillStyle = '#35584e';
+    ctx.font = 'bold 112px sans-serif';
+    ctx.fillText('Rowset', 200, 162);
+    ctx.font = '36px sans-serif';
+    ctx.fillText('The database for agent-managed work.', 45, 259);
+    ctx.fillStyle = '#b96f50';
+    ctx.font = 'bold 38px sans-serif';
+    ctx.fillText('rowset.lvtd.dev', 45, 351);
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    const board = new THREE.Mesh(
+      new THREE.PlaneGeometry(ad.w, ad.h),
+      new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide }),
+    );
+    board.position.set(
+      ad.x + Math.sin(ad.heading) * 0.22,
+      9,
+      ad.z + Math.cos(ad.heading) * 0.22,
+    );
+    board.rotation.y = ad.heading;
+    group.add(board);
     // Merge static geometry by material: the city costs dozens, not hundreds, of draw calls.
     for (const [color, geometries] of batches) {
       const merged = mergeGeometries(geometries);
@@ -324,7 +342,7 @@ export async function createWorld(container, settings) {
     scene.add(car);
     return car;
   }
-  const cars = Array.from({ length: 6 }, (_, i) =>
+  const cars = Array.from({ length: MAX_CARS }, (_, i) =>
     makeCar(COLORS[i % COLORS.length]),
   );
   const looks = [new THREE.Vector3(), new THREE.Vector3()];
@@ -336,15 +354,40 @@ export async function createWorld(container, settings) {
     activeMap = null;
   let width = 1,
     height = 1;
-  function place(car, driver, track) {
-    const p = track.point(START + driver.distance, driver.offset);
-    car.position.set(p.x, 0, p.z);
-    car.rotation.set(
-      0,
-      p.heading - (driver.steer || 0) * 0.12,
-      -(driver.steer || 0) * 0.025,
-    );
-    return p;
+  function place(car, driver) {
+    car.position.set(driver.x, 0, driver.z);
+    car.rotation.set(0, driver.heading, 0);
+  }
+  function avoidBuildingCamera(car, position, map) {
+    let limit = 1;
+    const dx = position.x - car.x,
+      dz = position.z - car.z,
+      dy = position.y - 1.8;
+    for (const building of getScenery(map).buildings) {
+      let entry = 0,
+        exit = 1;
+      for (const [origin, delta, center, half] of [
+        [car.x, dx, building.x, building.w / 2 + 0.2],
+        [car.z, dz, building.z, building.d / 2 + 0.2],
+      ]) {
+        if (Math.abs(delta) < 0.00001) {
+          if (Math.abs(origin - center) > half) exit = -1;
+        } else {
+          const a = (center - half - origin) / delta,
+            b = (center + half - origin) / delta;
+          entry = Math.max(entry, Math.min(a, b));
+          exit = Math.min(exit, Math.max(a, b));
+        }
+      }
+      if (entry <= exit && 1.8 + dy * entry < building.h + 1)
+        limit = Math.min(limit, Math.max(0, entry - 0.025));
+    }
+    if (limit < 1)
+      position.set(
+        car.x + dx * limit,
+        Math.max(2.5, 1.8 + dy * limit),
+        car.z + dz * limit,
+      );
   }
   function draw(race, settings, dt, garage) {
     const still = garage || ['paused', 'finished'].includes(race.phase);
@@ -376,15 +419,27 @@ export async function createWorld(container, settings) {
     cars.forEach((car, i) => {
       car.visible = i < racers.length;
       if (car.visible) {
-        car.userData.body.color.set(colors[i % colors.length]);
-        place(car, racers[i], track);
+        car.userData.body.color.set(
+          i < settings.players
+            ? colors[i]
+            : colors[
+                settings.players +
+                  ((i - settings.players) % (colors.length - settings.players))
+              ],
+        );
+        place(car, racers[i]);
       }
     });
     const split = settings.players === 2 && !garage;
     container.dataset.views = split ? '2' : '1';
     for (let i = 0; i < (split ? 2 : 1); i++) {
       const driver = race.drivers[i],
-        p = track.point(START + driver.distance, driver.offset);
+        p = {
+          x: driver.x,
+          z: driver.z,
+          tx: Math.sin(driver.heading),
+          tz: Math.cos(driver.heading),
+        };
       const camera = cameras[i];
       camera.aspect = width / (split ? height / 2 : height);
       if (garage && width > 760)
@@ -404,13 +459,17 @@ export async function createWorld(container, settings) {
       } else {
         desired.set(p.x - p.tx * 15, 10, p.z - p.tz * 15);
         const ahead = track.point(
-          START + driver.distance + 15,
+          START + driver.routeDistance + 15,
           driver.offset * 0.5,
         );
-        target.set(ahead.x, 0.8, ahead.z);
+        if (driver.guided && driver.finishTime === null)
+          target.set(ahead.x, 0.8, ahead.z);
+        else target.set(p.x + p.tx * 12, 0.8, p.z + p.tz * 12);
       }
       const smooth = initialized ? 1 - Math.exp(-dt * 7) : 1;
       camera.position.lerp(desired, smooth);
+      if (!garage && !driver.guided)
+        avoidBuildingCamera(driver, camera.position, race.map);
       looks[i].lerp(target, smooth);
       camera.up.copy(UP);
       camera.lookAt(looks[i]);

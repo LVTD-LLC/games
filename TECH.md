@@ -65,7 +65,7 @@ Ship changes using branch → PR → passing CI → merge. Keep `CHANGELOG.md` a
 ## Little City Racers
 
 `/city-racers/` is a child-friendly 3D racing game for one or two local players.
-The 1–6 total cars includes human drivers (minimum two cars in two-player mode);
+The 1–12 total cars includes human drivers (minimum two cars in two-player mode);
 the remaining cars are local computer-controlled friends. This is shared-keyboard
 multiplayer on one computer, not online multiplayer. Settings use `lvtd-city-racers-v1:settings` and tolerate
 unavailable or malformed storage.
@@ -75,7 +75,7 @@ Both are graphics APIs; actual hardware acceleration depends on the browser/devi
 If neither initializes, the page explains recovery and keeps the catalogue link.
 Renderer selection is available for diagnostics as `#world.dataset.renderer`, not in
 the child's interface. No remote models, fonts, textures or runtime services are used.
-The standalone renderer bundle is approximately 230 KB gzipped; it is never loaded
+The standalone renderer bundle is approximately 235 KB gzipped; it is never loaded
 by the catalogue or Wordle.
 
 The simulation in `games/city-racers/src/race.mjs` is independent of rendering.
@@ -83,18 +83,43 @@ The simulation in `games/city-racers/src/race.mjs` is independent of rendering.
 (about 603 m), and City adventure (about 1,297 m) with signed rounded corners, left
 and right turns, and conservative clearance between road segments.
 Arrow Up accelerates, Down brakes (takes priority over acceleration), and Left/Right
-steer laterally. Heading follows the continuous city loop, road edges clamp gently,
-and rivals yield without solid collisions. Releasing the accelerator slows the car;
-braking never reverses. One lap ends with a celebration, not a punitive loss screen. In two-player mode
-each driver has independent distance, speed, steering and finish time; the first
-finisher waits while the other keeps driving, and the shared result only opens
-after both finish.
-Escape pauses/resumes. Focus or visibility loss pauses and clears all held input.
-Touch controls support simultaneous steering and acceleration and pointer cancellation.
-Player 2 uses physical `KeyboardEvent.code` WASD keys, independent of text layout
-(e.g. Russian). Each player has their own touch pad, color and HUD; pause/focus loss
-clears both keyboard and pointer input. The saved `players`, `map` and `color2` fields
-default safely when loading older saves. Human colors are kept distinct.
+steer. `Race settings` offers 1–5 laps, independent Easy / Real opponents and an
+Auto-assist toggle; defaults stay one lap, Easy and assistance on. Existing saves
+migrate safely with these defaults. Real opponents use the same 25 m/s maximum and
+12 m/s² acceleration as drivers without catch-up waiting. Easy opponents are slower
+and stay near the rearmost learner. Both modes use solid, damage-free bumpers.
+
+With assistance on, heading follows the road and lateral motion is gently bounded.
+With assistance off, position/heading/velocity are independent of the route; steering
+uses a simple speed-sensitive bicycle model with lateral grip. Buildings, tree trunks,
+streetlights, fountain edges and billboard supports are solid. Holding brake after
+stopping selects low-speed reverse. Per-driver Back to road buttons (R for Player 1,
+F for Player 2) return to a clear slot at/before the last earned checkpoint, preserving
+lap state and clearing velocity. Pause/countdown and finish states protect input.
+
+`collisions.mjs` uses oriented 2D boxes matching the visible car footprint (2.38 × 4.34 m),
+separating-axis contacts, equal-mass normal impulses and iterative positional correction.
+There is no damage, deformation or simulated rollover. Scenery and collision bounds
+come from the same cached descriptors in `scenery.mjs`; tree collisions use trunks,
+not the floating foliage. Driving remains planar. Physics substeps at up to 120 Hz
+prevent tunneling at the bounded speeds and keep slow rendering from changing race pace.
+
+Ordered road-width gates about 30 m apart validate each lap: off-road shortcuts,
+reverse finish-line crossings and recovery do not award skipped checkpoints. Each
+human driver has independent progress and finish time. Finishers park outside the race
+lanes so they cannot obstruct remaining laps; the celebration opens only after all
+human drivers finish, irrespective of when AI cars finish.
+
+Escape pauses/resumes. Focus or visibility loss pauses and clears held input for both
+players. Physical `KeyboardEvent.code` WASD works regardless of text layout (including
+Russian). Each player has a color, lap counter, HUD and simultaneous-input touch pad.
+Human colors stay distinct and AI body colors cycle through the remaining palette.
+The optional saved fields include `players`, `map`, `color2`, `assist`, `difficulty`
+and `laps` under the existing namespaced storage key.
+
+A locally drawn CanvasTexture billboard advertises Rowset on both maps; it makes no
+remote request and does not navigate away from the child's game. Free-driving chase
+cameras shorten their distance when a building would obstruct the view.
 
 Two-player mode uses stacked chase-camera views. Each camera renders the shared
 scene to a half-height render target, then two upright textured planes composite

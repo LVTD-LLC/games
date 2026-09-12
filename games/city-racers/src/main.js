@@ -1,6 +1,8 @@
 import './style.css';
 import {
   COLORS,
+  MAX_CARS,
+  recoverDriver,
   createRace,
   settingsFrom,
   tickRace,
@@ -63,7 +65,7 @@ function updateSettings() {
   settings = settingsFrom(settings);
   $('car-count').value = settings.count;
   $('fewer').disabled = settings.count === settings.players;
-  $('more').disabled = settings.count === 6;
+  $('more').disabled = settings.count === MAX_CARS;
   $('car-dots').replaceChildren(
     ...Array.from({ length: settings.count }, () =>
       document.createElement('i'),
@@ -79,8 +81,22 @@ function updateSettings() {
   $('players-help').textContent =
     settings.players === 2
       ? 'Same keyboard · 1: Arrows · 2: WASD'
-      : 'Arrow keys · A little help with the corners';
+      : settings.assist
+        ? 'Arrow keys · A little help with the corners'
+        : 'Arrow keys · Free steering';
   $('map').value = settings.map;
+  $('assist').checked = settings.assist;
+  $('difficulty').value = settings.difficulty;
+  $('laps').value = String(settings.laps);
+  $('settings-summary').textContent =
+    `${settings.difficulty === 'real' ? 'Real' : 'Easy'} · ${settings.laps} ${settings.laps === 1 ? 'lap' : 'laps'}${settings.assist ? '' : ' · Assist off'}`;
+  $('assist-help').textContent = settings.assist
+    ? 'Helps with corners and keeps you on the road.'
+    : 'Free steering. Solid buildings and trees. Hold brake to reverse.';
+  $('lesson-copy').innerHTML = settings.assist
+    ? '<b>↑ Go &nbsp; ↓ Brake</b><br />← → Steer<br /><span>We’ll help with the corners.</span>'
+    : '<b>↑ Go &nbsp; ↓ Brake / reverse</b><br />← → Steer<br /><span>Back to road: R · Player 2: F</span>';
+
   $('route-name').textContent = getTrack(settings.map).name;
   $('route-description').textContent = getTrack(settings.map).description;
   document.querySelectorAll('[data-color]').forEach((button) => {
@@ -134,6 +150,16 @@ $('map').addEventListener('change', () => {
   settings.map = $('map').value;
   updateSettings();
 });
+for (const id of ['assist', 'difficulty', 'laps'])
+  $(id).addEventListener('change', () => {
+    settings[id] =
+      id === 'assist'
+        ? $(id).checked
+        : id === 'laps'
+          ? Number($(id).value)
+          : $(id).value;
+    updateSettings();
+  });
 $('fewer').addEventListener('click', () => {
   settings.count--;
   updateSettings();
@@ -154,6 +180,8 @@ function drivingUI(show) {
   $('touch-controls').hidden = !show;
   secondPad.hidden = !show || !two;
   $('pause').hidden = !show;
+  $('recover').hidden = !show || settings.assist;
+  $('recover-two').hidden = !show || settings.assist || !two;
 }
 function showModal(finished) {
   clearInput();
@@ -165,6 +193,8 @@ function showModal(finished) {
     'touch-controls',
     'touch-controls-two',
     'pause',
+    'recover',
+    'recover-two',
   ])
     $(id).hidden = true;
   $('modal').hidden = false;
@@ -243,6 +273,17 @@ window.addEventListener('keydown', (event) => {
     }
     return;
   }
+  const recovery = event.code === 'KeyR' ? 0 : event.code === 'KeyF' ? 1 : -1;
+  if (
+    !settings.assist &&
+    recovery >= 0 &&
+    recovery < settings.players &&
+    ['racing', 'countdown'].includes(race.phase)
+  ) {
+    event.preventDefault();
+    if (!event.repeat) recoverDriver(race, recovery);
+    return;
+  }
   const action = KEY_ACTIONS[event.code];
   if (
     action &&
@@ -298,6 +339,8 @@ document.querySelectorAll('[data-drive]').forEach((button) => {
     button.addEventListener(event, release);
   button.addEventListener('contextmenu', (event) => event.preventDefault());
 });
+for (const [index, id] of ['recover', 'recover-two'].entries())
+  $(id).addEventListener('click', () => recoverDriver(race, index));
 function fail() {
   clearInput();
   phase('error');
@@ -324,12 +367,29 @@ function updateHUD() {
     const percent = Math.floor((driver.distance / race.length) * 100);
     progress.style.width = `${percent}%`;
     progress.parentElement.setAttribute('aria-valuenow', percent);
-    $(`speed${suffix}`).textContent = Math.round(driver.speed * 3.6);
+    $(`speed${suffix}`).textContent = Math.round(Math.abs(driver.speed) * 3.6);
     const finished = driver.finishTime !== null;
-    hint.hidden = race.phase !== 'racing' || (!finished && driver.speed > 3);
+    const lap = finished
+      ? race.laps
+      : Math.min(race.laps, Math.floor(driver.distance / race.lapLength) + 1);
+    $(`lap-tag${suffix}`).textContent = `Lap ${lap} / ${race.laps}`;
+    if (!i && $('lap-count').dataset.value !== `${lap}/${race.laps}`) {
+      $('lap-count').dataset.value = `${lap}/${race.laps}`;
+      $('lap-count').innerHTML =
+        `${lap} <span>/ ${race.laps} ${race.laps === 1 ? 'lap' : 'laps'}</span>`;
+    }
+    $(`recover${suffix}`).disabled = finished;
+
+    hint.hidden =
+      race.phase !== 'racing' ||
+      (!finished &&
+        Math.abs(driver.speed) > 3 &&
+        (settings.assist || Math.abs(driver.offset) <= 10.5));
     const hintText = finished
       ? `Finished! Cheer on Player ${i ? '1' : '2'}.`
-      : `Hold ${i ? 'W' : '↑'} to go!`;
+      : !settings.assist && Math.abs(driver.offset) > 10.5
+        ? `Off road · Follow the route, or press ${i ? 'F' : 'R'} to return`
+        : `Hold ${i ? 'W' : '↑'} to go!`;
     if (hint.textContent !== hintText) hint.textContent = hintText;
     $(`touch-controls${suffix}`)
       .querySelectorAll('button')

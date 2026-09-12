@@ -4,7 +4,7 @@ A collection of browser games by LVTD. Play at [games.lvtd.dev](https://games.lv
 
 ## Released games
 
-| Game               | Description                                                                      | Language | Play                                        |
-| ------------------ | -------------------------------------------------------------------------------- | -------- | ------------------------------------------- |
-| Пять букв          | Guess a five-letter word in six tries. Daily puzzles and unlimited practice.     | Russian  | [Play](https://games.lvtd.dev/wordle/)      |
-| Little City Racers | A gentle 3D city race for one or two players, with colorful cars and two routes. | English  | [Play](https://games.lvtd.dev/city-racers/) |
+| Game               | Description                                                                                  | Language | Play                                        |
+| ------------------ | -------------------------------------------------------------------------------------------- | -------- | ------------------------------------------- |
+| Пять букв          | Guess a five-letter word in six tries. Daily puzzles and unlimited practice.                 | Russian  | [Play](https://games.lvtd.dev/wordle/)      |
+| Little City Racers | A 3D city race for one or two players: two routes, up to 12 cars, and optional driving help. | English  | [Play](https://games.lvtd.dev/city-racers/) |

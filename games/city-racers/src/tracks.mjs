@@ -155,3 +155,46 @@ export const TRACKS = {
 };
 export const getTrack = (id) =>
   Object.hasOwn(TRACKS, id) ? TRACKS[id] : TRACKS.park;
+
+const projectionSamples = new Map();
+export function projectOnTrack(track, x, z, hint) {
+  let best = Infinity,
+    distance = hint ?? 0;
+  if (hint === undefined) {
+    if (!projectionSamples.has(track.id))
+      projectionSamples.set(
+        track.id,
+        Array.from({ length: Math.ceil(track.length / 3) }, (_, i) => ({
+          s: i * 3,
+          ...track.point(i * 3),
+        })),
+      );
+    for (const p of projectionSamples.get(track.id)) {
+      const d = (x - p.x) ** 2 + (z - p.z) ** 2;
+      if (d < best) {
+        best = d;
+        distance = p.s;
+      }
+    }
+  } else {
+    for (let ds = -12; ds <= 12; ds += 3) {
+      const p = track.point(hint + ds),
+        d = (x - p.x) ** 2 + (z - p.z) ** 2;
+      if (d < best) {
+        best = d;
+        distance = hint + ds;
+      }
+    }
+  }
+  for (let i = 0; i < 5; i++) {
+    const p = track.point(distance);
+    distance += (x - p.x) * p.tx + (z - p.z) * p.tz;
+  }
+  const p = track.point(distance);
+  return {
+    ...p,
+    s: distance,
+    offset: (x - p.x) * -p.tz + (z - p.z) * p.tx,
+    away: Math.hypot(x - p.x, z - p.z),
+  };
+}
