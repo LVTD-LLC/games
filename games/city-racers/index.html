@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#edf0df" />
+    <meta
+      name="description"
+      content="A little city. A big adventure. A gentle 3D driving game with colorful cars and easy arrow-key controls."
+    />
+    <link rel="icon" href="/city-racers/favicon.svg" type="image/svg+xml" />
+    <title>Little City Racers · LVTD Games</title>
+  </head>
+  <body>
+    <main id="game" data-phase="loading">
+      <div id="world" aria-label="3D city race" role="img"></div>
+      <header class="topbar">
+        <a class="back" href="/" aria-label="Back to games"
+          >← <span>All games</span></a
+        >
+        <span class="wordmark"
+          ><span class="brand-icon" aria-hidden="true">▰</span> LITTLE CITY
+          RACERS</span
+        >
+        <button id="pause" class="icon-button" aria-label="Pause race" hidden>
+          Ⅱ
+        </button>
+      </header>
+
+      <section id="garage" class="panel garage" aria-labelledby="title">
+        <span class="eyebrow">A LITTLE CITY. A BIG ADVENTURE.</span>
+        <h1 id="title">Little City<br /><em>Racers.</em></h1>
+        <p class="intro">Your car. Your color. Let’s go!</p>
+        <fieldset class="colors">
+          <legend>Pick your color</legend>
+          <div id="colors"></div>
+        </fieldset>
+        <fieldset class="racers">
+          <legend>Cars on the road <span>including you</span></legend>
+          <div class="stepper">
+            <button id="fewer" aria-label="Fewer cars">−</button
+            ><output id="car-count" aria-live="polite">3</output
+            ><button id="more" aria-label="More cars">+</button>
+            <div class="car-dots" id="car-dots" aria-hidden="true"></div>
+          </div>
+        </fieldset>
+        <button id="start" class="primary" disabled>
+          <span id="start-label">Getting your car ready…</span
+          ><span aria-hidden="true">→</span>
+        </button>
+        <div class="lesson">
+          <div class="keys" aria-hidden="true">
+            <kbd>↑</kbd>
+            <div><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd></div>
+          </div>
+          <p>
+            <b>↑ Go &nbsp; ↓ Brake</b><br />← → Steer<br /><span
+              >We’ll help with the corners.</span
+            >
+          </p>
+        </div>
+      </section>
+
+      <aside id="route-card" class="route-card">
+        <span class="route-icon" aria-hidden="true">♧</span>
+        <div>
+          <b>Sunday in the city</b><span>One easy lap · No bumps, no rush</span>
+        </div>
+      </aside>
+      <div id="hud" class="hud" hidden>
+        <div class="lap">
+          <span aria-hidden="true">⚑</span><b>1 <span>/ 1 lap</span></b>
+        </div>
+        <div
+          class="progress-track"
+          role="progressbar"
+          aria-label="Lap progress"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="0"
+        >
+          <div id="progress"></div>
+        </div>
+        <div class="speed"><b id="speed">0</b><span>km/h</span></div>
+      </div>
+      <div
+        id="countdown"
+        class="countdown"
+        role="status"
+        aria-live="polite"
+        hidden
+      ></div>
+      <p id="drive-hint" class="drive-hint" hidden>Hold <kbd>↑</kbd> to go!</p>
+      <div
+        id="touch-controls"
+        class="touch-controls"
+        aria-label="Driving controls"
+        hidden
+      >
+        <div>
+          <button data-drive="left" aria-label="Steer left">←</button
+          ><button data-drive="right" aria-label="Steer right">→</button>
+        </div>
+        <div>
+          <button data-drive="brake" class="brake" aria-label="Brake">↓</button
+          ><button data-drive="accelerate" class="gas" aria-label="Accelerate">
+            ↑
+          </button>
+        </div>
+      </div>
+      <div id="modal" class="modal" hidden>
+        <section
+          class="panel result"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="result-title"
+        >
+          <div id="result-icon" class="result-icon" aria-hidden="true">★</div>
+          <h2 id="result-title">Nice driving!</h2>
+          <p id="result-copy">You made it all the way around the city.</p>
+          <button id="continue" class="primary">
+            Race again <span aria-hidden="true">→</span>
+          </button>
+          <button id="garage-button" class="secondary">Choose a car</button>
+        </section>
+      </div>
+      <p id="error" class="error" role="alert" hidden></p>
+    </main>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

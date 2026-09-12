@@ -8,5 +8,15 @@
     "path": "games/wordle",
     "language": "ru",
     "logo": "/logos/wordle.svg"
+  },
+  {
+    "slug": "city-racers",
+    "title": "Little City Racers",
+    "description": "A gentle 3D city race. Pick a color, invite up to five friends, and learn to drive with the arrow keys.",
+    "category": "Racing",
+    "duration": "1–2 minutes",
+    "path": "games/city-racers",
+    "language": "en",
+    "logo": "/logos/city-racers.svg"
   }
 ]

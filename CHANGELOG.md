@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-12 — Little City Racers
+
+- Added a standalone, low-poly 3D city racing game at `/city-racers/`, with WebGPU-first rendering and automatic WebGL 2 fallback.
+- Added five body colors, 1–6 cars (three by default), a single short city loop, and a following third-person camera.
+- Added arrow-key and multi-touch controls, forgiving road-following steering, non-blocking opponents, pause on focus loss, and quick replay.
+- Added race simulation and desktop/mobile browser regression coverage, a catalogue logo, and a released-game entry.
+
 ## 2026-09-12 — Purple game catalogue
 
 - Switched the Astro catalogue and not-found page to English while keeping Пять букв and its gameplay in Russian.

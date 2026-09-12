@@ -29,6 +29,7 @@ Astro's development server shows the catalogue only; game links need the assembl
 ```text
 apps/site/         Astro catalogue, own package.json + package-lock.json
 games/wordle/      Vanilla JS + Vite game, own package.json + package-lock.json
+games/city-racers/ Three.js + Vite game, own package.json + package-lock.json
 games.json         Game catalogue and build registry
 scripts/           Build orchestration, local preview, deployment
 dist/              Assembled deployment output (generated)
@@ -60,3 +61,39 @@ The public hostname `games.lvtd.dev` is active with HTTPS on the CapRover `games
 Rollback: revert the offending PR through another PR and merge after CI; this redeploys the prior source with a new exact revision marker. For an urgent operational rollback, use CapRover's previous successful app image via API/CLI, then reconcile the repo. No databases are involved.
 
 Ship changes using branch → PR → passing CI → merge. Keep `CHANGELOG.md` append-only.
+
+## Little City Racers
+
+`/city-racers/` is a single-player, child-friendly 3D racing game. The adjustable
+1–6 cars includes the player; the other cars are local computer-controlled friends,
+not networked players. Settings use `lvtd-city-racers-v1:settings` and tolerate
+unavailable or malformed storage.
+
+Three.js `WebGPURenderer` tries WebGPU on secure origins, then falls back to WebGL 2.
+Both are graphics APIs; actual hardware acceleration depends on the browser/device.
+If neither initializes, the page explains recovery and keeps the catalogue link.
+Renderer selection is available for diagnostics as `#world.dataset.renderer`, not in
+the child's interface. No remote models, fonts, textures or runtime services are used.
+The standalone renderer bundle is approximately 230 KB gzipped; it is never loaded
+by the catalogue or Wordle.
+
+The simulation in `games/city-racers/src/race.mjs` is independent of rendering.
+Arrow Up accelerates, Down brakes (takes priority over acceleration), and Left/Right
+steer laterally. Heading follows the continuous city loop, road edges clamp gently,
+and rivals yield without solid collisions. Releasing the accelerator slows the car;
+braking never reverses. One lap ends with a celebration, not a punitive loss screen.
+Escape pauses/resumes. Focus or visibility loss pauses and clears all held input.
+Touch controls support simultaneous steering and acceleration and pointer cancellation.
+
+The scene batches static geometry by material, caps pixel density and reduces
+resolution when frames are slow. Physics uses small substeps; inactive scenes draw
+only when changed. Browser regression tests deliberately exercise software WebGL 2
+for portable CI; WebGPU needs a separate browser/adapter smoke test and must not be
+claimed as verified merely because `navigator.gpu` exists.
+
+For Linux WebGPU visual QA, use a virtual display and Chromium with
+`--enable-unsafe-webgpu --ignore-gpu-blocklist --enable-gpu --enable-features=Vulkan --use-angle=swiftshader --use-vulkan=swiftshader`.
+These are **test-only** software-adapter flags, never settings to ask players to enable.
+A successful adapter request alone is insufficient: inspect the rendered scene,
+complete a lap, replay, and check for GPU/device errors. Hardware performance remains
+device-dependent.
