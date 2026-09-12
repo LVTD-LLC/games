@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-12 — Short game descriptions
+
+- Added a short English description to each catalogue entry, with full-width text on mobile.
+- Updated Little City Racers copy to describe its solo and local two-player modes accurately.
+
 ## 2026-09-12 — More paints and car styles
 
 - Expanded the paint palette from five to twelve colors, preserving saved favorites and adding clear selection marks on light paints.
