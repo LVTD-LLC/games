@@ -10,7 +10,10 @@ import Catalogue from '../layouts/Catalogue.astro';
       <li>
         <a class="game" href={`/${game.slug}/`}>
           <img class="logo" src={game.logo} alt="" width="104" height="104" />
-          <h2 lang={game.language}>{game.title}</h2>
+          <div class="details">
+            <h2 lang={game.language}>{game.title}</h2>
+            <p>{game.description}</p>
+          </div>
           <span class="play">
             Play <span aria-hidden="true">→</span>
           </span>
@@ -54,7 +57,17 @@ import Catalogue from '../layouts/Catalogue.astro';
     font-weight: 700;
     letter-spacing: -0.8px;
   }
+  .details {
+    min-width: 0;
+  }
+  p {
+    margin: 10px 0 0;
+    color: var(--lavender);
+    font-size: 17px;
+    line-height: 1.5;
+  }
   .play {
+    flex-shrink: 0;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -84,6 +97,13 @@ import Catalogue from '../layouts/Catalogue.astro';
     }
     h2 {
       overflow-wrap: anywhere;
+    }
+    .details {
+      display: contents;
+    }
+    p {
+      grid-column: 1 / -1;
+      margin: 0;
     }
     .play {
       grid-column: 1 / -1;
