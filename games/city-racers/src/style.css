@@ -815,3 +815,105 @@ select:focus-visible {
     height: 340px;
   }
 }
+
+/* Optional race rules stay tucked away from the child's primary start flow. */
+.race-options {
+  margin: 0 0 20px;
+  border-top: 1px solid #dce1d0;
+  border-bottom: 1px solid #dce1d0;
+}
+.race-options summary {
+  cursor: pointer;
+  padding: 15px 0;
+  font-size: 13px;
+  font-weight: 700;
+}
+.race-options summary span {
+  display: block;
+  margin: 6px 0 0 16px;
+  color: #647466;
+  font-size: 11px;
+  font-weight: 400;
+}
+.assist-option {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin: 4px 0 20px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.assist-option input {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
+  accent-color: #365e50;
+}
+.assist-option small {
+  display: block;
+  font-size: 11px;
+  line-height: 1.5;
+  margin-top: 5px;
+  color: #647466;
+}
+.settings-note {
+  font-size: 11px;
+  line-height: 1.5;
+  color: #647466;
+}
+.car-dots {
+  max-width: 115px;
+  gap: 4px;
+}
+.car-dots i {
+  width: 15px;
+  height: 9px;
+}
+.driver-tag small {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 0;
+  font-weight: 400;
+  margin-top: 5px;
+}
+.recover {
+  position: absolute;
+  z-index: 2;
+  top: 184px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: #fbf9eee8;
+  color: #365e50;
+  font-size: 12px;
+  min-height: 40px;
+}
+.split .recover {
+  top: 142px;
+}
+.split .recover-two {
+  top: calc(50% + 90px);
+}
+@media (max-width: 760px) {
+  .recover {
+    top: 166px;
+  }
+  .split .recover {
+    top: 130px;
+  }
+  .split .recover-two {
+    top: calc(50% + 86px);
+  }
+}
+@media (max-height: 600px) {
+  .split .recover {
+    top: 104px;
+    padding: 5px 10px;
+    min-height: 30px;
+    font-size: 10px;
+  }
+  .split .recover-two {
+    top: calc(50% + 66px);
+  }
+}

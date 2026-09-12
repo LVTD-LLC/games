@@ -68,6 +68,40 @@
             <div class="car-dots" id="car-dots" aria-hidden="true"></div>
           </div>
         </fieldset>
+        <details class="race-options">
+          <summary>
+            Race settings <span id="settings-summary">Easy · 1 lap</span>
+          </summary>
+          <label class="assist-option"
+            ><input id="assist" type="checkbox" checked />
+            <span
+              ><b>Auto-assist</b
+              ><small id="assist-help"
+                >Helps with corners and keeps you on the road.</small
+              ></span
+            ></label
+          >
+          <label class="map-select" for="difficulty"
+            >Opponents
+            <select id="difficulty">
+              <option value="easy">Easy · Friends wait for you</option>
+              <option value="real">Real · Full-speed racing</option>
+            </select>
+          </label>
+          <label class="map-select" for="laps"
+            >Laps per race
+            <select id="laps">
+              <option value="1">1 lap</option>
+              <option value="2">2 laps</option>
+              <option value="3">3 laps</option>
+              <option value="4">4 laps</option>
+              <option value="5">5 laps</option>
+            </select>
+          </label>
+          <p class="settings-note">
+            Solid bumpers in both modes. No damage — just bumps and nudges.
+          </p>
+        </details>
         <button id="start" class="primary" disabled>
           <span id="start-label">Getting your car ready…</span
           ><span aria-hidden="true">→</span>
@@ -94,14 +128,17 @@
       </aside>
       <div id="split-divider" hidden aria-hidden="true"></div>
       <div id="hud" class="hud" hidden>
-        <b id="driver-tag" class="driver-tag" hidden>1 · ARROWS</b>
+        <b id="driver-tag" class="driver-tag" hidden
+          >1 · ARROWS<small id="lap-tag">Lap 1 / 1</small></b
+        >
         <div class="lap">
-          <span aria-hidden="true">⚑</span><b>1 <span>/ 1 lap</span></b>
+          <span aria-hidden="true">⚑</span
+          ><b id="lap-count">1 <span>/ 1 lap</span></b>
         </div>
         <div
           class="progress-track"
           role="progressbar"
-          aria-label="Lap progress"
+          aria-label="Race progress"
           aria-valuemin="0"
           aria-valuemax="100"
           aria-valuenow="0"
@@ -111,11 +148,13 @@
         <div class="speed"><b id="speed">0</b><span>km/h</span></div>
       </div>
       <div id="hud-two" class="hud hud-two" hidden>
-        <b class="driver-tag">2 · WASD</b>
+        <b class="driver-tag"
+          >2 · WASD<small id="lap-tag-two">Lap 1 / 1</small></b
+        >
         <div
           class="progress-track"
           role="progressbar"
-          aria-label="Player 2 lap progress"
+          aria-label="Player 2 race progress"
           aria-valuemin="0"
           aria-valuemax="100"
           aria-valuenow="0"
@@ -157,6 +196,22 @@
           </button>
         </div>
       </div>
+      <button
+        id="recover"
+        class="recover"
+        hidden
+        aria-label="Player 1 back to road"
+      >
+        ↶ Back to road · R
+      </button>
+      <button
+        id="recover-two"
+        class="recover recover-two"
+        hidden
+        aria-label="Player 2 back to road"
+      >
+        ↶ Back to road · F
+      </button>
       <div id="modal" class="modal" hidden>
         <section
           class="panel result"

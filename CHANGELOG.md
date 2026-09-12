@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-09-12 — Race rules and solid bumpers
+
+- Increased the field to 12 cars and added 1–5 laps plus independent Easy / Real opponent and auto-assist settings, preserving beginner defaults.
+- Added free steering with brake-to-reverse, solid buildings/tree trunks and per-driver back-to-road recovery when assistance is disabled.
+- Added oriented car-body contacts and gentle momentum transfer: bumpers touch and cars can push without damage or visual overlap.
+- Added ordered route gates for valid laps, off-lane finisher parking, shared scenery/collider descriptors, a camera that avoids buildings, and a Rowset roadside billboard.
+- Expanded physics and browser coverage for dense fields, collisions, reverse/recovery, difficulty, saved settings and multiple laps.
+
 ## 2026-09-12 — Two-driver city adventures
 
 - Added optional local two-player racing: arrow keys for Player 1, physical WASD keys for Player 2, separate colors and stacked third-person views.
