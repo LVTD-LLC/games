@@ -34,12 +34,33 @@
         <span class="eyebrow">A LITTLE CITY. A BIG ADVENTURE.</span>
         <h1 id="title">Little City<br /><em>Racers.</em></h1>
         <p class="intro">Your car. Your color. Let’s go!</p>
+        <fieldset class="player-choice">
+          <legend>Who’s driving?</legend>
+          <div class="choice-row">
+            <button id="solo" aria-pressed="true">One player</button
+            ><button id="duo" aria-pressed="false">Two players</button>
+          </div>
+          <p id="players-help">Arrow keys · A little help with the corners</p>
+        </fieldset>
+        <label class="map-select" for="map"
+          >Choose your route
+          <select id="map">
+            <option value="park">Park loop · Easy</option>
+            <option value="city">City adventure · Longer</option>
+          </select>
+        </label>
         <fieldset class="colors">
-          <legend>Pick your color</legend>
-          <div id="colors"></div>
+          <legend id="color-label">Pick your color</legend>
+          <div id="colors" class="color-options"></div>
+        </fieldset>
+        <fieldset id="player-two-color" class="colors" hidden>
+          <legend>Player 2 · WASD</legend>
+          <div id="colors-two" class="color-options"></div>
         </fieldset>
         <fieldset class="racers">
-          <legend>Cars on the road <span>including you</span></legend>
+          <legend>
+            Cars on the road <span id="count-note">including you</span>
+          </legend>
           <div class="stepper">
             <button id="fewer" aria-label="Fewer cars">−</button
             ><output id="car-count" aria-live="polite">3</output
@@ -56,7 +77,7 @@
             <kbd>↑</kbd>
             <div><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd></div>
           </div>
-          <p>
+          <p id="lesson-copy">
             <b>↑ Go &nbsp; ↓ Brake</b><br />← → Steer<br /><span
               >We’ll help with the corners.</span
             >
@@ -67,10 +88,13 @@
       <aside id="route-card" class="route-card">
         <span class="route-icon" aria-hidden="true">♧</span>
         <div>
-          <b>Sunday in the city</b><span>One easy lap · No bumps, no rush</span>
+          <b id="route-name">Park loop</b
+          ><span id="route-description">An easy first lap</span>
         </div>
       </aside>
+      <div id="split-divider" hidden aria-hidden="true"></div>
       <div id="hud" class="hud" hidden>
+        <b id="driver-tag" class="driver-tag" hidden>1 · ARROWS</b>
         <div class="lap">
           <span aria-hidden="true">⚑</span><b>1 <span>/ 1 lap</span></b>
         </div>
@@ -86,6 +110,26 @@
         </div>
         <div class="speed"><b id="speed">0</b><span>km/h</span></div>
       </div>
+      <div id="hud-two" class="hud hud-two" hidden>
+        <b class="driver-tag">2 · WASD</b>
+        <div
+          class="progress-track"
+          role="progressbar"
+          aria-label="Player 2 lap progress"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="0"
+        >
+          <div id="progress-two"></div>
+        </div>
+        <div class="speed"><b id="speed-two">0</b><span>km/h</span></div>
+      </div>
+      <p
+        id="drive-hint-two"
+        class="drive-hint drive-hint-two"
+        role="status"
+        hidden
+      ></p>
       <div
         id="countdown"
         class="countdown"
@@ -93,7 +137,9 @@
         aria-live="polite"
         hidden
       ></div>
-      <p id="drive-hint" class="drive-hint" hidden>Hold <kbd>↑</kbd> to go!</p>
+      <p id="drive-hint" class="drive-hint" role="status" hidden>
+        Hold <kbd>↑</kbd> to go!
+      </p>
       <div
         id="touch-controls"
         class="touch-controls"

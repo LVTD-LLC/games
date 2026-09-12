@@ -64,9 +64,10 @@ Ship changes using branch → PR → passing CI → merge. Keep `CHANGELOG.md` a
 
 ## Little City Racers
 
-`/city-racers/` is a single-player, child-friendly 3D racing game. The adjustable
-1–6 cars includes the player; the other cars are local computer-controlled friends,
-not networked players. Settings use `lvtd-city-racers-v1:settings` and tolerate
+`/city-racers/` is a child-friendly 3D racing game for one or two local players.
+The 1–6 total cars includes human drivers (minimum two cars in two-player mode);
+the remaining cars are local computer-controlled friends. This is shared-keyboard
+multiplayer on one computer, not online multiplayer. Settings use `lvtd-city-racers-v1:settings` and tolerate
 unavailable or malformed storage.
 
 Three.js `WebGPURenderer` tries WebGPU on secure origins, then falls back to WebGL 2.
@@ -78,12 +79,29 @@ The standalone renderer bundle is approximately 230 KB gzipped; it is never load
 by the catalogue or Wordle.
 
 The simulation in `games/city-racers/src/race.mjs` is independent of rendering.
+`tracks.mjs` supplies distance-based poses for both routes: the original Park loop
+(about 603 m), and City adventure (about 1,297 m) with signed rounded corners, left
+and right turns, and conservative clearance between road segments.
 Arrow Up accelerates, Down brakes (takes priority over acceleration), and Left/Right
 steer laterally. Heading follows the continuous city loop, road edges clamp gently,
 and rivals yield without solid collisions. Releasing the accelerator slows the car;
-braking never reverses. One lap ends with a celebration, not a punitive loss screen.
+braking never reverses. One lap ends with a celebration, not a punitive loss screen. In two-player mode
+each driver has independent distance, speed, steering and finish time; the first
+finisher waits while the other keeps driving, and the shared result only opens
+after both finish.
 Escape pauses/resumes. Focus or visibility loss pauses and clears all held input.
 Touch controls support simultaneous steering and acceleration and pointer cancellation.
+Player 2 uses physical `KeyboardEvent.code` WASD keys, independent of text layout
+(e.g. Russian). Each player has their own touch pad, color and HUD; pause/focus loss
+clears both keyboard and pointer input. The saved `players`, `map` and `color2` fields
+default safely when loading older saves. Human colors are kept distinct.
+
+Two-player mode uses stacked chase-camera views. Each camera renders the shared
+scene to a half-height render target, then two upright textured planes composite
+into the single canvas. Render-target UVs follow WebGPURenderer’s top-left convention
+on both WebGPU and WebGL 2, matching its QuadMesh rather than ordinary plane UVs.
+This avoids backend-specific scissor/clear behavior and shares city/car geometry.
+Only two map environments are cached; changing modes does not create more renderers.
 
 The scene batches static geometry by material, caps pixel density and reduces
 resolution when frames are slow. Physics uses small substeps; inactive scenes draw
