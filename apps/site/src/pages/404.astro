@@ -1,40 +1,27 @@
-<!doctype html>
-<html lang="ru">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>Игра не найдена — LVTD Games</title>
-  </head>
-  <body>
-    <main>
-      <p>404 / НЕ ТА ПОЛКА</p>
-      <h1>Здесь пока нет игры.</h1>
-      <a href="/">← Вернуться к играм</a>
-    </main>
-  </body>
-</html>
+---
+import Catalogue from '../layouts/Catalogue.astro';
+---
+
+<Catalogue
+  title="Page not found — LVTD Games"
+  description="This page could not be found. Browse the LVTD Games collection."
+>
+  <h1>Page not found</h1>
+  <a class="back" href="/">
+    ← Back to games
+  </a>
+</Catalogue>
+
 <style>
-  body {
-    margin: 0;
-    background: #f7f7f0;
-    color: #23392f;
-    font-family: Arial, sans-serif;
-    display: grid;
-    place-items: center;
-    min-height: 100dvh;
+  .back {
+    display: inline-block;
+    padding: 16px 24px;
+    border-radius: 12px;
+    background: var(--purple);
+    font-size: 18px;
+    font-weight: 700;
   }
-  main {
-    padding: 25px;
-  }
-  p {
-    font-size: 11px;
-    letter-spacing: 2px;
-  }
-  h1 {
-    font-size: 36px;
-    font-weight: 500;
-  }
-  a {
-    color: inherit;
+  .back:hover {
+    background: var(--surface-hover);
   }
 </style>
