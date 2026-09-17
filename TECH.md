@@ -52,13 +52,13 @@ Games are separate HTML documents at `/<slug>/`; no iframe and no runtime import
 
 ## Production / deployment
 
-CapRover app `games` runs an Nginx static container on the existing Hetzner host. No persistent volumes or runtime app secrets are needed. Nginx gives unknown routes a real 404 and fingerprinted assets immutable caching.
+CapRover app `games` runs an Nginx static container on the existing Hetzner host. The static site needs no persistent volume or runtime app secrets; the separate Corporate BS API does (see below). Nginx gives unknown routes a real 404 and fingerprinted assets immutable caching.
 
 The **CI** workflow validates PRs and main. A separate **Deploy to CapRover** workflow automatically follows successful main CI, checks out the tested SHA, skips superseded commits, and uploads tracked source plus a revision marker. It waits for the exact commit at `/deploy-revision.txt`, not just an HTTP 200. GitHub secret `CAPROVER_APP_TOKEN` is an app-scoped deploy token; never commit it or use the administrator password in CI.
 
 The public hostname `games.lvtd.dev` is active with HTTPS on the CapRover `games` app; its DNS-only A record points to `195.201.166.171`. The deploy verifier uses the HTTPS CapRover origin so a DNS-provider outage does not misreport an app rollout; verify the custom hostname after domain changes.
 
-Rollback: revert the offending PR through another PR and merge after CI; this redeploys the prior source with a new exact revision marker. For an urgent operational rollback, use CapRover's previous successful app image via API/CLI, then reconcile the repo. No databases are involved.
+Rollback: revert the offending PR through another PR and merge after CI; this redeploys the prior source with a new exact revision marker. For an urgent operational rollback, use CapRover's previous successful app image via API/CLI, then reconcile the repo. The static site has no database; preserve the separate Corporate BS API volume when rolling back.
 
 Ship changes using branch → PR → passing CI → merge. Keep `CHANGELOG.md` append-only.
 
@@ -151,3 +151,98 @@ These are **test-only** software-adapter flags, never settings to ask players to
 A successful adapter request alone is insufficient: inspect the rendered scene,
 complete a lap, replay, and check for GPU/device errors. Hardware performance remains
 device-dependent.
+
+## Corporate BS Meter
+
+`/corporate-bs-meter/` is a standalone vanilla JS/Vite word game. The static catalogue
+and previous games are unchanged. The new `services/corporate-bs-api/` service uses
+Node 24's built-in HTTP and SQLite libraries (no runtime npm dependencies). Nginx
+proxies `/api/corporate-bs/`, result pages and unsubscribe pages to the internal
+CapRover service `srv-captain--corporate-bs-api:80`; Docker DNS is resolved at request
+time. Keep exactly **one API replica**, with persistent volume `corporate-bs-data`
+mounted at `/data`. SQLite uses WAL and transactions; the database is not in the image.
+
+### Configuration and deployment
+
+Runtime variables for the **API service only**:
+
+- `TYPESAFE_API_KEY`: from Infisical project Openclaw, prod,
+  `/projects/corporate-bs-meter`. Never a `VITE_` variable or build argument.
+- `TYPESAFE_MODEL=jev-1.13.0`: pinned to the model validated for the initial rubric.
+- `PUBLIC_ORIGIN=https://games.lvtd.dev`, `TRUST_PROXY=true`, `PORT=80`.
+- `DATABASE_PATH=/data/corporate-bs.sqlite`, `DAILY_JUDGING_LIMIT=3000`.
+
+The existing deployment workflow now deploys/verifies the API first, then the static
+site, both from the exact SHA that passed main CI. GitHub secret
+`CORPORATE_BS_CAPROVER_APP_TOKEN` is scoped to the API app; the existing
+`CAPROVER_APP_TOKEN` remains scoped to `games`. Both services expose their exact
+revision at `/deploy-revision.txt`; the API also exposes `/api/corporate-bs/health`.
+The backend's default HTTPS CapRover hostname is for deployment verification. Its
+mutating game endpoints require the configured website Origin and a player cookie.
+
+CapRover is the only ingress to the API container: it appends the client IP to
+`X-Forwarded-For`. The site's inner Nginx preserves that chain without appending a
+hop. The API trusts only the **last** address, and only with `TRUST_PROXY=true`.
+Never publish the API container port directly or enable proxy trust for an
+untrusted ingress. Rate counters store salted hashes, not raw addresses.
+
+Rollback app code by reverting through a PR; retain `/data`. Back up SQLite with
+an SQLite-aware online backup (e.g. `VACUUM INTO` to a new backup file), not by
+copying only the live `.sqlite` file without its WAL. Do not scale replicas or
+remove/replace the volume. The first release only creates additive tables; future
+schema changes must preserve compatibility across rolling deploys.
+
+### Local work and verification
+
+Start the real service with server-only env and a local database, then run the site:
+
+```sh
+PORT=4174 PUBLIC_ORIGIN=http://localhost:4173 COOKIE_SECURE=false \
+DATABASE_PATH=/tmp/corporate-bs.sqlite node services/corporate-bs-api/server.mjs
+npm run dev
+```
+
+Supply `TYPESAFE_API_KEY` through your protected environment, never in command
+history. The local preview proxies API and result routes to port 4174. `BS_API_URL`
+can override that local upstream. Vite hot reload uses the same port.
+
+`npm test` includes API integration tests using an injected test judge. Playwright
+starts `tests/bs-api-fixture.mjs`, an isolated in-memory API with a deterministic
+judge; production never imports it. No real emails, paid requests, or leaderboard
+entries are created in CI. The write scenarios intentionally skip when `BASE_URL`
+is set; perform a bounded anonymous live submission separately after deployment.
+
+### Game semantics and data
+
+- No accounts. A namespaced HttpOnly, Secure, SameSite cookie remembers a random
+  player token for 90 days; only its hash is stored in the database. Nicknames are
+  not verified identities. Clearing cookies creates a new player.
+- Both name and email are optional. A name opts the player into the public ranking;
+  clearing it removes them. Email requires a separate explicit updates checkbox.
+- Emails are stored separately with consent timestamp/version and an unsubscribe
+  token. They are never included in public responses or sent to TypeSafe. This
+  release **collects opt-ins but sends no marketing email**. Operator-only export:
+  `node services/corporate-bs-api/export-subscribers.mjs`. Its CSV contains private
+  data; import securely into an email tool, and honor the current subscriber set
+  and per-row unsubscribe URL before every send. GET opens a confirmation page;
+  POST removes the subscription (email scanners cannot silently unsubscribe).
+- Every scored phrase gets an unguessable share URL with server-rendered metadata.
+  Named players' best entries appear in the top ten. Other results remain accessible
+  by their share link. Never submit confidential data. HTML is escaped in result
+  pages and inserted with `textContent` in the browser.
+- Scores are server-produced rubric points out of 100, **not confidence percentages**.
+  Higher means more convincingly empty corporate language. TypeSafe judges validity
+  and public suitability independently; malformed/failed responses never save a
+  score. Fixed score-band verdicts avoid a second generative model.
+- Each player gets one leaderboard seat for their best result. Ties use earliest
+  result time then ID. Repeat identical submissions reuse the stored result, and
+  identical normalized phrases use a cache keyed by the rubric version.
+- Limits: 10 attempts/player/minute, 60/player/day, 30/IP/minute, 300/IP/day, and
+  3,000 paid judging requests/day globally by default (includes nickname checks).
+  Counters survive restarts. Return friendly failures on timeouts or exhaustion.
+  These are casual-game abuse controls, not a proof-of-human competition.
+- Change `RUBRIC_VERSION` whenever the rubric or model changes: previous scores
+  stay shareable but are excluded from the new ranking and cache namespace.
+- X, Threads and WhatsApp use text-prefilled share intents. LinkedIn supports only
+  the URL: we copy the caption for pasting and explain that in the UI. Native share
+  and manual-copy fallbacks need no social credentials and never post automatically.

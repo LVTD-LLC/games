@@ -1,10 +1,10 @@
 [
   {
     "slug": "wordle",
-    "title": "Пять букв",
+    "title": "\u041f\u044f\u0442\u044c \u0431\u0443\u043a\u0432",
     "description": "Guess the five-letter Russian word in six tries.",
     "category": "Word games",
-    "duration": "3–5 minutes",
+    "duration": "3\u20135 minutes",
     "path": "games/wordle",
     "language": "ru",
     "logo": "/logos/wordle.svg"
@@ -14,9 +14,19 @@
     "title": "Little City Racers",
     "description": "Race through a colorful 3D city solo or with a friend on the same screen.",
     "category": "Racing",
-    "duration": "1–2 minutes",
+    "duration": "1\u20132 minutes",
     "path": "games/city-racers",
     "language": "en",
     "logo": "/logos/city-racers.svg"
+  },
+  {
+    "slug": "corporate-bs-meter",
+    "title": "Corporate BS Meter",
+    "description": "Write your most impressively meaningless corporate phrase. Get judged. Climb the leaderboard.",
+    "category": "Word games",
+    "duration": "1 minute",
+    "path": "games/corporate-bs-meter",
+    "language": "en",
+    "logo": "/logos/corporate-bs-meter.svg"
   }
 ]

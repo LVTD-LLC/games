@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-17 — Corporate BS Meter
+
+- Added the third game: a Jev-powered corporate nonsense meter with optional nickname/email onboarding, a persistent global top ten, and one best score per player.
+- Added shareable score pages, social sharing, email consent/unsubscribe, and a separate rate-limited Node/SQLite API with a persistent volume and server-only credentials.
+- Extended automatic deployment to verify the API before publishing the static site; added API and desktop/mobile browser regression coverage.
+
 ## 2026-09-12 — Short game descriptions
 
 - Added a short English description to each catalogue entry, with full-width text on mobile.
