@@ -293,7 +293,7 @@ export function createApp({
         return send(200, {
           ...result,
           rank: await store.rank(player.id),
-          ranked: Boolean(player.name),
+          ranked: true,
           entries: await store.leaderboard(),
         });
       } finally {

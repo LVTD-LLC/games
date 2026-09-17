@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-17 — Anonymous leaderboard entries
+
+- Include saved unnamed BS Meter attempts in the ranking as Anonymous, with one best result per player and no name/email requirement. Existing anonymous results become eligible automatically.
+- Update onboarding, result, and privacy copy; verify anonymous persistence, independent players, name changes, and public email privacy.
+
 ## 2026-09-17 — Share attempt detail pages
 
 - Give BS Meter attempt pages a responsive scorecard and sharing section with X, Threads, WhatsApp, LinkedIn, copy, and supported device sharing.

@@ -22,7 +22,7 @@ test.describe('game interactions with isolated server-side test judge', () => {
     Boolean(process.env.BASE_URL),
     'Do not write fixture data to production.',
   );
-  test('anonymous play, shared result, retry and name-only leaderboard enrollment', async ({
+  test('anonymous leaderboard entry survives reload, sharing, renaming and clearing the name', async ({
     page,
   }) => {
     await page.goto('/corporate-bs-meter/');
@@ -38,8 +38,9 @@ test.describe('game interactions with isolated server-side test judge', () => {
     await page.getByRole('button', { name: 'Measure my BS' }).click();
     await expect(page.locator('#score')).toHaveText('92.7');
     await expect(page.locator('#rank-message')).toContainText(
-      'Playing anonymously',
+      'Playing as Anonymous',
     );
+    await expect(page.locator('#rankings')).toContainText('Anonymous');
     const share = new URL(await page.locator('#share-x').getAttribute('href'));
     expect(share.searchParams.get('text')).toContain('92.7/100');
     expect(share.searchParams.get('url')).toContain(
@@ -52,7 +53,14 @@ test.describe('game interactions with isolated server-side test judge', () => {
       'href',
       /threads.com\/intent\/post\?text=/,
     );
-    await page.getByRole('button', { name: 'Join the leaderboard' }).click();
+    const attemptPath = new URL(share.searchParams.get('url')).pathname;
+    const seat = page
+      .locator('#rankings li')
+      .filter({ has: page.locator(`a[href="${attemptPath}"]`) });
+    await expect(seat.locator('.player-name')).toHaveText('Anonymous');
+    await page.reload();
+    await expect(seat.locator('.player-name')).toHaveText('Anonymous');
+    await page.getByRole('button', { name: 'Add a leaderboard name' }).click();
     await page
       .getByLabel('Leaderboard name')
       .fill(`Director ${test.info().project.name}`);
@@ -63,17 +71,35 @@ test.describe('game interactions with isolated server-side test judge', () => {
     await expect(page.locator('#rankings')).toContainText(
       `Director ${test.info().project.name}`,
     );
-    await page
-      .getByRole('button', { name: 'Refine your strategic nonsense' })
-      .click();
-    await expect(page.locator('#phrase')).toBeFocused();
+    await expect(seat.locator('.player-name')).toHaveText(
+      `Director ${test.info().project.name}`,
+    );
     await page.locator('#phrase').fill('Please send the report.');
     await page.getByRole('button', { name: 'Measure my BS' }).click();
     await expect(page.locator('#score')).toHaveText('12.4');
     await expect(page.locator('#rank-message')).toContainText('92.7/100');
+    await page
+      .getByRole('button', { name: 'Refine your strategic nonsense' })
+      .click();
+    await expect(page.locator('#phrase')).toBeFocused();
+    await expect(page.locator('#profile-button')).toContainText('Director');
+    await page.locator('#profile-button').click();
+    await page.getByLabel('Leaderboard name').fill('');
+    await page
+      .getByRole('button', { name: 'Let’s get down to business' })
+      .click();
+    await expect(seat.locator('.player-name')).toHaveText('Anonymous');
+    await expect(seat.locator('.player-score')).toHaveText('92.7');
+    await expect(page.locator('#rank-message')).toContainText(
+      'Playing as Anonymous',
+    );
     await page.reload();
     await expect(page.locator('#welcome')).not.toBeVisible();
-    await expect(page.locator('#profile-button')).toContainText('Director');
+    await expect(seat.locator('.player-name')).toHaveText('Anonymous');
+    const renamed = await page.request.get(share.searchParams.get('url'));
+    expect(await renamed.text()).toContain(
+      'Submitted by <strong>Anonymous</strong>',
+    );
   });
   test('email requires opt-in, inline failures recover, dialogs support Escape', async ({
     page,

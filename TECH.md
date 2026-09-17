@@ -201,8 +201,9 @@ CapRover is the only API ingress and appends the real client IP to `X-Forwarded-
 - No accounts. A namespaced HttpOnly, Secure, SameSite cookie remembers a random
   player token for 90 days; only its hash is stored in the database. Nicknames are
   not verified identities. Clearing cookies creates a new player.
-- Both name and email are optional. A name opts the player into the public ranking;
-  clearing it removes them. Email requires a separate explicit updates checkbox.
+- Both name and email are optional. All saved attempts enter the public ranking;
+  unnamed players appear as Anonymous. Adding or clearing a name changes attribution,
+  not eligibility. Email requires a separate explicit updates checkbox.
 - Emails are stored separately with consent timestamp/version and an unsubscribe
   token. They are never included in public responses or sent to TypeSafe. This
   release **collects opt-ins but sends no marketing email**. Operator-only export:
@@ -211,14 +212,16 @@ CapRover is the only API ingress and appends the real client IP to `X-Forwarded-
   and per-row unsubscribe URL before every send. GET opens a confirmation page;
   POST removes the subscription (email scanners cannot silently unsubscribe).
 - Every scored phrase gets an unguessable share URL with server-rendered metadata.
-  Named players' best entries appear in the top ten. Other results remain accessible
+  Each player's best entry competes for the top ten, including Anonymous players. Other results remain accessible
   by their share link. Never submit confidential data. HTML is escaped in result
   pages and inserted with `textContent` in the browser.
 - Scores are server-produced rubric points out of 100, **not confidence percentages**.
   Higher means more convincingly empty corporate language. TypeSafe judges validity
   and public suitability independently; malformed/failed responses never save a
   score. Fixed score-band verdicts avoid a second generative model.
-- Each player gets one leaderboard seat for their best result. Ties use earliest
+- Each player gets one leaderboard seat for their best result, keyed by player ID
+  (not display name), so different Anonymous players remain distinct. Existing
+  unnamed results are eligible without a data migration. Ties use earliest
   result time then ID. Repeat identical submissions reuse the stored result, and
   identical normalized phrases use a cache keyed by the rubric version.
 - Limits: 10 attempts/player/minute, 60/player/day, 30/IP/minute, 300/IP/day, and

@@ -40,7 +40,7 @@ export async function openStore(connectionString) {
       : null;
   }
   const rankedSQL = `WITH best AS (SELECT r.*, p.name, ROW_NUMBER() OVER (PARTITION BY r.player_id ORDER BY r.score DESC, r.created_at, r.id) AS best
-    FROM corporate_bs.results r JOIN corporate_bs.players p ON p.id=r.player_id WHERE p.name != '' AND r.rubric=$1)
+    FROM corporate_bs.results r JOIN corporate_bs.players p ON p.id=r.player_id WHERE r.rubric=$1)
     SELECT *, ROW_NUMBER() OVER (ORDER BY score DESC, created_at, id)::integer AS rank FROM best WHERE best=1`;
   return {
     db,
