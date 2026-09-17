@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f4f2e9" />
+    <title>Corporate BS Meter — LVTD Games</title>
+    <meta
+      name="description"
+      content="Say less. Mean even less. Write your most impressively meaningless corporate phrase, get an AI BS score, and climb the global leaderboard."
+    />
+    <meta
+      property="og:title"
+      content="Corporate BS Meter — Can you out-BS the boardroom?"
+    />
+    <meta
+      property="og:description"
+      content="One phrase. One brutally honest meter. How corporate can you get?"
+    />
+    <meta
+      property="og:image"
+      content="https://games.lvtd.dev/corporate-bs-meter/share.png"
+    />
+    <meta
+      property="og:url"
+      content="https://games.lvtd.dev/corporate-bs-meter/"
+    />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="/logos/corporate-bs-meter.svg"
+    />
+  </head>
+  <body>
+    <header>
+      <a class="brand" href="/" aria-label="LVTD Games — all games"
+        >LVTD <span>/ All games</span></a
+      ><button class="text-button" id="profile-button">
+        Your name <span aria-hidden="true">↗</span>
+      </button>
+    </header>
+    <main>
+      <section class="game" aria-labelledby="game-title">
+        <div class="intro">
+          <div class="eyebrow">
+            <span class="status-dot"></span> The boardroom is listening
+          </div>
+          <h1 id="game-title">Corporate<br /><span>BS Meter.</span></h1>
+          <p class="tagline">Say less. Mean even less.</p>
+          <p class="instructions">
+            Write the most impressively meaningless corporate phrase you can.
+            Out-BS the boardroom.
+          </p>
+        </div>
+        <div class="meter-card" id="meter-card">
+          <div class="instrument-header">
+            <span>Corporate nonsense detector</span
+            ><span aria-hidden="true">№ 003</span>
+          </div>
+          <div class="dial" aria-hidden="true">
+            <svg viewBox="0 0 440 250">
+              <path class="track" d="M 40 220 A 180 180 0 0 1 400 220" />
+              <path class="range" d="M 40 220 A 180 180 0 0 1 400 220" />
+              <g id="ticks"></g>
+              <g id="needle">
+                <path d="M 220 210 L 61 218 L 220 230 Z" />
+                <circle cx="220" cy="220" r="11" />
+              </g>
+              <text x="40" y="246">PLAIN ENGLISH</text>
+              <text x="400" y="246" text-anchor="end">PURE BS</text>
+            </svg>
+          </div>
+          <div class="readout" aria-live="polite" aria-atomic="true">
+            <div class="score-number">
+              <span id="score">—</span><span class="out-of">/100</span>
+            </div>
+            <h2 id="verdict">Awaiting your synergy.</h2>
+            <p id="verdict-line">Your next promotion is one sentence away.</p>
+          </div>
+        </div>
+        <form id="phrase-form">
+          <label for="phrase">Your finest corporate nonsense</label>
+          <div class="input-wrap">
+            <textarea
+              id="phrase"
+              name="phrase"
+              maxlength="280"
+              minlength="5"
+              rows="3"
+              required
+              placeholder="Let’s operationalize our north-star alignment to unlock a more synergistic tomorrow."
+            ></textarea
+            ><span id="count" aria-live="off">0 / 280</span>
+          </div>
+          <div class="form-bottom">
+            <button type="button" class="text-button" id="example">
+              Need inspiration?</button
+            ><button class="primary" type="submit" id="judge-button">
+              Measure my BS <span aria-hidden="true">↗</span>
+            </button>
+          </div>
+          <p id="game-error" class="error" role="alert" hidden></p>
+          <p class="fine-print">
+            A playful AI rating, not a fact-check. Phrases get shareable result
+            pages—keep confidential work out.
+          </p>
+        </form>
+        <section id="result" hidden aria-label="Your result">
+          <h2 id="result-summary"></h2>
+          <blockquote id="result-phrase"></blockquote>
+          <p id="rank-message"></p>
+          <div class="share-heading">
+            This deserves a wider stakeholder audience.
+          </div>
+          <div class="share-buttons" aria-label="Share your result">
+            <a id="share-x" target="_blank" rel="noopener noreferrer"
+              >Share on X</a
+            ><button id="share-linkedin">LinkedIn</button
+            ><a id="share-threads" target="_blank" rel="noopener noreferrer"
+              >Threads</a
+            ><a id="share-whatsapp" target="_blank" rel="noopener noreferrer"
+              >WhatsApp</a
+            ><button id="copy-result">Copy result</button
+            ><button id="native-share" hidden>More…</button>
+          </div>
+          <p id="share-status" class="fine-print" role="status"></p>
+          <label for="share-copy" class="sr-only">Share message</label
+          ><textarea id="share-copy" readonly hidden></textarea
+          ><button class="text-button" id="try-again">
+            Refine your strategic nonsense <span aria-hidden="true">↗</span>
+          </button>
+        </section>
+      </section>
+      <aside class="leaderboard" aria-labelledby="leaderboard-title">
+        <div class="leaderboard-heading">
+          <div>
+            <div class="eyebrow">Global leaderboard</div>
+            <h2 id="leaderboard-title">The board<br />of directors.</h2>
+          </div>
+          <svg width="38" height="42" viewBox="0 0 38 42" aria-hidden="true">
+            <path
+              d="M11 5h16v10a8 8 0 0 1-16 0V5Zm0 3H5v6c0 6 6 7 9 7m13-13h6v6c0 6-6 7-9 7m-5 3v10m-7 3h14"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+          </svg>
+        </div>
+        <p class="leaderboard-sub">
+          The top 10. Maximum jargon. Minimum substance.
+        </p>
+        <ol id="rankings">
+          <li class="empty-state">Calling the board to order…</li>
+        </ol>
+        <button id="refresh-leaderboard" class="text-button" hidden>
+          Retry leaderboard
+        </button>
+        <p class="fine-print">
+          Your best score only. Earlier entries win ties.<br />Add a name to
+          take your seat. No email needed.
+        </p>
+        <button class="outline-button" id="join-button">
+          Join the leaderboard <span aria-hidden="true">↗</span>
+        </button>
+      </aside>
+    </main>
+    <footer>
+      <span
+        >A thoroughly unproductive game by
+        <a href="https://lvtd.dev" target="_blank" rel="noopener noreferrer"
+          >LVTD</a
+        >.</span
+      >
+      <div>
+        <a href="https://typesafe.ai" target="_blank" rel="noopener noreferrer"
+          >Judged by Jev</a
+        ><button class="text-button" id="privacy-button">Privacy</button>
+      </div>
+    </footer>
+    <dialog id="welcome" aria-labelledby="welcome-title">
+      <form id="profile-form">
+        <button
+          type="button"
+          class="close-button"
+          id="close-welcome"
+          aria-label="Skip and play anonymously"
+        >
+          ×
+        </button>
+        <div class="eyebrow">Before we circle back</div>
+        <h2 id="welcome-title">Take a seat<br />at the table.</h2>
+        <p>Both fields are optional. Your nonsense is mandatory.</p>
+        <label for="player-name">Leaderboard name <span>optional</span></label
+        ><input
+          id="player-name"
+          name="name"
+          maxlength="32"
+          autocomplete="nickname"
+          placeholder="Chief Synergy Officer"
+          aria-describedby="name-help"
+        /><small id="name-help"
+          >Your name and best phrase appear on the public leaderboard.</small
+        ><label for="player-email"
+          >Email <span>optional, never public</span></label
+        ><input
+          id="player-email"
+          name="email"
+          type="email"
+          maxlength="254"
+          autocomplete="email"
+          placeholder="you@example.com"
+        /><label class="checkbox-label"
+          ><input type="checkbox" id="updates" />Send me occasional emails about
+          new LVTD games. I can unsubscribe anytime.</label
+        >
+        <p id="profile-error" class="error" role="alert" hidden></p>
+        <button class="primary" id="profile-submit" type="submit">
+          Let’s get down to business <span aria-hidden="true">↗</span></button
+        ><button type="button" class="text-button skip" id="skip-welcome">
+          Skip. I’m off the record.
+        </button>
+        <p class="fine-print">
+          No account or password. You can change your name later.
+        </p>
+      </form>
+    </dialog>
+    <dialog id="privacy" aria-labelledby="privacy-title">
+      <button
+        class="close-button"
+        id="close-privacy"
+        aria-label="Close privacy information"
+      >
+        ×
+      </button>
+      <h2 id="privacy-title">The plain-English version.</h2>
+      <p>
+        Playing needs no name or email. A game-only cookie remembers your player
+        for 90 days; this is not an account and does not verify your identity.
+      </p>
+      <p>
+        Your phrase is sent to TypeSafe’s Jev to judge it. Every scored phrase
+        has a shareable page. If you add a name, your best score, name and
+        phrase also appear in the global ranking. Clear your name to leave the
+        ranking. Shared result pages remain available.
+      </p>
+      <p>
+        Your optional email is stored separately, only when you choose new-game
+        updates. It is never public or sent to the AI. Every game-update email
+        will include an unsubscribe link.
+      </p>
+      <p>
+        We keep scores to run the game. Temporary hashed network counters limit
+        abuse; raw IP addresses are not stored in the game database.
+      </p>
+      <p>
+        Do not submit confidential information or other people’s personal
+        details. This is a comedy game, not a claim about anyone’s honesty.
+      </p>
+      <button class="primary" id="privacy-done">Got it</button>
+    </dialog>
+    <noscript
+      ><p>
+        This game needs JavaScript. You can still
+        <a href="/">browse our games</a>.
+      </p></noscript
+    >
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

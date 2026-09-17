@@ -1,0 +1,12 @@
+{
+  "name": "@lvtd-games/corporate-bs-meter",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "vite": "8.3.0"
+  }
+}
