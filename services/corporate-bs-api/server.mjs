@@ -1,5 +1,6 @@
 import { createServer } from 'node:http';
 import { isIP } from 'node:net';
+import { resultPage } from './result-page.mjs';
 const PREFIX = '/api/corporate-bs';
 const COOKIE = 'lvtd_bs_session';
 const MINUTE = 60_000,
@@ -50,9 +51,14 @@ async function body(req) {
 function page(
   title,
   content,
-  { description = '', url = '', origin = 'https://games.lvtd.dev' } = {},
+  {
+    description = '',
+    url = '',
+    origin = 'https://games.lvtd.dev',
+    result = false,
+  } = {},
 ) {
-  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHTML(title)} — Corporate BS Meter</title><meta name="description" content="${escapeHTML(description)}"><meta property="og:title" content="${escapeHTML(title)}"><meta property="og:description" content="${escapeHTML(description)}"><meta property="og:type" content="website"><meta property="og:url" content="${escapeHTML(url)}"><meta property="og:image" content="${origin}/corporate-bs-meter/share.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${escapeHTML(title)}"><meta name="twitter:description" content="${escapeHTML(description)}"><meta name="twitter:image" content="${origin}/corporate-bs-meter/share.png"><style>body{margin:0;background:#f4f2e9;color:#262a24;font:18px/1.6 Arial,sans-serif}main{max-width:650px;margin:8vh auto;padding:28px}a{color:#38533a}h1{font-size:clamp(32px,7vw,58px);line-height:1.05;letter-spacing:-2px}blockquote{margin:28px 0;font-size:24px;overflow-wrap:anywhere}.score{font-size:90px;font-weight:800;line-height:1.2}.button,button{display:inline-block;background:#38533a;color:white;border:0;border-radius:8px;padding:16px 24px;font:inherit;text-decoration:none;cursor:pointer}small{font-size:14px}a:focus-visible,button:focus-visible{outline:3px solid #b76b38;outline-offset:4px}</style></head><body><main><a href="/">LVTD / All games</a>${content}</main></body></html>`;
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHTML(title)} — Corporate BS Meter</title><meta name="description" content="${escapeHTML(description)}"><meta property="og:title" content="${escapeHTML(title)}"><meta property="og:description" content="${escapeHTML(description)}"><meta property="og:type" content="website"><meta property="og:url" content="${escapeHTML(url)}"><meta property="og:image" content="${origin}/corporate-bs-meter/share.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${escapeHTML(title)}"><meta name="twitter:description" content="${escapeHTML(description)}"><meta name="twitter:image" content="${origin}/corporate-bs-meter/share.png"><style>body{margin:0;background:#f4f2e9;color:#262a24;font:18px/1.6 Arial,sans-serif}main{max-width:650px;margin:8vh auto;padding:28px}a{color:#38533a}h1{font-size:clamp(32px,7vw,58px);line-height:1.05;letter-spacing:-2px}blockquote{margin:28px 0;font-size:24px;overflow-wrap:anywhere}.score{font-size:90px;font-weight:800;line-height:1.2}.button,button{display:inline-block;background:#38533a;color:white;border:0;border-radius:8px;padding:16px 24px;font:inherit;text-decoration:none;cursor:pointer}small{font-size:14px}a:focus-visible,button:focus-visible{outline:3px solid #b76b38;outline-offset:4px}</style>${result ? '<link rel="stylesheet" href="/corporate-bs-meter/result-page.css"><script src="/corporate-bs-meter/result-share.js" defer></script>' : ''}</head><body><main><a href="/">LVTD / All games</a>${content}</main></body></html>`;
 }
 export function createApp({
   store,
@@ -97,17 +103,18 @@ export function createApp({
         if (!result)
           throw new HttpError(404, 'This result could not be found.');
         const title = `${result.score.toFixed(1)}/100 — ${result.title}`;
+        res.setHeader(
+          'Content-Security-Policy',
+          "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self'; form-action 'self'; frame-ancestors 'self'; base-uri 'none'",
+        );
         return send(
           200,
-          page(
-            title,
-            `<h1>Corporate BS Meter</h1><div class="score">${result.score.toFixed(1)}<small> / 100</small></div><h2>${escapeHTML(result.title)}</h2><blockquote>“${escapeHTML(result.phrase)}”</blockquote><p>By ${escapeHTML(result.name)}. ${escapeHTML(result.line)}</p><a class="button" href="/corporate-bs-meter/?challenge=${result.id}">Can you out-BS this?</a><p><small>A playful AI rating, not a fact-check.</small></p>`,
-            {
-              description: result.phrase,
-              url: `${origin}/corporate-bs-meter/result/${result.id}/`,
-              origin,
-            },
-          ),
+          page(title, resultPage(result, origin), {
+            result: true,
+            description: result.phrase,
+            url: `${origin}/corporate-bs-meter/result/${result.id}/`,
+            origin,
+          }),
           'text/html; charset=utf-8',
         );
       }

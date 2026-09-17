@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-17 — Share attempt detail pages
+
+- Give BS Meter attempt pages a responsive scorecard and sharing section with X, Threads, WhatsApp, LinkedIn, copy, and supported device sharing.
+- Preserve the original player's attribution, usable no-JavaScript links, accessible clipboard fallback and escaped user content; verify desktop/mobile sharing behavior.
+
 ## 2026-09-17 — Shared games PostgreSQL
 
 - Consolidate static games and BS Meter API into the games app; remove the separate API deployment and SQLite runtime.

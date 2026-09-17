@@ -230,3 +230,9 @@ CapRover is the only API ingress and appends the real client IP to `X-Forwarded-
 - X, Threads and WhatsApp use text-prefilled share intents. LinkedIn supports only
   the URL: we copy the caption for pasting and explain that in the UI. Native share
   and manual-copy fallbacks need no social credentials and never post automatically.
+
+### Sharing a saved BS Meter attempt
+
+Public result pages render `services/corporate-bs-api/result-page.mjs` and load the game's `public/result-page.css` and `public/result-share.js`. The detail-only CSP allows same-origin scripts/styles without allowing inline scripts. These pages need no player session or API calls to share. Text attributes the original player rather than claiming the viewer earned the score; links always use the canonical result URL, without tracking query parameters.
+
+X, Threads, WhatsApp and LinkedIn use normal external links with `noopener noreferrer`. Copy and device sharing progressively enhance them; denied clipboard access reveals a labelled, selected text field. LinkedIn shares the URL and separately copies a caption for pasting. With JavaScript disabled, the social links, permalink and copyable text remain available. Browser tests stub native share/clipboard permissions and intercept LinkedIn navigation: they validate our integration, not delivery through a real social account or operating-system share sheet.
