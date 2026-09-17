@@ -66,25 +66,6 @@ jobs:
           printf '%s\n' "$DEPLOY_SHA" > "$staging_dir/apps/site/public/deploy-revision.txt"
           tar -cf "$RUNNER_TEMP/deploy.tar" -C "$staging_dir" .
 
-      - name: Package scoring API and revision marker
-        if: steps.current.outputs.deploy == 'true'
-        shell: bash
-        run: |
-          api_staging_dir="$RUNNER_TEMP/corporate-bs-source"
-          mkdir -p "$api_staging_dir"
-          git archive "$DEPLOY_SHA" | tar -x -C "$api_staging_dir"
-          cp "$api_staging_dir/services/corporate-bs-api/captain-definition" "$api_staging_dir/captain-definition"
-          printf '%s\n' "$DEPLOY_SHA" > "$api_staging_dir/services/corporate-bs-api/revision.txt"
-          tar -cf "$RUNNER_TEMP/corporate-bs-api.tar" -C "$api_staging_dir" .
-
-      - name: Deploy and verify scoring API before the game frontend
-        if: steps.current.outputs.deploy == 'true'
-        env:
-          CAPROVER_APP_NAME: corporate-bs-api
-          CAPROVER_APP_TOKEN: ${{ secrets.CORPORATE_BS_CAPROVER_APP_TOKEN }}
-          PRODUCTION_URL: https://corporate-bs-api.cap.gregagi.com
-        run: node scripts/deploy-caprover.mjs "$RUNNER_TEMP/corporate-bs-api.tar" "$DEPLOY_SHA"
-
       - name: Deploy and wait for the tested revision to be live
         if: steps.current.outputs.deploy == 'true'
         env:

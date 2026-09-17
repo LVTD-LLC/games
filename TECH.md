@@ -35,7 +35,7 @@ scripts/           Build orchestration, local preview, deployment
 dist/              Assembled deployment output (generated)
 ```
 
-These are intentionally **independent npm projects**, not hoisted npm workspaces. Each has its own dependency tree and lockfile. The root owns only orchestration and browser-test tooling. A Phaser game, a Three.js game, and Astro can depend on different versions without resolving through a shared application manifest.
+These are intentionally **independent npm projects**, not hoisted npm workspaces. Each has its own dependency tree and lockfile. The root owns orchestration, browser-test tooling, and the server-only `pg`/`sirv` dependencies. A Phaser game, a Three.js game, and Astro can depend on different versions without resolving through a shared application manifest.
 
 Games are separate HTML documents at `/<slug>/`; no iframe and no runtime imports from Astro. CSS and framework runtimes cannot bleed between pages. This is dependency/runtime isolation, **not a security sandbox**: games share an origin. Namespace local storage (Wordle uses `lvtd-wordle-v1:`), keep service workers scoped to the game, and use separate origins for untrusted code.
 
@@ -48,17 +48,49 @@ Games are separate HTML documents at `/<slug>/`; no iframe and no runtime import
 5. Add its logo under `apps/site/public/logos/`, a released-game row in README.md, a concise changelog entry, and meaningful checks. The catalogue reads each logo from the registry.
 6. Run `npm run setup && npm run build`, then visit the assembled route directly and via the catalogue.
 
-`scripts/packages.mjs` discovers registered packages, installs each with `npm ci`, builds the shell, then copies each standalone build into `dist/<slug>/`. New games do not need Dockerfile changes. Games may choose their own frontend technology, provided their build produces a static web app. A server-side game backend would require a separate service.
+`scripts/packages.mjs` discovers registered packages, installs each with `npm ci`, builds the shell, then copies each standalone build into `dist/<slug>/`. New games do not need Dockerfile changes. Games may choose their own frontend technology, provided their build produces a static web app. Games needing persistence add server-side routes under `services/` and a namespaced SQL migration; static-only games need no database code.
 
 ## Production / deployment
 
-CapRover app `games` runs an Nginx static container on the existing Hetzner host. The static site needs no persistent volume or runtime app secrets; the separate Corporate BS API does (see below). Nginx gives unknown routes a real 404 and fingerprinted assets immutable caching.
+CapRover app `games` runs a Node 24 server: static game packages plus server-side APIs in one deployment. PostgreSQL is a separate **shared** private app, `games-postgres`; browser code never receives its connection string. Static games remain independent packages and do not use the database. `sirv` serves built assets with ETags and immutable fingerprinted-asset caching; unknown routes return the English 404 page.
 
-The **CI** workflow validates PRs and main. A separate **Deploy to CapRover** workflow automatically follows successful main CI, checks out the tested SHA, skips superseded commits, and uploads tracked source plus a revision marker. It waits for the exact commit at `/deploy-revision.txt`, not just an HTTP 200. GitHub secret `CAPROVER_APP_TOKEN` is an app-scoped deploy token; never commit it or use the administrator password in CI.
+The **CI** workflow validates PRs/main against a disposable PostgreSQL service. **Deploy to CapRover** follows successful main CI, checks out the tested SHA, skips superseded commits, and uploads tracked source plus `/deploy-revision.txt`. Only the existing app-scoped `CAPROVER_APP_TOKEN` is needed. There is no per-game API or database deployment in CI. The server applies committed migrations before accepting traffic; startup fails if a migration fails or an applied migration was changed. Container health checks verify a database query.
 
-The public hostname `games.lvtd.dev` is active with HTTPS on the CapRover `games` app; its DNS-only A record points to `195.201.166.171`. The deploy verifier uses the HTTPS CapRover origin so a DNS-provider outage does not misreport an app rollout; verify the custom hostname after domain changes.
+The public hostname `games.lvtd.dev` uses HTTPS on app `games` (195.201.166.171). Deployment verifies the exact SHA using `https://games.cap.gregagi.com/deploy-revision.txt`; also smoke-test the public game and health routes.
 
-Rollback: revert the offending PR through another PR and merge after CI; this redeploys the prior source with a new exact revision marker. For an urgent operational rollback, use CapRover's previous successful app image via API/CLI, then reconcile the repo. The static site has no database; preserve the separate Corporate BS API volume when rolling back.
+### Shared database and migrations
+
+- Production specification: [`ops/games-postgres.json`](ops/games-postgres.json). PostgreSQL 17.11, one replica, private `captain-overlay-network`, no public ports/web ingress, persistent `games-postgres-data` mounted at `/var/lib/postgresql/data`. Do not recreate the volume for app deployments.
+- `DATABASE_URL` belongs only in the **games app's runtime environment**, pointing to `srv-captain--games-postgres:5432/games`. The `games` login owns this database but is not a cluster superuser; the Postgres app's separate administrator credential is not given to games. Preserve unrelated CapRover settings when updating configuration.
+- Every game uses its own schema (first: `corporate_bs`). Shared auth/payment tables can be introduced in later migrations; neither feature is implemented here. Do not treat a nickname or the existing BS cookie as shared authentication.
+- Append ordered, zero-padded SQL files in `services/database/migrations/`, e.g. `0002_next_game.sql`. Use schema-qualified names and backward-compatible expand/contract changes. Never modify/remove an applied file.
+- `npm run db:migrate` uses the same runner as startup. A PostgreSQL advisory lock serializes concurrent runners; the batch and migration ledger are transactional. Checksums reject edited files, missing history and out-of-order migrations. SQL must be transaction-compatible (no `CREATE INDEX CONCURRENTLY` or explicit transaction statements).
+- Code rollback is a revert PR after CI, or the previous successful image for an emergency. Migrations are forward-only: retain compatible schema/data and ship corrective migrations. Never automatically drop database tables on rollback.
+- Back up with `pg_dump -Fc` using protected runtime credentials and restore into a separate database with `pg_restore` for verification. Keep dumps private; they contain player and subscriber data. A persistent volume alone is not a backup. This change does not create a scheduled backup service.
+
+Local database setup:
+
+```sh
+docker compose up -d --wait
+export DATABASE_URL=postgres://games:local-games-only@127.0.0.1:5432/games
+export TEST_DATABASE_URL=postgres://games:local-games-only@127.0.0.1:5432/postgres
+npm run db:migrate
+npm test
+npm run build
+npm run test:e2e
+```
+
+These are local-only credentials. Tests require a disposable PostgreSQL server with CREATEDB rights; they create isolated randomly named databases and remove them afterward. Never point `TEST_DATABASE_URL` at production. Browser tests exercise the real consolidated static/API server and PostgreSQL with an injected judge, without paid API calls. For real local play, provide `TYPESAFE_API_KEY` through the protected environment, set `PORT=4173 PUBLIC_ORIGIN=http://localhost:4173 COOKIE_SECURE=false`, and `npm start`. `npm run preview` remains a static-development proxy, not the production entrypoint.
+
+### One-time SQLite cutover
+
+The retired `corporate-bs-api` app used SQLite, not PostgreSQL. Its historical source lives in git history, not the current deployment workflow.
+
+1. Provision the private Postgres app from the specification and set the games runtime environment; no data migration runs in CI.
+2. Stop the old API writer during a short scoring maintenance window. Back up its entire persistent volume, or take a consistent SQLite online backup before stopping it. Keep the old image/configuration and backup for rollback.
+3. Before starting the new server, run `node services/database/import-sqlite.mjs /path/to/backup.sqlite` with the target `DATABASE_URL`. The source is read-only; the importer applies migrations then copies all six tables transactionally. It verifies counts and **refuses any nonempty destination**, including settings, so do not start `openStore` first. Preserve session hashes, timestamps, result IDs/share links, consent/unsubscribe tokens, caches, counters, and IP salt.
+4. Deploy the reviewed games revision, verify exact revision, database health, public rankings and existing share links. Keep the old API scaled to zero and its volume intact until separately authorized for deletion. Once new writes enter PostgreSQL, reverting to stale SQLite requires reconciliation; never silently switch back.
+5. Normal future deploys only apply pending SQL migrations; they never repeat the import or provision per-game infrastructure.
 
 Ship changes using branch → PR → passing CI → merge. Keep `CHANGELOG.md` append-only.
 
@@ -154,63 +186,15 @@ device-dependent.
 
 ## Corporate BS Meter
 
-`/corporate-bs-meter/` is a standalone vanilla JS/Vite word game. The static catalogue
-and previous games are unchanged. The new `services/corporate-bs-api/` service uses
-Node 24's built-in HTTP and SQLite libraries (no runtime npm dependencies). Nginx
-proxies `/api/corporate-bs/`, result pages and unsubscribe pages to the internal
-CapRover service `srv-captain--corporate-bs-api:80`; Docker DNS is resolved at request
-time. Keep exactly **one API replica**, with persistent volume `corporate-bs-data`
-mounted at `/data`. SQLite uses WAL and transactions; the database is not in the image.
+`/corporate-bs-meter/` is a standalone vanilla JS/Vite word game. Its server-only module under `services/corporate-bs-api/` is mounted in the games server (the directory name is not a separate deployed app). Routes and share/unsubscribe URLs remain unchanged. Data lives under the `corporate_bs` schema in shared PostgreSQL.
 
-### Configuration and deployment
+Runtime variables on **games**:
 
-Runtime variables for the **API service only**:
+- `DATABASE_URL`: private shared PostgreSQL connection (never `VITE_` or build arguments).
+- `TYPESAFE_API_KEY`: existing server-only scoring key; initially from Infisical Openclaw/prod `/projects/corporate-bs-meter`.
+- `TYPESAFE_MODEL=jev-1.13.0`, `PUBLIC_ORIGIN=https://games.lvtd.dev`, `TRUST_PROXY=true`, `PORT=80`, `DAILY_JUDGING_LIMIT=3000`.
 
-- `TYPESAFE_API_KEY`: from Infisical project Openclaw, prod,
-  `/projects/corporate-bs-meter`. Never a `VITE_` variable or build argument.
-- `TYPESAFE_MODEL=jev-1.13.0`: pinned to the model validated for the initial rubric.
-- `PUBLIC_ORIGIN=https://games.lvtd.dev`, `TRUST_PROXY=true`, `PORT=80`.
-- `DATABASE_PATH=/data/corporate-bs.sqlite`, `DAILY_JUDGING_LIMIT=3000`.
-
-The existing deployment workflow now deploys/verifies the API first, then the static
-site, both from the exact SHA that passed main CI. GitHub secret
-`CORPORATE_BS_CAPROVER_APP_TOKEN` is scoped to the API app; the existing
-`CAPROVER_APP_TOKEN` remains scoped to `games`. Both services expose their exact
-revision at `/deploy-revision.txt`; the API also exposes `/api/corporate-bs/health`.
-The backend's default HTTPS CapRover hostname is for deployment verification. Its
-mutating game endpoints require the configured website Origin and a player cookie.
-
-CapRover is the only ingress to the API container: it appends the client IP to
-`X-Forwarded-For`. The site's inner Nginx preserves that chain without appending a
-hop. The API trusts only the **last** address, and only with `TRUST_PROXY=true`.
-Never publish the API container port directly or enable proxy trust for an
-untrusted ingress. Rate counters store salted hashes, not raw addresses.
-
-Rollback app code by reverting through a PR; retain `/data`. Back up SQLite with
-an SQLite-aware online backup (e.g. `VACUUM INTO` to a new backup file), not by
-copying only the live `.sqlite` file without its WAL. Do not scale replicas or
-remove/replace the volume. The first release only creates additive tables; future
-schema changes must preserve compatibility across rolling deploys.
-
-### Local work and verification
-
-Start the real service with server-only env and a local database, then run the site:
-
-```sh
-PORT=4174 PUBLIC_ORIGIN=http://localhost:4173 COOKIE_SECURE=false \
-DATABASE_PATH=/tmp/corporate-bs.sqlite node services/corporate-bs-api/server.mjs
-npm run dev
-```
-
-Supply `TYPESAFE_API_KEY` through your protected environment, never in command
-history. The local preview proxies API and result routes to port 4174. `BS_API_URL`
-can override that local upstream. Vite hot reload uses the same port.
-
-`npm test` includes API integration tests using an injected test judge. Playwright
-starts `tests/bs-api-fixture.mjs`, an isolated in-memory API with a deterministic
-judge; production never imports it. No real emails, paid requests, or leaderboard
-entries are created in CI. The write scenarios intentionally skip when `BASE_URL`
-is set; perform a bounded anonymous live submission separately after deployment.
+CapRover is the only API ingress and appends the real client IP to `X-Forwarded-For`. The API trusts only the last address, and only with `TRUST_PROXY=true`. Do not publish the container port or enable proxy trust behind an untrusted ingress. Rate counters store salted hashes, not raw IPs. Budget reservations use short atomic PostgreSQL transactions; no lock is held during remote judging. Keep one games replica for now: the per-player in-flight judging guard remains process-local, although persisted budgets and result uniqueness are database-enforced.
 
 ### Game semantics and data
 

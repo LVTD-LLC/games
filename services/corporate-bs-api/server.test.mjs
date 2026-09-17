@@ -1,8 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, rmSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { testDatabase } from '../../tests/database.mjs';
 import { once } from 'node:events';
 import { createApp } from './server.mjs';
 import { openStore } from './store.mjs';
@@ -19,7 +17,8 @@ async function fixture(
     nameAllowed: async () => true,
   },
 ) {
-  const store = openStore(':memory:');
+  const database = await testDatabase();
+  const store = await openStore(database.url);
   const server = createApp({
     store,
     judge,
@@ -32,7 +31,8 @@ async function fixture(
   const base = `http://127.0.0.1:${server.address().port}`;
   t.after(async () => {
     await new Promise((resolve) => server.close(resolve));
-    store.close();
+    await store.close();
+    await database.close();
   });
   const session = await fetch(base + '/api/corporate-bs/session');
   const cookie = session.headers.get('set-cookie').split(';')[0];
@@ -79,7 +79,14 @@ test('anonymous play uses only server scores; profile opts into ranking without 
   });
   assert.equal(second.data.id, first.data.id);
   assert.equal(second.data.rank.rank, 1);
-  assert.equal(f.store.db.prepare('SELECT count(*) n FROM results').get().n, 1);
+  assert.equal(
+    (
+      await f.store.db.query(
+        'SELECT count(*)::integer n FROM corporate_bs.results',
+      )
+    ).rows[0].n,
+    1,
+  );
   const publicData = await (
     await fetch(f.base + '/api/corporate-bs/leaderboard')
   ).text();
@@ -93,18 +100,27 @@ test('anonymous play uses only server scores; profile opts into ranking without 
   assert(html.includes('og:title'));
   assert(!html.includes('private@example.com'));
   await f.post('/profile', { name: '' });
-  assert.deepEqual(f.store.leaderboard(), []);
-  const sub = f.store.db.prepare('SELECT * FROM subscribers').get();
+  assert.deepEqual(await f.store.leaderboard(), []);
+  const sub = (await f.store.db.query('SELECT * FROM corporate_bs.subscribers'))
+    .rows[0];
   assert.equal(sub.consent_version, 'games-updates-v1');
   const unsubPath = `/corporate-bs-meter/unsubscribe/${sub.unsubscribe_token}/`;
   await fetch(f.base + unsubPath);
   assert.equal(
-    f.store.db.prepare('SELECT count(*) n FROM subscribers').get().n,
+    (
+      await f.store.db.query(
+        'SELECT count(*)::integer n FROM corporate_bs.subscribers',
+      )
+    ).rows[0].n,
     1,
   );
   await fetch(f.base + unsubPath, { method: 'POST' });
   assert.equal(
-    f.store.db.prepare('SELECT count(*) n FROM subscribers').get().n,
+    (
+      await f.store.db.query(
+        'SELECT count(*)::integer n FROM corporate_bs.subscribers',
+      )
+    ).rows[0].n,
     0,
   );
 });
@@ -148,7 +164,14 @@ test('cross-origin, unknown-session, invalid input and malformed provider output
     (await f.post('/score', { phrase: 'Hello again.' })).status,
     503,
   ); // pending lock released on failure
-  assert.equal(f.store.db.prepare('SELECT count(*) n FROM results').get().n, 0);
+  assert.equal(
+    (
+      await f.store.db.query(
+        'SELECT count(*)::integer n FROM corporate_bs.results',
+      )
+    ).rows[0].n,
+    0,
+  );
 });
 test('unsafe content and prompt-injection decisions fail closed without publishing', async (t) => {
   const f = await fixture(t, {
@@ -174,7 +197,14 @@ test('unsafe content and prompt-injection decisions fail closed without publishi
     (await f.post('/profile', { name: 'Unacceptable' })).status,
     400,
   );
-  assert.equal(f.store.db.prepare('SELECT count(*) n FROM results').get().n, 0);
+  assert.equal(
+    (
+      await f.store.db.query(
+        'SELECT count(*)::integer n FROM corporate_bs.results',
+      )
+    ).rows[0].n,
+    0,
+  );
 });
 test('HTML in a shared phrase is escaped and client metadata is ignored', async (t) => {
   const f = await fixture(t);
@@ -212,45 +242,49 @@ test('rate limits apply before scoring, even when a client forges forwarded IP h
   );
   assert.equal(calls, 10);
 });
-test('best-per-player, deterministic ties, cached scores and budgets survive a database restart', () => {
-  const dir = mkdtempSync(join(tmpdir(), 'bs-store-'));
-  const file = join(dir, 'game.sqlite');
-  let store = openStore(file);
+test('best-per-player, deterministic ties, cached scores and budgets survive a database restart', async () => {
+  const database = await testDatabase();
+  let store = await openStore(database.url);
   try {
-    const a = store.session().player,
-      b = store.session().player;
-    store.profile(a.id, 'First', '');
-    store.profile(b.id, 'Second', '');
-    store.save(a.id, 'First strong phrase', { score: 90, model: 'test' });
-    store.save(a.id, 'Weaker phrase', { score: 12, model: 'test' });
-    store.save(b.id, 'Second strong phrase', { score: 90, model: 'test' });
+    const a = (await store.session()).player,
+      b = (await store.session()).player;
+    await store.profile(a.id, 'First', '');
+    await store.profile(b.id, 'Second', '');
+    await store.save(a.id, 'First strong phrase', { score: 90, model: 'test' });
+    await store.save(a.id, 'Weaker phrase', { score: 12, model: 'test' });
+    await store.save(b.id, 'Second strong phrase', {
+      score: 90,
+      model: 'test',
+    });
     // Ensure exact deterministic tie ordering independent of wall-clock test speed.
-    store.db
-      .prepare('UPDATE results SET created_at=1 WHERE player_id=?')
-      .run(a.id);
-    store.db
-      .prepare('UPDATE results SET created_at=2 WHERE player_id=?')
-      .run(b.id);
-    store.cache('cached phrase', {
+    await store.db.query(
+      'UPDATE corporate_bs.results SET created_at=1 WHERE player_id=$1',
+      [a.id],
+    );
+    await store.db.query(
+      'UPDATE corporate_bs.results SET created_at=2 WHERE player_id=$1',
+      [b.id],
+    );
+    await store.cache('cached phrase', {
       score: 52,
       valid: true,
       publishable: true,
       model: 'test',
     });
-    assert.equal(store.allow([['budget', 1, 60000]], 1000), true);
-    store.close();
-    store = openStore(file);
-    assert.equal(store.allow([['budget', 1, 60000]], 1100), false);
-    assert.equal(store.cached('cached phrase').score, 52);
+    assert.equal(await store.allow([['budget', 1, 60000]], 1000), true);
+    await store.close();
+    store = await openStore(database.url);
+    assert.equal(await store.allow([['budget', 1, 60000]], 1100), false);
+    assert.equal((await store.cached('cached phrase')).score, 52);
     assert.deepEqual(
-      store.leaderboard().map((r) => r.name),
+      (await store.leaderboard()).map((r) => r.name),
       ['First', 'Second'],
     );
-    assert.equal(store.rank(a.id).score, 90);
-    assert.equal(store.allow([['budget', 1, 60000]], 61000), true);
+    assert.equal((await store.rank(a.id)).score, 90);
+    assert.equal(await store.allow([['budget', 1, 60000]], 61000), true);
   } finally {
-    store.close();
-    rmSync(dir, { recursive: true, force: true });
+    await store.close();
+    await database.close();
   }
 });
 test('TypeSafe adapter uses the documented contract, validates output and maps rubric score to points', async () => {
