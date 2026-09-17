@@ -16,16 +16,9 @@ export default defineConfig({
   ],
   webServer: process.env.BASE_URL
     ? undefined
-    : [
-        {
-          command: 'npm run preview',
-          url: 'http://localhost:4173',
-          reuseExistingServer: !process.env.CI,
-        },
-        {
-          command: 'node tests/bs-api-fixture.mjs',
-          url: 'http://127.0.0.1:4174/api/corporate-bs/health',
-          reuseExistingServer: !process.env.CI,
-        },
-      ],
+    : {
+        command: 'node tests/bs-api-fixture.mjs',
+        url: 'http://localhost:4173/api/corporate-bs/health',
+        reuseExistingServer: !process.env.CI,
+      },
 });

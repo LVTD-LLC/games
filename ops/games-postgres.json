@@ -1,0 +1,12 @@
+{
+  "appName": "games-postgres",
+  "image": "postgres:17.11-alpine",
+  "database": "games",
+  "appUser": "games",
+  "adminUser": "games_admin",
+  "volumeName": "games-postgres-data",
+  "containerPath": "/var/lib/postgresql/data",
+  "port": 5432,
+  "publicPorts": [],
+  "webIngress": false
+}

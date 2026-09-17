@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-17 — Shared games PostgreSQL
+
+- Consolidate static games and BS Meter API into the games app; remove the separate API deployment and SQLite runtime.
+- Add shared private games-postgres configuration, game-namespaced schema, transactional versioned SQL migrations on startup, and a verified one-time SQLite importer preserving existing data.
+- Preserve ranking/session/consent behavior with asynchronous PostgreSQL queries, atomic budgets and duplicate-safe results; run API and desktop/mobile tests against real PostgreSQL.
+
 ## 2026-09-17 — Corporate BS Meter
 
 - Added the third game: a Jev-powered corporate nonsense meter with optional nickname/email onboarding, a persistent global top ten, and one best score per player.

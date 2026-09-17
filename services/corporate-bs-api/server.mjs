@@ -1,9 +1,5 @@
 import { createServer } from 'node:http';
-import { readFileSync } from 'node:fs';
 import { isIP } from 'node:net';
-import { pathToFileURL } from 'node:url';
-import { openStore } from './store.mjs';
-import { createJudge } from './scoring.mjs';
 const PREFIX = '/api/corporate-bs';
 const COOKIE = 'lvtd_bs_session';
 const MINUTE = 60_000,
@@ -89,13 +85,15 @@ export function createApp({
         pathname = url.pathname;
       if (req.method === 'GET' && pathname === '/deploy-revision.txt')
         return send(200, revision, 'text/plain; charset=utf-8');
-      if (req.method === 'GET' && pathname === `${PREFIX}/health`)
+      if (req.method === 'GET' && pathname === `${PREFIX}/health`) {
+        await store.health();
         return send(200, { ok: true, revision });
+      }
       const resultMatch = pathname.match(
         /^\/corporate-bs-meter\/result\/([a-f0-9-]{36})\/?$/,
       );
       if (req.method === 'GET' && resultMatch) {
-        const result = store.result(resultMatch[1]);
+        const result = await store.result(resultMatch[1]);
         if (!result)
           throw new HttpError(404, 'This result could not be found.');
         const title = `${result.score.toFixed(1)}/100 — ${result.title}`;
@@ -126,7 +124,7 @@ export function createApp({
           'text/html; charset=utf-8',
         );
       if (unsubscribe && req.method === 'POST') {
-        store.unsubscribe(unsubscribe[1]);
+        await store.unsubscribe(unsubscribe[1]);
         return send(
           200,
           page(
@@ -144,18 +142,18 @@ export function createApp({
         ?.trim();
       const ip =
         trustProxy && isIP(forwarded) ? forwarded : req.socket.remoteAddress;
-      if (!store.allow([[`requests:${ip}`, 180, MINUTE]]))
+      if (!(await store.allow([[`requests:${ip}`, 180, MINUTE]])))
         throw new HttpError(
           429,
           'A little too much synergy. Try again in a minute.',
         );
       if (req.method === 'GET' && pathname === `${PREFIX}/leaderboard`)
-        return send(200, { entries: store.leaderboard() });
+        return send(200, { entries: await store.leaderboard() });
       const apiResult = pathname.match(
         /^\/api\/corporate-bs\/results\/([a-f0-9-]{36})$/,
       );
       if (req.method === 'GET' && apiResult) {
-        const result = store.result(apiResult[1]);
+        const result = await store.result(apiResult[1]);
         if (!result)
           throw new HttpError(404, 'This result could not be found.');
         return send(200, result);
@@ -166,12 +164,15 @@ export function createApp({
         .find((s) => s.startsWith(COOKIE + '='))
         ?.slice(COOKIE.length + 1);
       if (req.method === 'GET' && pathname === `${PREFIX}/session`) {
-        if (!store.player(token) && !store.allow([[`sessions:${ip}`, 30, DAY]]))
+        if (
+          !(await store.player(token)) &&
+          !(await store.allow([[`sessions:${ip}`, 30, DAY]]))
+        )
           throw new HttpError(
             429,
             'Too many new sessions today. Please try again tomorrow.',
           );
-        const session = store.session(token);
+        const session = await store.session(token);
         res.setHeader(
           'Set-Cookie',
           `${COOKIE}=${session.token}; HttpOnly; SameSite=Lax; Path=${PREFIX}; Max-Age=7776000${secure ? '; Secure' : ''}`,
@@ -182,7 +183,7 @@ export function createApp({
         throw new HttpError(405, 'Method not allowed.');
       if (req.headers.origin !== origin)
         throw new HttpError(403, 'Please play from the game website.');
-      const player = store.player(token);
+      const player = await store.player(token);
       if (!player)
         throw new HttpError(
           401,
@@ -210,17 +211,17 @@ export function createApp({
             'Enter a valid email and choose game updates, or leave email blank.',
           );
         if (
-          !store.allow([
+          !(await store.allow([
             [`profile:${player.id}`, 6, MINUTE],
             [`profile-ip:${ip}`, 30, DAY],
-          ])
+          ]))
         )
           throw new HttpError(
             429,
             'Too many profile changes. Try again later.',
           );
         if (name && name !== player.name) {
-          if (!store.allow([['inference', dailyBudget, DAY]]))
+          if (!(await store.allow([['inference', dailyBudget, DAY]])))
             throw new HttpError(
               503,
               'Our daily judging limit is reached. Try tomorrow.',
@@ -228,7 +229,7 @@ export function createApp({
           if (!(await judge.nameAllowed(name)))
             throw new HttpError(400, 'Please choose another public nickname.');
         }
-        store.profile(player.id, name, email);
+        await store.profile(player.id, name, email);
         return send(200, { name, subscribed: Boolean(email) });
       }
       if (pathname !== `${PREFIX}/score`)
@@ -237,12 +238,12 @@ export function createApp({
       if (phrase.length < 5 || !/\p{L}/u.test(phrase))
         throw new HttpError(400, 'Write a phrase of 5–280 characters.');
       if (
-        !store.allow([
+        !(await store.allow([
           [`score:${player.id}`, 10, MINUTE],
           [`score-day:${player.id}`, 60, DAY],
           [`score-ip:${ip}`, 30, MINUTE],
           [`score-ip-day:${ip}`, 300, DAY],
-        ])
+        ]))
       )
         throw new HttpError(
           429,
@@ -252,9 +253,9 @@ export function createApp({
         throw new HttpError(409, 'Your previous phrase is still being judged.');
       pending.add(player.id);
       try {
-        let evaluation = store.cached(phrase);
+        let evaluation = await store.cached(phrase);
         if (!evaluation) {
-          if (!store.allow([['inference', dailyBudget, DAY]]))
+          if (!(await store.allow([['inference', dailyBudget, DAY]])))
             throw new HttpError(
               503,
               'Our daily judging limit is reached. Try tomorrow.',
@@ -269,7 +270,7 @@ export function createApp({
             typeof evaluation.model !== 'string'
           )
             throw new Error('Invalid evaluation');
-          store.cache(phrase, evaluation);
+          await store.cache(phrase, evaluation);
         }
         if (!evaluation.valid)
           throw new HttpError(
@@ -281,12 +282,12 @@ export function createApp({
             422,
             'Keep it workplace-friendly and leave out personal details. Try another phrase.',
           );
-        const result = store.save(player.id, phrase, evaluation);
+        const result = await store.save(player.id, phrase, evaluation);
         return send(200, {
           ...result,
-          rank: store.rank(player.id),
+          rank: await store.rank(player.id),
           ranked: Boolean(player.name),
-          entries: store.leaderboard(),
+          entries: await store.leaderboard(),
         });
       } finally {
         pending.delete(player.id);
@@ -307,47 +308,4 @@ export function createApp({
       });
     }
   });
-}
-if (
-  process.argv[1] &&
-  import.meta.url === pathToFileURL(process.argv[1]).href
-) {
-  const store = openStore(
-    process.env.DATABASE_PATH || '/data/corporate-bs.sqlite',
-  );
-  let revision = 'development';
-  try {
-    revision = readFileSync(
-      new URL('./revision.txt', import.meta.url),
-      'utf8',
-    ).trim();
-  } catch {}
-  if (!process.env.TYPESAFE_API_KEY)
-    throw new Error('TYPESAFE_API_KEY is required');
-  const server = createApp({
-    store,
-    judge: createJudge({
-      apiKey: process.env.TYPESAFE_API_KEY,
-      model: process.env.TYPESAFE_MODEL || 'jev-latest',
-    }),
-    origin: process.env.PUBLIC_ORIGIN || 'https://games.lvtd.dev',
-    secure: process.env.COOKIE_SECURE !== 'false',
-    trustProxy: process.env.TRUST_PROXY === 'true',
-    dailyBudget: Number(process.env.DAILY_JUDGING_LIMIT) || 3000,
-    revision,
-  });
-  server.requestTimeout = 20000;
-  server.headersTimeout = 10000;
-  server.listen(Number(process.env.PORT) || 80, '0.0.0.0', () =>
-    console.log('Corporate BS API ready'),
-  );
-  function shutdown() {
-    server.close(() => {
-      store.close();
-      process.exit(0);
-    });
-    setTimeout(() => process.exit(1), 15000).unref();
-  }
-  process.on('SIGTERM', shutdown);
-  process.on('SIGINT', shutdown);
 }
