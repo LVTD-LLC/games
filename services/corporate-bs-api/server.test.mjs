@@ -98,6 +98,11 @@ test('anonymous play uses only server scores; profile opts into ranking without 
   const html = await share.text();
   assert(html.includes('87.3/100'));
   assert(html.includes('og:title'));
+  assert(html.includes('Circulate the memo.'));
+  assert(html.includes('/corporate-bs-meter/result-share.js'));
+  assert(
+    share.headers.get('content-security-policy').includes("script-src 'self';"),
+  );
   assert(!html.includes('private@example.com'));
   await f.post('/profile', { name: '' });
   assert.deepEqual(await f.store.leaderboard(), []);
