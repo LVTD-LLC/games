@@ -51,7 +51,7 @@ function profileUI() {
   $('profile-button').textContent = player.name || 'Your name ↗';
   $('join-button').textContent = player.name
     ? 'Edit leaderboard name ↗'
-    : 'Join the leaderboard ↗';
+    : 'Add a leaderboard name ↗';
 }
 function openProfile() {
   $('player-name').value = player.name;
@@ -112,7 +112,7 @@ $('profile-form').addEventListener('submit', async (event) => {
       current = {
         ...current,
         ...fresh,
-        ranked: Boolean(player.name),
+        ranked: true,
         rank: null,
       };
       renderResult(current);
@@ -214,11 +214,12 @@ function renderResult(result) {
   $('result-summary').textContent =
     `${result.score.toFixed(1)}/100 · ${result.title}`;
   $('result-phrase').textContent = `“${result.phrase}”`;
-  $('rank-message').textContent = result.ranked
-    ? result.rank
-      ? `Your best is #${result.rank.rank} globally · ${result.rank.score.toFixed(1)}/100. Only your best phrase takes a seat.`
-      : 'Your best phrase is entered in the global leaderboard.'
-    : 'Playing anonymously. Add a name above to enter your best phrase in the leaderboard—no email needed.';
+  const rankMessage = result.rank
+    ? `Your best is #${result.rank.rank} globally · ${result.rank.score.toFixed(1)}/100. Only your best phrase takes a seat.`
+    : 'Your best phrase is entered in the global leaderboard.';
+  $('rank-message').textContent =
+    rankMessage +
+    (player.name ? '' : ' Playing as Anonymous—no name or email needed.');
   const text = shareText(result),
     url = resultUrl(result);
   // Keep the X intent below its standard length, accounting for the shortened URL.

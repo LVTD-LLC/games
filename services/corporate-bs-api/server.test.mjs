@@ -51,7 +51,7 @@ async function fixture(
   }
   return { store, base, cookie, post };
 }
-test('anonymous play uses only server scores; profile opts into ranking without exposing email', async (t) => {
+test('anonymous play is saved and ranked; profile changes attribution without exposing email', async (t) => {
   const f = await fixture(t);
   const first = await f.post('/score', {
     phrase: 'Align the strategic alignment.',
@@ -61,8 +61,12 @@ test('anonymous play uses only server scores; profile opts into ranking without 
   });
   assert.equal(first.status, 200);
   assert.equal(first.data.score, 87.3);
-  assert.equal(first.data.ranked, false);
-  assert.deepEqual(first.data.entries, []);
+  assert.equal(first.data.ranked, true);
+  assert.equal(first.data.name, 'Anonymous');
+  assert.equal(first.data.rank.rank, 1);
+  assert.equal(first.data.entries[0].id, first.data.id);
+  assert.equal(first.data.entries[0].name, 'Anonymous');
+  assert.equal((await f.store.result(first.data.id)).name, 'Anonymous');
   const denied = await f.post('/profile', {
     name: 'Director',
     email: 'private@example.com',
@@ -105,7 +109,9 @@ test('anonymous play uses only server scores; profile opts into ranking without 
   );
   assert(!html.includes('private@example.com'));
   await f.post('/profile', { name: '' });
-  assert.deepEqual(await f.store.leaderboard(), []);
+  assert.equal((await f.store.leaderboard())[0].id, first.data.id);
+  assert.equal((await f.store.leaderboard())[0].name, 'Anonymous');
+  assert.equal((await f.store.result(first.data.id)).name, 'Anonymous');
   const sub = (await f.store.db.query('SELECT * FROM corporate_bs.subscribers'))
     .rows[0];
   assert.equal(sub.consent_version, 'games-updates-v1');
@@ -252,15 +258,21 @@ test('best-per-player, deterministic ties, cached scores and budgets survive a d
   let store = await openStore(database.url);
   try {
     const a = (await store.session()).player,
-      b = (await store.session()).player;
+      b = (await store.session()).player,
+      c = (await store.session()).player;
     await store.profile(a.id, 'First', '');
-    await store.profile(b.id, 'Second', '');
+    // Two unnamed players must retain independent leaderboard seats.
     await store.save(a.id, 'First strong phrase', { score: 90, model: 'test' });
     await store.save(a.id, 'Weaker phrase', { score: 12, model: 'test' });
     await store.save(b.id, 'Second strong phrase', {
       score: 90,
       model: 'test',
     });
+    const third = await store.save(c.id, 'Third strong phrase', {
+      score: 80,
+      model: 'test',
+    });
+    await store.save(c.id, 'Third weaker phrase', { score: 10, model: 'test' });
     // Ensure exact deterministic tie ordering independent of wall-clock test speed.
     await store.db.query(
       'UPDATE corporate_bs.results SET created_at=1 WHERE player_id=$1',
@@ -283,9 +295,12 @@ test('best-per-player, deterministic ties, cached scores and budgets survive a d
     assert.equal((await store.cached('cached phrase')).score, 52);
     assert.deepEqual(
       (await store.leaderboard()).map((r) => r.name),
-      ['First', 'Second'],
+      ['First', 'Anonymous', 'Anonymous'],
     );
     assert.equal((await store.rank(a.id)).score, 90);
+    assert.equal((await store.rank(b.id)).rank, 2);
+    assert.equal((await store.rank(c.id)).rank, 3);
+    assert.equal((await store.leaderboard())[2].id, third.id);
     assert.equal(await store.allow([['budget', 1, 60000]], 61000), true);
   } finally {
     await store.close();
