@@ -2,7 +2,7 @@
 let client;
 let revision = 'development';
 let queue = [];
-const game = 'catalogue';
+const game = 'jess';
 function safePath(path) {
   if (/^\/corporate-bs-meter\/result\//.test(path))
     return '/corporate-bs-meter/result/';
@@ -43,6 +43,9 @@ const properties = new Set([
   '$prev_pageview_max_scroll_percentage',
   '$prev_pageview_last_scroll_percentage',
   'mode',
+  'side',
+  'actor',
+  'move_count',
   'attempts',
   'outcome',
   'resumed',

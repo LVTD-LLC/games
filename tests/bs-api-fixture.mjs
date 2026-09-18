@@ -40,6 +40,26 @@ for (let attempt = 0; ; attempt++) {
 gamesServer({
   store,
   judge,
+  chooseJess: async (chess) => {
+    const moves = chess.moves({ verbose: true });
+    const id = (m) => m.from + m.to + (m.promotion || '');
+    const move =
+      moves.find((m) => m.san === 'e5') ||
+      moves.find((m) => m.san === 'e4') ||
+      moves[0];
+    return {
+      move: id(move),
+      confidence: 1,
+      model: 'browser-test-fixture',
+      probabilities: moves
+        .map((m) => ({
+          id: id(m),
+          san: m.san,
+          probability: id(m) === id(move) ? 1 : 0,
+        }))
+        .sort((a, b) => b.probability - a.probability),
+    };
+  },
   origin: 'http://localhost:4173',
   secure: false,
   dailyBudget: 1000,

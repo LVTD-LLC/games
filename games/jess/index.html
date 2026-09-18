@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f5f2ea" />
+    <meta
+      name="description"
+      content="A game of chess against Jev. Pick a side, make your move, and peek at the probabilities behind your opponent’s reply."
+    />
+    <title>Jess — Chess against Jev</title>
+  </head>
+  <body>
+    <header class="topbar">
+      <a href="/" class="back">← All games</a
+      ><span class="edition">HUMAN × MACHINE</span
+      ><a href="https://typesafe.ai" target="_blank" rel="noopener noreferrer"
+        >Powered by Jev ↗</a
+      >
+    </header>
+    <main>
+      <div class="intro">
+        <div>
+          <h1>Jess<span>.</span></h1>
+          <p>Chess. With a mind of its own.</p>
+        </div>
+        <div class="intro-note">
+          You bring the strategy.<br />Jev brings the probabilities.
+        </div>
+      </div>
+      <div class="game-layout">
+        <section class="table" aria-label="Chess game">
+          <div class="player-bar">
+            <div class="avatar jev">j.</div>
+            <div>
+              <strong>Jev</strong
+              ><span id="opponent-color">Your AI opponent</span>
+            </div>
+            <span class="turn-badge" id="opponent-badge"
+              >READY WHEN YOU ARE</span
+            >
+          </div>
+          <div
+            id="board"
+            class="board"
+            role="group"
+            aria-label="Chess board. Arrow keys navigate; Enter selects a piece or destination."
+          ></div>
+          <div class="player-bar">
+            <div class="avatar you">Y</div>
+            <div>
+              <strong>You</strong><span id="player-color">Pick your side</span>
+            </div>
+            <span class="turn-badge" id="player-badge"></span>
+          </div>
+          <div class="board-tools">
+            <button id="undo" disabled>↶ Take back</button
+            ><button id="flip">⇅ Flip board</button
+            ><button id="new-game">New game</button>
+          </div>
+          <p class="board-help">
+            Select a piece, then a highlighted square. Take your time—there’s no
+            clock.
+          </p>
+        </section>
+        <aside>
+          <section id="setup" class="panel setup">
+            <span class="eyebrow">YOUR NEXT GOOD MOVE</span>
+            <h2>Pick a side.</h2>
+            <p>
+              White moves first. Black makes the first reply. Or leave it to
+              chance.
+            </p>
+            <div class="side-buttons">
+              <button data-side="w">
+                <span aria-hidden="true">♔</span>Play White</button
+              ><button data-side="b">
+                <span aria-hidden="true">♚</span>Play Black
+              </button>
+            </div>
+            <button class="random" data-side="random">Surprise me ↗</button>
+          </section>
+          <section id="game-status" class="panel status-panel" hidden>
+            <span class="eyebrow" id="move-number">MOVE 1</span>
+            <h2 id="status" role="status" aria-live="polite"></h2>
+            <p id="status-detail"></p>
+            <button id="retry" class="primary" hidden>Retry Jev’s move</button>
+          </section>
+          <section class="panel mind">
+            <div class="panel-heading">
+              <h2>Inside Jev’s move</h2>
+              <span class="spark" aria-hidden="true">✳</span>
+            </div>
+            <p id="insight-summary">A little peek into your opponent’s mind.</p>
+            <ol id="probabilities" aria-label="Jev’s top move preferences"></ol>
+            <p id="probability-note" class="fine">
+              After each reply, see Jev’s top choices. These are move
+              preferences, not your odds of winning.
+            </p>
+          </section>
+          <section class="panel moves-panel">
+            <div class="panel-heading">
+              <h2>The game so far</h2>
+              <span id="ply-count">0 moves</span>
+            </div>
+            <p id="empty-history">Every good game starts somewhere.</p>
+            <ol id="history" aria-label="Move history"></ol>
+          </section>
+          <details class="how">
+            <summary>A different kind of chess opponent</summary>
+            <p>
+              Jev is TypeSafe’s decision model, not a traditional chess engine.
+              On every turn, it sees the board and every legal move. It gives
+              each option a probability; the highest-probability move gets
+              played. No hidden Stockfish, no random fallback.
+            </p>
+            <p>
+              All normal chess moves are supported, including castling, en
+              passant and your choice of promotion. Checkmate wins; stalemate,
+              repetition, the 50-move rule and insufficient material end in a
+              draw. A 300-move session limit keeps games bounded.
+            </p>
+            <p>
+              Your game is saved in this browser. Only the chess position and
+              move history are sent to Jev. No account needed.
+            </p>
+          </details>
+        </aside>
+      </div>
+      <footer>
+        A small experiment in human intuition and machine judgment.
+      </footer>
+    </main>
+    <dialog id="promotion">
+      <h2>A promotion is in order.</h2>
+      <p>Choose your new piece.</p>
+      <div class="promotion-options">
+        <button data-promotion="q">Queen</button
+        ><button data-promotion="r">Rook</button
+        ><button data-promotion="b">Bishop</button
+        ><button data-promotion="n">Knight</button>
+      </div>
+      <button id="cancel-promotion">Cancel</button>
+    </dialog>
+    <dialog id="restart">
+      <h2>A fresh board?</h2>
+      <p>This will replace your current game.</p>
+      <div class="dialog-actions">
+        <button id="cancel-restart">Keep playing</button
+        ><button id="confirm-restart" class="primary">Start fresh</button>
+      </div>
+    </dialog>
+    <noscript
+      >Jess needs JavaScript to play. You can still
+      <a href="/">browse all games</a>.</noscript
+    >
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

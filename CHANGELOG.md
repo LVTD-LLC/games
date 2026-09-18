@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-18 — Jess: chess against Jev
+
+- Add Jess to the catalogue: choose White, Black or random; play legal chess with promotion choices, saved games, take-backs, keyboard/touch controls and responsive vector pieces.
+- Let Jev choose from every legal move through a server-only TypeSafe Choice request. Show its top probabilities as move preferences, never win odds.
+- Reuse the games backend and protected runtime key, with validated move histories, persistent paid-request budgets, bounded inference and recoverable errors. No new service or database migration.
+
 ## 2026-09-18 — Anonymous gameplay analytics
 
 - Add PostHog visits, gameplay actions/outcomes, sharing, web vitals and sanitized browser/API errors across the catalogue, four games and shared BS results.

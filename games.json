@@ -38,5 +38,15 @@
     "path": "games/game-of-life",
     "language": "en",
     "logo": "/logos/game-of-life.svg"
+  },
+  {
+    "slug": "jess",
+    "title": "Jess",
+    "description": "Play chess against Jev and peek at the probabilities behind its moves.",
+    "category": "Board games",
+    "duration": "5–20 minutes",
+    "path": "games/jess",
+    "language": "en",
+    "logo": "/logos/jess.svg"
   }
 ]

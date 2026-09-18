@@ -367,3 +367,55 @@ resolve stack locations without a private upload credential. This repository is
 public; never include secrets in browser code or source maps. Node runs unminified
 source. Future games should follow the same event vocabulary, input exclusions,
 initialization policy, and hostname gate, with their own package dependency and bundle.
+
+## Jess
+
+`/jess/` is a standalone Vite/vanilla JS chess game using pinned `chess.js` 1.4.0
+in both its independent package and the root server package. Rules, legal move
+generation and game termination belong to code; Jev is the opponent, not a rules
+engine. Both sides support castling, en passant and all four promotions. Threefold
+repetition and the 50-move rule end automatically; sessions cap at 600 plies.
+Browser storage is namespaced `lvtd-jess-v1:game` (validated move history, side and
+orientation). No accounts, leaderboard, chess database tables or migrations.
+
+`POST /api/jess/move` accepts only `{ player: "w" | "b", moves: ["e2e4", ...] }`.
+The server replays history from the standard starting position, rejects illegal,
+finished or human-turn games, then supplies the complete legal set as a TypeSafe
+Choice. State includes FEN, an ASCII board, side to move and recent moves; the
+browser cannot supply prompts, models, candidate lists or API URLs. The adapter
+requires a complete finite probability distribution, legal argmax choice and
+bounded confidence. It uses the documented highest-probability choice, including
+the provider's tie choice. No engine/random fallback masquerades as Jev.
+
+The browser shows the top three move probabilities **for the previous Jev turn**;
+these are relative preferences, not calibrated chess win probabilities. Model
+strength is experimental, not a rated chess-engine claim. Failed requests retain
+the board and require explicit retry. In-flight requests are aborted/invalidated
+on take-back or new game so stale replies cannot move a replacement board.
+
+Uses the existing games runtime `TYPESAFE_API_KEY` and `TYPESAFE_MODEL` (default
+`jev-1.13.0`). Never expose them through Vite, client code or browser storage.
+No additional infrastructure/key setup is required on the existing deployment.
+`JESS_DAILY_JUDGING_LIMIT` defaults to 3,000 paid requests/day **in addition to**
+the separate BS Meter budget. Jess reuses the existing store's atomic `allow`
+primitive/counter table with `jess:`-namespaced keys; it never reads/writes BS
+players, scores or subscriber data. Limits: 30 requests/IP/minute, 300 paid
+requests/IP/day, one in-flight request/IP and 32 globally per process. Counters
+are salted hashes and survive restarts. Keep the existing single games replica.
+Origin checks are defense in depth, not authentication; non-browser clients are
+still controlled by IP/global budgets. Trust only CapRover's last forwarded IP,
+as documented above. The body is bounded to 8 KB, history to 600 plies, and paid
+calls to 12 seconds. No automatic paid retries. Browser timeout is 18 seconds.
+
+Anonymous Jess analytics follow the existing opt-out/test filtering; events cover
+starts, move counts, take-backs and outcomes, never positions or move histories.
+For local play use the consolidated `npm start` setup above; static `npm run preview`
+proxies Jess requests to `BS_API_URL` (the existing local consolidated API address).
+Contract/rules/boundary tests use injected responses; Playwright covers the real
+HTTP endpoint with a deterministic test chooser, plus mocked failures/races.
+Production smoke verification must separately confirm a real Jev reply.
+
+Integration references: [TypeSafe HTTP API](https://docs.typesafe.ai/api),
+[Choice](https://docs.typesafe.ai/primitives/choice),
+[function-calling cookbook](https://docs.typesafe.ai/cookbooks/function_calling),
+[chess.js](https://jhlywa.github.io/chess.js/).
