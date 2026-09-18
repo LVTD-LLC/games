@@ -1,3 +1,4 @@
+import { track, analyticsHeaders, reportError } from './analytics.js';
 import './style.css';
 const $ = (id) => document.getElementById(id);
 const API = '/api/corporate-bs';
@@ -15,12 +16,16 @@ let exampleIndex = 0;
 async function api(path, body) {
   const response = await fetch(API + path, {
     credentials: 'same-origin',
+    headers: analyticsHeaders(),
     signal: AbortSignal.timeout(18000),
     ...(body === undefined
       ? {}
       : {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            ...analyticsHeaders(),
+          },
           body: JSON.stringify(body),
         }),
   });
@@ -32,6 +37,8 @@ async function api(path, body) {
   return data;
 }
 function showError(id, error) {
+  track('game_action_failed', { operation: id });
+  reportError(id);
   $(id).textContent = error.message || 'Connection lost. Please try again.';
   $(id).hidden = false;
 }
@@ -131,6 +138,7 @@ function updateCount() {
 }
 $('phrase').addEventListener('input', updateCount);
 $('example').addEventListener('click', () => {
+  track('bs_example_used');
   $('phrase').value = examples[exampleIndex++ % examples.length];
   updateCount();
   $('phrase').focus();
@@ -244,6 +252,9 @@ $('phrase-form').addEventListener('submit', async (event) => {
   event.preventDefault();
   if (busy) return;
   busy = true;
+  track('game_started', {
+    challenge: new URLSearchParams(location.search).has('challenge'),
+  });
   $('judge-button').disabled = true;
   $('game-error').hidden = true;
   $('meter-card').classList.add('judging');
@@ -253,6 +264,7 @@ $('phrase-form').addEventListener('submit', async (event) => {
     await ensureSession();
     const data = await api('/score', { phrase: $('phrase').value });
     current = data;
+    track('game_completed', { score: data.score, outcome: 'scored' });
     renderResult(data);
     renderLeaderboard(data.entries);
     $('result').scrollIntoView({
@@ -273,8 +285,10 @@ $('phrase-form').addEventListener('submit', async (event) => {
 async function copyResult() {
   try {
     await navigator.clipboard.writeText(shareText(current));
+    track('game_result_shared', { channel: 'clipboard' });
     return true;
   } catch {
+    track('game_share_fallback', { channel: 'clipboard' });
     $('share-copy').hidden = false;
     $('share-copy').focus();
     $('share-copy').select();
@@ -307,6 +321,7 @@ $('native-share').addEventListener('click', async () => {
       text: `${current.score.toFixed(1)}/100. ${current.title}. “${current.phrase}” Can you out-BS me?`,
       url: resultUrl(current),
     });
+    track('game_result_shared', { channel: 'native' });
   } catch (error) {
     if (error.name !== 'AbortError')
       $('share-status').textContent =
@@ -314,6 +329,7 @@ $('native-share').addEventListener('click', async () => {
   }
 });
 $('try-again').addEventListener('click', () => {
+  track('game_replay_requested');
   $('phrase').focus();
   $('phrase').select();
   $('phrase').scrollIntoView({
@@ -349,3 +365,12 @@ if (challenge && /^[a-f0-9-]{36}$/.test(challenge))
       document.querySelector('.intro').append(p);
     })
     .catch(() => {});
+
+for (const channel of ['x', 'threads', 'whatsapp', 'linkedin']) {
+  $('share-' + channel).addEventListener('click', () =>
+    track('game_share_opened', { channel }),
+  );
+}
+$('rankings').addEventListener('click', (event) => {
+  if (event.target.closest('a')) track('leaderboard_result_selected');
+});

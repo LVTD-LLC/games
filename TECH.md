@@ -301,3 +301,69 @@ initial backend upload may still be building while the web app rolls out; the UI
 preserves the board and reports temporary unavailability. Keep protocol 1 compatible
 across rolling upgrades. An engine failure does not change the existing database
 health check or other game routes. Roll back through a revert PR for both apps.
+
+## Product analytics
+
+PostHog US project **Games (616562)** collects anonymous site and gameplay events.
+The [Games usage and health dashboard](https://us.posthog.com/project/616562/dashboard/2111415) summarizes visitors, players, game outcomes, devices, referrals, sharing, errors and performance.
+Each standalone package owns its SDK installation and `src/analytics.js` (the
+catalogue uses `src/lib/analytics.js`); keep their privacy and initialization
+policies aligned. No game imports another application's runtime. The SDK loads
+asynchronously after configuration; analytics errors never block play.
+
+Production deployment reads the GitHub repository variable
+`POSTHOG_PROJECT_TOKEN` (public `phc_` ingestion token, **not** a personal API key).
+`scripts/analytics-config.mjs` writes only this public configuration into the
+source archive as `posthog-public.json`. The build copies validated configuration
+to `dist/analytics-config.json`; browser and Node SDKs use the same project and
+release SHA. `POSTHOG_HOST` is restricted to `https://us.i.posthog.com`. Missing
+production configuration fails deployment. Local builds and CI are disabled by
+default, and browser collection is restricted to the two production hostnames.
+For an explicitly enabled local build, provide `POSTHOG_PROJECT_TOKEN` to the
+build; browser tests instead intercept configuration and all event ingestion.
+Never commit `posthog-public.json`, `.env` files, or any personal/admin API key.
+
+A shared, site-scoped anonymous browser ID and session ID connect visits across
+all games. There are no analytics `identify` calls: BS nicknames and cookies are
+not accounts. Only valid browser-generated UUID correlation headers accompany API
+calls; unavailable SDKs send none, and the server skips uncorrelated telemetry.
+Automated browsers are marked `is_test: true`; exclude these in usage dashboards.
+Server captures are nonblocking and flush on shutdown. Simulation ticks are not
+captured; the server records failed step requests only.
+
+| Event family                                                                              | Meaning / useful properties                                                                                            |
+| ----------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `$pageview`, `$pageleave`                                                                 | Visits and time on pages; normalized path, game, browser, device, referrer domain                                      |
+| `game_selected`                                                                           | Catalogue choice (`target_game`)                                                                                       |
+| `game_started`, `game_resumed`, `game_completed`                                          | Wordle's first accepted guess, race launch, BS submission, or first simulation advance; outcomes and relevant settings |
+| `game_paused`, `game_abandoned`                                                           | Pauses; returning an unfinished race to the garage                                                                     |
+| `guess_submitted`, `guess_rejected`, `game_mode_selected`                                 | Wordle attempts, rejection reason and mode; never letters/words                                                        |
+| `race_settings_changed`, `race_car_recovered`                                             | Track, player count, laps, assist, difficulty and car model                                                            |
+| `simulation_*`                                                                            | Pattern/reset/edit/play/pause controls, manual advances, speed and failures; never board contents                      |
+| `bs_example_used`, `bs_profile_saved`, `bs_score_completed`                               | Examples, successful profile update (booleans only), server-confirmed saved score                                      |
+| `game_result_shared`, `game_share_opened`, `game_share_fallback`, `bs_challenge_accepted` | Confirmed clipboard/native shares, share button intent, fallbacks, challenge entry                                     |
+| `game_api_failed`, `game_action_failed`, `game_load_failed`, `$exception`                 | Failure category/status and sanitized error stacks, correlated with browser sessions                                   |
+| `$web_vitals`                                                                             | Numeric loading/responsiveness/layout-shift measurements                                                               |
+
+`game_completed` means a won/lost Wordle round, a finished race, a displayed BS
+score, or an automatically playing Life board reaching zero population. A Life
+pause or reset is not a failed completion. Wordle's `duration_seconds` measures
+this page's active round segment starting at its first accepted guess, not time
+across reloads. Compare starts/completions with a funnel by game rather than
+assuming every open-ended simulation has a finish. `bs_score_completed` is the
+server confirmation; do not sum it with the browser `game_completed` event.
+
+The allowlist drops input text, names/emails, raw queries, result IDs, DOM
+attributes and arbitrary automatic properties. Error messages are redacted;
+stacks retain source locations. IP-based location enrichment, autocapture,
+replay, console recording, heatmaps, surveys, and feature flag requests are off.
+Analytics is enabled by default on production. No separate analytics page or
+preference flow is added; the existing BS Meter privacy dialog briefly describes
+the collected data.
+Anonymous IDs are still pseudonymous usage data; no promise of full anonymity.
+
+Client builds publish source maps next to their public JavaScript so PostHog can
+resolve stack locations without a private upload credential. This repository is
+public; never include secrets in browser code or source maps. Node runs unminified
+source. Future games should follow the same event vocabulary, input exclusions,
+initialization policy, and hostname gate, with their own package dependency and bundle.

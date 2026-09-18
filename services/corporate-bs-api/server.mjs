@@ -58,7 +58,7 @@ function page(
     result = false,
   } = {},
 ) {
-  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHTML(title)} — Corporate BS Meter</title><meta name="description" content="${escapeHTML(description)}"><meta property="og:title" content="${escapeHTML(title)}"><meta property="og:description" content="${escapeHTML(description)}"><meta property="og:type" content="website"><meta property="og:url" content="${escapeHTML(url)}"><meta property="og:image" content="${origin}/corporate-bs-meter/share.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${escapeHTML(title)}"><meta name="twitter:description" content="${escapeHTML(description)}"><meta name="twitter:image" content="${origin}/corporate-bs-meter/share.png"><style>body{margin:0;background:#f4f2e9;color:#262a24;font:18px/1.6 Arial,sans-serif}main{max-width:650px;margin:8vh auto;padding:28px}a{color:#38533a}h1{font-size:clamp(32px,7vw,58px);line-height:1.05;letter-spacing:-2px}blockquote{margin:28px 0;font-size:24px;overflow-wrap:anywhere}.score{font-size:90px;font-weight:800;line-height:1.2}.button,button{display:inline-block;background:#38533a;color:white;border:0;border-radius:8px;padding:16px 24px;font:inherit;text-decoration:none;cursor:pointer}small{font-size:14px}a:focus-visible,button:focus-visible{outline:3px solid #b76b38;outline-offset:4px}</style>${result ? '<link rel="stylesheet" href="/corporate-bs-meter/result-page.css"><script src="/corporate-bs-meter/result-share.js" defer></script>' : ''}</head><body><main><a href="/">LVTD / All games</a>${content}</main></body></html>`;
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHTML(title)} — Corporate BS Meter</title><meta name="description" content="${escapeHTML(description)}"><meta property="og:title" content="${escapeHTML(title)}"><meta property="og:description" content="${escapeHTML(description)}"><meta property="og:type" content="website"><meta property="og:url" content="${escapeHTML(url)}"><meta property="og:image" content="${origin}/corporate-bs-meter/share.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${escapeHTML(title)}"><meta name="twitter:description" content="${escapeHTML(description)}"><meta name="twitter:image" content="${origin}/corporate-bs-meter/share.png"><style>body{margin:0;background:#f4f2e9;color:#262a24;font:18px/1.6 Arial,sans-serif}main{max-width:650px;margin:8vh auto;padding:28px}a{color:#38533a}h1{font-size:clamp(32px,7vw,58px);line-height:1.05;letter-spacing:-2px}blockquote{margin:28px 0;font-size:24px;overflow-wrap:anywhere}.score{font-size:90px;font-weight:800;line-height:1.2}.button,button{display:inline-block;background:#38533a;color:white;border:0;border-radius:8px;padding:16px 24px;font:inherit;text-decoration:none;cursor:pointer}small{font-size:14px}a:focus-visible,button:focus-visible{outline:3px solid #b76b38;outline-offset:4px}</style>${result ? '<link rel="stylesheet" href="/corporate-bs-meter/result-page.css"><script src="/corporate-bs-meter/result-share.js" defer></script><script type="module" src="/corporate-bs-meter/result-analytics.js"></script>' : ''}</head><body><main><a href="/">LVTD / All games</a>${content}</main></body></html>`;
 }
 export function createApp({
   store,
@@ -69,9 +69,17 @@ export function createApp({
   dailyBudget = 3000,
   revision = 'development',
   logger = console,
+  analytics = { capture() {} },
 }) {
   const pending = new Set();
   return createServer(async (req, res) => {
+    const started = performance.now();
+    const capture = (event, properties = {}) =>
+      analytics.capture(req, event, {
+        game: 'corporate-bs-meter',
+        duration_seconds: (performance.now() - started) / 1000,
+        ...properties,
+      });
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('Cache-Control', 'no-store');
     res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
@@ -105,7 +113,7 @@ export function createApp({
         const title = `${result.score.toFixed(1)}/100 — ${result.title}`;
         res.setHeader(
           'Content-Security-Policy',
-          "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self'; form-action 'self'; frame-ancestors 'self'; base-uri 'none'",
+          "default-src 'none'; script-src 'self' https://us-assets.i.posthog.com; connect-src 'self' https://us.i.posthog.com https://us-assets.i.posthog.com; style-src 'self' 'unsafe-inline'; img-src 'self'; form-action 'self'; frame-ancestors 'self'; base-uri 'none'",
         );
         return send(
           200,
@@ -237,6 +245,10 @@ export function createApp({
             throw new HttpError(400, 'Please choose another public nickname.');
         }
         await store.profile(player.id, name, email);
+        capture('bs_profile_saved', {
+          has_name: Boolean(name),
+          subscribed: Boolean(email),
+        });
         return send(200, { name, subscribed: Boolean(email) });
       }
       if (pathname !== `${PREFIX}/score`)
@@ -290,6 +302,7 @@ export function createApp({
             'Keep it workplace-friendly and leave out personal details. Try another phrase.',
           );
         const result = await store.save(player.id, phrase, evaluation);
+        capture('bs_score_completed', { score: result.score });
         return send(200, {
           ...result,
           rank: await store.rank(player.id),
@@ -306,6 +319,12 @@ export function createApp({
           'Corporate BS request unavailable:',
           error instanceof HttpError ? 'budget' : error.name,
         );
+      const route = req.url.split('?')[0];
+      const operation =
+        ['/score', '/profile', '/session', '/leaderboard']
+          .find((suffix) => route === PREFIX + suffix)
+          ?.slice(1) || 'other';
+      capture('game_api_failed', { operation, status });
       if (status === 429) res.setHeader('Retry-After', '60');
       send(status, {
         error:

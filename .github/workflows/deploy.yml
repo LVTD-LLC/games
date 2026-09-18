@@ -57,6 +57,9 @@ jobs:
           node-version: 24
 
       - name: Package tracked source and revision marker
+        env:
+          POSTHOG_PROJECT_TOKEN: ${{ vars.POSTHOG_PROJECT_TOKEN }}
+          POSTHOG_HOST: https://us.i.posthog.com
         if: steps.current.outputs.deploy == 'true'
         shell: bash
         run: |
@@ -65,6 +68,7 @@ jobs:
           git archive "$DEPLOY_SHA" | tar -x -C "$staging_dir"
           printf '%s\n' "$DEPLOY_SHA" > "$staging_dir/apps/site/public/deploy-revision.txt"
           printf '%s\n' "$DEPLOY_SHA" > "$staging_dir/services/life-engine/revision.txt"
+          node scripts/analytics-config.mjs "$staging_dir/posthog-public.json"
           tar -cf "$RUNNER_TEMP/deploy.tar" -C "$staging_dir" .
 
       - name: Deploy and wait for the tested revision to be live

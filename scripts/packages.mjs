@@ -1,4 +1,5 @@
-import { readFile, rm, mkdir, cp } from 'node:fs/promises';
+import { readAnalyticsConfig } from './analytics-config.mjs';
+import { readFile, writeFile, rm, mkdir, cp } from 'node:fs/promises';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
@@ -35,6 +36,12 @@ if (command === 'install') {
   await cp(path.join(root, 'apps/site/dist'), path.join(root, 'dist'), {
     recursive: true,
   });
+  await writeFile(
+    path.join(root, 'dist/analytics-config.json'),
+    JSON.stringify(
+      await readAnalyticsConfig(path.join(root, 'posthog-public.json')),
+    ),
+  );
   for (const game of games) {
     run(game.path, ['run', 'build']);
     const destination = path.join(root, 'dist', game.slug);

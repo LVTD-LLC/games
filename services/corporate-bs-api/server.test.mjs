@@ -19,7 +19,17 @@ async function fixture(
 ) {
   const database = await testDatabase();
   const store = await openStore(database.url);
+  const telemetry = [];
   const server = createApp({
+    analytics: {
+      capture(req, event, properties) {
+        telemetry.push({
+          event,
+          properties,
+          distinctId: req.headers['x-posthog-distinct-id'],
+        });
+      },
+    },
     store,
     judge,
     origin: 'https://games.example',
@@ -49,7 +59,7 @@ async function fixture(
     });
     return { status: response.status, data: await response.json() };
   }
-  return { store, base, cookie, post };
+  return { store, base, cookie, post, telemetry };
 }
 test('anonymous play is saved and ranked; profile changes attribution without exposing email', async (t) => {
   const f = await fixture(t);
@@ -105,7 +115,9 @@ test('anonymous play is saved and ranked; profile changes attribution without ex
   assert(html.includes('Circulate the memo.'));
   assert(html.includes('/corporate-bs-meter/result-share.js'));
   assert(
-    share.headers.get('content-security-policy').includes("script-src 'self';"),
+    share.headers
+      .get('content-security-policy')
+      .includes("script-src 'self' https://us-assets.i.posthog.com;"),
   );
   assert(!html.includes('private@example.com'));
   await f.post('/profile', { name: '' });
@@ -340,5 +352,37 @@ test('TypeSafe adapter uses the documented contract, validates output and maps r
   await assert.rejects(
     () => malformed.score('A sentence.'),
     /Invalid scoring response/,
+  );
+});
+
+test('API telemetry follows saved actions and failures without profile or phrase text', async (t) => {
+  const f = await fixture(t);
+  const distinctId = '019f1234-1234-7123-8123-123456789abc';
+  const headers = { 'X-POSTHOG-DISTINCT-ID': distinctId };
+  const scored = await f.post(
+    '/score',
+    { phrase: 'Confidential phrase for the strategy.' },
+    headers,
+  );
+  assert.equal(scored.status, 200);
+  await f.post(
+    '/profile',
+    { name: 'Private Nickname', email: 'private@example.com', updates: true },
+    headers,
+  );
+  const rejected = await f.post('/score', { phrase: '' }, headers);
+  assert.equal(rejected.status, 400);
+  assert.deepEqual(
+    f.telemetry.map((item) => item.event),
+    ['bs_score_completed', 'bs_profile_saved', 'game_api_failed'],
+  );
+  assert(f.telemetry.every((item) => item.distinctId === distinctId));
+  assert.equal(f.telemetry[0].properties.score, scored.data.score);
+  assert.equal(f.telemetry[1].properties.subscribed, true);
+  assert.equal(f.telemetry[2].properties.operation, 'score');
+  assert.equal(f.telemetry[2].properties.status, 400);
+  assert.doesNotMatch(
+    JSON.stringify(f.telemetry),
+    /Confidential|Nickname|private@example/,
   );
 });
