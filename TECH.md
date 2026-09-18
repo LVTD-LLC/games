@@ -326,7 +326,7 @@ Never commit `posthog-public.json`, `.env` files, or any personal/admin API key.
 A shared, site-scoped anonymous browser ID and session ID connect visits across
 all games. There are no analytics `identify` calls: BS nicknames and cookies are
 not accounts. Only valid browser-generated UUID correlation headers accompany API
-calls; opted-out/blocked clients send none, and the server skips their telemetry.
+calls; unavailable SDKs send none, and the server skips uncorrelated telemetry.
 Automated browsers are marked `is_test: true`; exclude these in usage dashboards.
 Server captures are nonblocking and flush on shutdown. Simulation ticks are not
 captured; the server records failed step requests only.
@@ -357,13 +357,13 @@ The allowlist drops input text, names/emails, raw queries, result IDs, DOM
 attributes and arbitrary automatic properties. Error messages are redacted;
 stacks retain source locations. IP-based location enrichment, autocapture,
 replay, console recording, heatmaps, surveys, and feature flag requests are off.
-The BS Meter’s existing Privacy dialog explains collection and provides a persistent
-browser opt-out that applies across all games.
-Do Not Track, Global Privacy Control, and blocked storage also disable collection.
+Analytics is enabled by default on production. No separate analytics page or
+preference flow is added; the existing BS Meter privacy dialog briefly describes
+the collected data.
 Anonymous IDs are still pseudonymous usage data; no promise of full anonymity.
 
 Client builds publish source maps next to their public JavaScript so PostHog can
 resolve stack locations without a private upload credential. This repository is
 public; never include secrets in browser code or source maps. Node runs unminified
 source. Future games should follow the same event vocabulary, input exclusions,
-opt-out behavior, and hostname gate, with their own package dependency and bundle.
+initialization policy, and hostname gate, with their own package dependency and bundle.

@@ -164,40 +164,29 @@ test('Life controls send bounded events instead of a capture for every simulatio
   );
   expect(JSON.stringify(events)).not.toContain('00000000000000000000');
 });
-test('opt-out persists across games, strips API correlation, and DNT suppresses collection', async ({
+test('SDK storage failures do not interrupt gameplay or event capture', async ({
   page,
-  context,
 }) => {
   const events = await analytics(page);
-  await page.goto('/corporate-bs-meter/');
-  await seen(events, '$pageview');
-  await page.getByRole('button', { name: 'Skip and play anonymously' }).click();
-  await page.locator('#privacy-button').click();
-  await page.locator('[data-analytics-opt-out]').click();
-  const before = events.length;
+  const errors = [];
+  page.on('pageerror', (error) => errors.push(error.message));
+  await page.addInitScript(() => {
+    Object.defineProperty(window, 'localStorage', {
+      get() {
+        throw new Error('Storage blocked');
+      },
+    });
+  });
   await page.goto('/wordle/');
-  await page.locator('#help').click();
-  await expect(page.locator('#help-dialog')).toBeVisible();
-  await page.goto('/corporate-bs-meter/');
-  await page.locator('#phrase').fill('A little clarity goes a long way.');
-  const request = page.waitForRequest('**/api/corporate-bs/score');
-  await page.locator('#judge-button').click();
-  expect((await request).headers()['x-posthog-distinct-id']).toBeUndefined();
-  await expect(page.locator('#score')).toHaveText('12.4');
-  expect(events.length).toBe(before);
-  const other = await context.newPage();
-  await other.addInitScript(() =>
-    Object.defineProperty(navigator, 'doNotTrack', { value: '1' }),
-  );
-  const suppressed = await analytics(other);
-  await other.goto('/city-racers/');
-  await expect(other.locator('#start')).toBeEnabled();
-  await other.locator('#start').click();
-  await expect(other.locator('#game')).toHaveAttribute(
-    'data-phase',
-    /countdown|racing/,
-  );
-  expect(suppressed).toHaveLength(0);
+  await seen(events, '$pageview');
+  for (const letter of 'слово')
+    await page.locator(`[data-key="${letter}"]`).click();
+  await page
+    .getByRole('button', { name: 'Проверить слово', exact: true })
+    .click();
+  await expect(page.locator('#attempts')).toHaveText('1 / 6 попыток');
+  await seen(events, 'guess_submitted');
+  expect(errors).toEqual([]);
 });
 test('unavailable analytics configuration leaves gameplay and the 404 page usable', async ({
   page,
@@ -243,25 +232,3 @@ test('racing configuration/start/pause and sanitized exception stacks reach the 
   ).toBeGreaterThan(0);
   expect(JSON.stringify(exception)).not.toContain('private-player@example.com');
 });
-for (const signal of ['doNotTrack', 'globalPrivacyControl']) {
-  test(`${signal} disables analytics before configuration or SDK requests`, async ({
-    page,
-  }) => {
-    const requests = [];
-    page.on('request', (request) => {
-      if (/analytics-config|posthog\.com/.test(request.url()))
-        requests.push(request.url());
-    });
-    await page.addInitScript(
-      (signal) =>
-        Object.defineProperty(navigator, signal, {
-          value: signal === 'doNotTrack' ? '1' : true,
-        }),
-      signal,
-    );
-    await page.goto('/wordle/');
-    await page.locator('#help').click();
-    await expect(page.locator('#help-dialog')).toBeVisible();
-    expect(requests).toEqual([]);
-  });
-}

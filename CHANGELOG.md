@@ -3,7 +3,7 @@
 ## 2026-09-18 — Anonymous gameplay analytics
 
 - Add PostHog visits, gameplay actions/outcomes, sharing, web vitals and sanitized browser/API errors across the catalogue, four games and shared BS results.
-- Connect anonymous browser sessions across games; exclude submitted content and personal details, respect browser privacy signals, and provide an analytics opt-out.
+- Connect anonymous browser sessions across games; exclude submitted content and personal details.
 - Configure production through a public project-token variable; keep local/test traffic isolated and publish source maps for error diagnosis.
 
 ## 2026-09-17 — Anonymous leaderboard entries

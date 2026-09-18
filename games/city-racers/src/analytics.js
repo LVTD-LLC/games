@@ -2,17 +2,7 @@
 let client;
 let revision = 'development';
 let queue = [];
-const preference = 'lvtd-analytics:disabled';
 const game = 'city-racers';
-function disabled() {
-  if (navigator.doNotTrack === '1' || navigator.globalPrivacyControl === true)
-    return true;
-  try {
-    return localStorage.getItem(preference) === '1';
-  } catch {
-    return true;
-  }
-}
 function safePath(path) {
   if (/^\/corporate-bs-meter\/result\//.test(path))
     return '/corporate-bs-meter/result/';
@@ -81,11 +71,7 @@ const properties = new Set([
   'subscribed',
 ]);
 function sanitize(event) {
-  if (
-    disabled() ||
-    ['$set', '$identify', '$create_alias'].includes(event.event)
-  )
-    return null;
+  if (['$set', '$identify', '$create_alias'].includes(event.event)) return null;
   delete event.$set;
   delete event.$set_once;
   delete event.$unset;
@@ -140,7 +126,6 @@ function sanitize(event) {
   return event;
 }
 export function track(event, properties = {}) {
-  if (disabled()) return;
   try {
     if (client)
       client.capture(event, properties, {
@@ -156,7 +141,7 @@ export function track(event, properties = {}) {
   }
 }
 export function analyticsHeaders() {
-  if (!client || disabled()) return {};
+  if (!client) return {};
   try {
     return {
       'X-POSTHOG-DISTINCT-ID': client.get_distinct_id(),
@@ -168,16 +153,11 @@ export function analyticsHeaders() {
   }
 }
 export function reportError(operation) {
-  if (disabled()) return;
   try {
     client?.captureException(new Error(operation), { operation });
   } catch {}
 }
 async function init() {
-  if (disabled()) {
-    queue = [];
-    return;
-  }
   try {
     const response = await fetch('/analytics-config.json', {
       signal: AbortSignal.timeout(2000),
@@ -187,15 +167,13 @@ async function init() {
     if (
       !config.token ||
       !config.enabled ||
-      !config.hosts?.includes(location.hostname) ||
-      disabled()
+      !config.hosts?.includes(location.hostname)
     ) {
       queue = [];
       return;
     }
     revision = config.revision;
     const { default: posthog } = await import('posthog-js');
-    if (disabled()) return;
     posthog.init(config.token, {
       api_host: config.host,
       ui_host: 'https://us.posthog.com',
@@ -219,7 +197,6 @@ async function init() {
       advanced_disable_flags: true,
       enable_recording_console_log: false,
       ip: false,
-      respect_dnt: true,
       before_send: sanitize,
       loaded(sdk) {
         client = sdk;
@@ -231,24 +208,4 @@ async function init() {
     queue = [];
   }
 }
-// Local preference remains usable even when the SDK/network is blocked.
-document.addEventListener('click', (event) => {
-  const button = event.target.closest('[data-analytics-opt-out]');
-  if (!button) return;
-  try {
-    localStorage.setItem(preference, '1');
-    client?.opt_out_capturing();
-    queue = [];
-    button.textContent = 'Analytics disabled in this browser';
-    button.disabled = true;
-  } catch {
-    button.textContent = 'Your browser is already blocking analytics storage';
-  }
-});
-window.addEventListener('storage', (event) => {
-  if (event.key === preference && disabled()) {
-    queue = [];
-    client?.opt_out_capturing();
-  }
-});
 void init();
