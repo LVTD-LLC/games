@@ -1,3 +1,4 @@
+import { track, analyticsHeaders, reportError } from './analytics.js';
 import { patterns, seedPattern } from './patterns.mjs';
 
 const SIZE = 64;
@@ -7,6 +8,7 @@ const canvas = $('board'),
 let cells = seedPattern(patterns[0], SIZE);
 let baseline = cells.slice(),
   trails = new Uint8Array(SIZE * SIZE);
+let started = false;
 let generation = 0,
   playing = false,
   pending = null,
@@ -67,6 +69,7 @@ function state() {
   $('fast').disabled = !!pending || playing;
 }
 function pause() {
+  if (playing) track('game_paused', { generation, population: population() });
   playing = false;
   clearTimeout(timer);
   epoch++;
@@ -81,6 +84,10 @@ function schedule() {
 }
 async function advance(steps) {
   if (pending) return;
+  if (!started) {
+    track('game_started', { population: population() });
+    started = true;
+  }
   const controller = new AbortController(),
     version = epoch;
   pending = controller;
@@ -89,7 +96,7 @@ async function advance(steps) {
   try {
     const response = await fetch('/api/life/step', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...analyticsHeaders() },
       body: JSON.stringify({ board: cells.join(''), steps }),
       signal: controller.signal,
     });
@@ -109,11 +116,18 @@ async function advance(steps) {
     cells = next;
     generation += steps;
     render();
+    if (!playing)
+      track('simulation_advanced', {
+        steps,
+        generation,
+        population: population(),
+      });
     if (steps > 1)
       notice(
         `Advanced ${steps} generations. Bend took ${result.elapsedMs.toFixed(1)} ms, using ${result.threads} CPU threads.`,
       );
     if (population() === 0 && playing) {
+      track('game_completed', { outcome: 'extinct', generation });
       playing = false;
       notice(
         'This world has gone quiet. Draw a new beginning or choose a pattern.',
@@ -121,6 +135,10 @@ async function advance(steps) {
     }
   } catch (error) {
     if (version !== epoch) return;
+    track('simulation_failed', {
+      reason: error.name === 'AbortError' ? 'timeout' : 'unavailable',
+    });
+    reportError('simulation_unavailable');
     playing = false;
     notice(
       error.name === 'AbortError'
@@ -138,6 +156,16 @@ async function advance(steps) {
 }
 function fresh(next, name, id = '') {
   pause();
+  started = false;
+  track('simulation_board_changed', {
+    pattern:
+      id ||
+      (name === 'A clean slate'
+        ? 'clear'
+        : name === 'A new random world'
+          ? 'random'
+          : 'reset'),
+  });
   cells = next;
   baseline = next.slice();
   trails.fill(0);
@@ -151,6 +179,11 @@ function togglePlay() {
   if (playing) pause();
   else {
     playing = true;
+    track('simulation_played', {
+      generation,
+      population: population(),
+      speed: Number($('speed').value),
+    });
     state();
     advance(1);
   }
@@ -176,6 +209,9 @@ $('speed').addEventListener('input', () => {
   $('speed-value').textContent = `${$('speed').value} / sec`;
   schedule();
 });
+$('speed').addEventListener('change', () =>
+  track('simulation_speed_changed', { speed: Number($('speed').value) }),
+);
 $('zoom').addEventListener('change', () => {
   zoom = Number($('zoom').value);
   canvas.style.setProperty('--board-width', `${zoom * 100}%`);
@@ -284,6 +320,8 @@ canvas.addEventListener('pointermove', (event) => {
 });
 for (const name of ['pointerup', 'pointercancel', 'lostpointercapture'])
   canvas.addEventListener(name, () => {
+    if (pointer && tool !== 'pan')
+      track('simulation_board_edited', { tool, population: population() });
     pointer = null;
     lastCell = null;
   });
@@ -313,6 +351,10 @@ canvas.addEventListener('keydown', (event) => {
     keyboardCursor = true;
     const index = cursor[1] * SIZE + cursor[0];
     cells[index] = 1 - cells[index];
+    track('simulation_board_edited', {
+      tool: 'keyboard',
+      population: population(),
+    });
     trails[index] = 0;
     generation = 0;
     baseline = cells.slice();

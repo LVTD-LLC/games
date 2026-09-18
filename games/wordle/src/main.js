@@ -1,3 +1,4 @@
+import { track } from './analytics.js';
 import './style.css';
 import dictionary from './allowed.json';
 import {
@@ -46,7 +47,15 @@ const randomAnswer = (previous) => {
   ];
 };
 
+let roundActive = false,
+  roundStarted = 0;
 function loadGame(nextMode, fresh = false) {
+  if (nextMode !== mode || fresh)
+    track('game_mode_selected', {
+      mode: nextMode,
+      action: fresh ? 'new_round' : 'switch',
+    });
+  roundActive = false;
   mode = nextMode;
   date = dayKey();
   input = '';
@@ -180,18 +189,37 @@ function handleKey(key) {
   if (key === 'Backspace') input = input.slice(0, -1);
   else if (key === 'Enter') {
     if (input.length !== 5) {
+      track('guess_rejected', { mode, reason: 'length' });
       announce('Нужно пять букв');
       return;
     }
     if (!allowed.has(input)) {
+      track('guess_rejected', { mode, reason: 'dictionary' });
       announce('Такого слова нет в словаре. Попробуйте существительное.');
       return;
     }
     if (guesses.includes(input)) {
+      track('guess_rejected', { mode, reason: 'duplicate' });
       announce('Это слово уже было — попробуйте другое');
       return;
     }
+    if (!roundActive) {
+      track(guesses.length ? 'game_resumed' : 'game_started', {
+        mode,
+        attempts: guesses.length,
+      });
+      roundActive = true;
+      roundStarted = performance.now();
+    }
     guesses.push(input);
+    track('guess_submitted', { mode, attempts: guesses.length });
+    if (finished())
+      track('game_completed', {
+        mode,
+        attempts: guesses.length,
+        outcome: guesses.includes(answer) ? 'won' : 'lost',
+        duration_seconds: (performance.now() - roundStarted) / 1000,
+      });
     input = '';
     save();
     announce(
@@ -260,7 +288,10 @@ $('daily').onclick = () => loadGame('daily');
 $('practice').onclick = () => loadGame('practice');
 $('next').onclick = () => loadGame('practice', true);
 $('new-practice').onclick = () => loadGame('practice', true);
-$('help').onclick = () => $('help-dialog').showModal();
+$('help').onclick = () => {
+  track('game_help_opened');
+  $('help-dialog').showModal();
+};
 document.querySelectorAll('dialog').forEach((dialog) => {
   dialog.querySelector('.close').onclick = () => dialog.close();
   dialog.addEventListener('click', (event) => {
@@ -285,8 +316,10 @@ $('share').onclick = async () => {
   );
   try {
     await navigator.clipboard.writeText(text);
+    track('game_result_shared', { mode, channel: 'clipboard' });
     announce('Результат скопирован — можно отправлять друзьям');
   } catch {
+    track('game_share_fallback', { mode, channel: 'clipboard' });
     $('share-fallback').hidden = false;
     $('share-fallback').value = text;
     $('share-fallback').focus();
@@ -295,6 +328,7 @@ $('share').onclick = async () => {
   }
 };
 $('stats').onclick = () => {
+  track('game_stats_opened');
   let history;
   try {
     history = JSON.parse(storage.get(keyPrefix + 'history'));

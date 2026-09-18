@@ -1,2 +1,5 @@
 import { defineConfig } from 'vite';
-export default defineConfig({ base: '/city-racers/' });
+export default defineConfig({
+  build: { sourcemap: true },
+  base: '/city-racers/',
+});

@@ -1,3 +1,4 @@
+import { track, reportError } from './analytics.js';
 import './style.css';
 import {
   MAX_CARS,
@@ -59,6 +60,17 @@ function clearInput() {
 function phase(value) {
   race.phase = value;
   $('game').dataset.phase = value;
+}
+function raceProperties() {
+  return {
+    players: settings.players,
+    map: settings.map,
+    difficulty: settings.difficulty,
+    laps: settings.laps,
+    assist: settings.assist,
+    car_count: settings.count,
+    model: settings.model,
+  };
 }
 function updateSettings() {
   settings = settingsFrom(settings);
@@ -122,6 +134,7 @@ function updateSettings() {
   race = createRace(settings);
   if (world) {
     phase('garage');
+    track('race_settings_changed', raceProperties());
     world.resetCamera();
   }
   try {
@@ -246,6 +259,7 @@ function start() {
   closeModal();
   race = createRace(settings);
   phase('countdown');
+  track('game_started', raceProperties());
   lastCount = '';
   $('garage').hidden = true;
   $('route-card').hidden = true;
@@ -261,12 +275,14 @@ function pause() {
   if (!['racing', 'countdown'].includes(race.phase)) return;
   resumePhase = race.phase;
   phase('paused');
+  track('game_paused', { ...raceProperties(), duration_seconds: race.elapsed });
   showModal(false);
 }
 function resume() {
   clearInput();
   closeModal();
   phase(resumePhase);
+  track('game_resumed', raceProperties());
   drivingUI(true);
   $('pause').focus({ preventScroll: true });
   lastCount = '';
@@ -278,6 +294,11 @@ $('continue').addEventListener('click', () =>
   race.phase === 'paused' ? resume() : start(),
 );
 $('garage-button').addEventListener('click', () => {
+  if (race.phase !== 'finished')
+    track('game_abandoned', {
+      ...raceProperties(),
+      duration_seconds: race.elapsed,
+    });
   clearInput();
   closeModal();
   race = createRace(settings);
@@ -304,7 +325,7 @@ window.addEventListener('keydown', (event) => {
     ['racing', 'countdown'].includes(race.phase)
   ) {
     event.preventDefault();
-    if (!event.repeat) recoverDriver(race, recovery);
+    if (!event.repeat) recover(recovery);
     return;
   }
   const action = KEY_ACTIONS[event.code];
@@ -363,8 +384,15 @@ document.querySelectorAll('[data-drive]').forEach((button) => {
   button.addEventListener('contextmenu', (event) => event.preventDefault());
 });
 for (const [index, id] of ['recover', 'recover-two'].entries())
-  $(id).addEventListener('click', () => recoverDriver(race, index));
+  $(id).addEventListener('click', () => recover(index));
+function recover(index) {
+  recoverDriver(race, index);
+  track('race_car_recovered', { players: settings.players });
+}
 function fail() {
+  if (race.phase === 'error') return;
+  track('game_load_failed', { reason: 'graphics_unavailable' });
+  reportError('city_graphics_unavailable');
   clearInput();
   phase('error');
   closeModal();
@@ -440,7 +468,14 @@ async function boot() {
       tickRace(race, readInputs(keys, pointers, settings.players), dt);
       if (race.phase !== previous) {
         $('game').dataset.phase = race.phase;
-        if (race.phase === 'finished') showModal(true);
+        if (race.phase === 'finished') {
+          track('game_completed', {
+            ...raceProperties(),
+            outcome: 'finished',
+            duration_seconds: race.elapsed,
+          });
+          showModal(true);
+        }
       }
       if (race.phase === 'countdown') {
         const count = String(Math.ceil(race.countdown));

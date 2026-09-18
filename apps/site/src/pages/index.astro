@@ -8,7 +8,7 @@ import Catalogue from '../layouts/Catalogue.astro';
   <ul class="games" aria-label="Game collection">
     {games.map((game) => (
       <li>
-        <a class="game" href={`/${game.slug}/`}>
+        <a class="game" data-game={game.slug} href={`/${game.slug}/`}>
           <img class="logo" src={game.logo} alt="" width="104" height="104" />
           <div class="details">
             <h2 lang={game.language}>{game.title}</h2>
@@ -118,3 +118,17 @@ import Catalogue from '../layouts/Catalogue.astro';
     }
   }
 </style>
+
+<script>
+  import { track } from '../lib/analytics.js';
+  document
+    .querySelectorAll<HTMLAnchorElement>('[data-game]')
+    .forEach((link) => {
+      const capture = () =>
+        track('game_selected', { target_game: link.dataset.game });
+      link.addEventListener('click', capture);
+      link.addEventListener('auxclick', (event) => {
+        if (event.button === 1) capture();
+      });
+    });
+</script>

@@ -5,7 +5,7 @@
 - Shared daily puzzle resets at midnight UTC. The daily round refreshes when the tab regains focus or the next key is entered after midnight.
 - Practice can be replayed immediately. Both modes restore their own progress; finished daily games count once in local statistics.
 - Storage and clipboard failures do not prevent play. Sharing falls back to selectable text and never includes guessed words.
-- No accounts, analytics, backend calls, or third-party fonts. Like other client-side word games, answers are inspectable in source; this is not anti-cheat infrastructure.
+- No accounts or third-party fonts. Anonymous PostHog analytics may record modes, attempt counts and outcomes, never answers, guesses or keystrokes. Analytics failures must not prevent play. Like other client-side word games, answers are inspectable in source; this is not anti-cheat infrastructure.
 - Curated daily pool is versioned in `src/engine.mjs`: **do not reorder or resize v1**, which would change existing daily answers. A new pool needs a versioned schedule and storage-key migration.
 - Guess dictionary: five-letter lowercase nouns from [Harrix/Russian-Nouns](https://github.com/Harrix/Russian-Nouns), commit `6f0ae9f0619cf0401c6935b7cbba1165bf4c7f19`, `dist/russian_nouns.txt`, normalized Ё → Е and deduplicated (3,473 words). License is retained at `public/dictionary-license.txt`. Curated answers are also accepted as guesses.
 

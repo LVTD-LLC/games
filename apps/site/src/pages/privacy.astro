@@ -1,0 +1,50 @@
+---
+import Catalogue from '../layouts/Catalogue.astro';
+---
+
+<Catalogue title="Privacy & analytics — LVTD Games">
+  <h1>Privacy &amp; analytics</h1>
+  <p>
+    We use PostHog to understand visits, game choices, play sessions, results,
+    sharing actions, loading performance, and errors. An anonymous browser ID
+    stored on this site helps us count returning visitors across our games.
+  </p>
+  <p>
+    Analytics events do not include your name, email, phrases, guessed words,
+    board contents, or URL query strings. We do not record sessions, keyboard
+    input, or screen contents. We disable IP-based location enrichment.
+  </p>
+  <p>
+    You can disable analytics below. We also respect Do Not Track and Global
+    Privacy Control. Playing works with analytics disabled or blocked.
+  </p>
+  <button data-analytics-opt-out>Disable analytics in this browser</button>
+  <p>
+    Corporate BS Meter separately stores submitted phrases and scores for public
+    results and its leaderboard. A nickname is optional. An email is saved only
+    when you choose game updates; it is never public. Other games keep their
+    progress or settings in your browser.
+  </p>
+  <a href="/">← Back to games</a>
+</Catalogue>
+<style>
+  p {
+    max-width: 760px;
+    font-size: 18px;
+    line-height: 1.65;
+  }
+  button {
+    padding: 16px 24px;
+    font: inherit;
+    color: var(--text);
+    background: var(--purple);
+    border: 0;
+    border-radius: 12px;
+    cursor: pointer;
+    max-width: 100%;
+  }
+  button:focus-visible {
+    outline: 3px solid var(--lavender);
+    outline-offset: 4px;
+  }
+</style>

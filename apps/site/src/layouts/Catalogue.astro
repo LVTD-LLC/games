@@ -30,6 +30,12 @@ const {
     <main>
       <slot />
     </main>
+    <footer>
+      <a href="/privacy/">Privacy &amp; analytics</a>
+    </footer>
+    <script>
+      import '../lib/analytics.js';
+    </script>
   </body>
 </html>
 
@@ -62,6 +68,11 @@ const {
   a:focus-visible {
     outline: 3px solid var(--lavender);
     outline-offset: 6px;
+  }
+  footer {
+    width: min(1040px, calc(100% - 40px));
+    margin: 0 auto 32px;
+    color: var(--lavender);
   }
   header,
   main {

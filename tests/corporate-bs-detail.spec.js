@@ -45,7 +45,7 @@ test('detail sharing copies attribution and canonical URL, supplies social inten
     `/corporate-bs-meter/result/${result.id}/?source=test`,
   );
   expect(response.headers()['content-security-policy']).toContain(
-    "script-src 'self';",
+    "script-src 'self' https://us-assets.i.posthog.com;",
   );
   const url = `http://localhost:4173/corporate-bs-meter/result/${result.id}/`;
   await expect(

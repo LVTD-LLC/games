@@ -105,7 +105,9 @@ test('anonymous play is saved and ranked; profile changes attribution without ex
   assert(html.includes('Circulate the memo.'));
   assert(html.includes('/corporate-bs-meter/result-share.js'));
   assert(
-    share.headers.get('content-security-policy').includes("script-src 'self';"),
+    share.headers
+      .get('content-security-policy')
+      .includes("script-src 'self' https://us-assets.i.posthog.com;"),
   );
   assert(!html.includes('private@example.com'));
   await f.post('/profile', { name: '' });

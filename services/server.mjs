@@ -1,3 +1,4 @@
+import { createAnalytics } from './analytics.mjs';
 import { createServer } from 'node:http';
 import { readFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
@@ -6,12 +7,20 @@ import { createLifeProxy } from './life-proxy.mjs';
 import { createApp } from './corporate-bs-api/server.mjs';
 import { openStore } from './corporate-bs-api/store.mjs';
 import { createJudge } from './corporate-bs-api/scoring.mjs';
-export function gamesServer({ store, judge, root = 'dist', ...options }) {
+export function gamesServer({
+  store,
+  judge,
+  root = 'dist',
+  analytics = { capture() {} },
+  ...options
+}) {
   const life = createLifeProxy({
     origin: options.origin,
     trustProxy: options.trustProxy,
   });
-  const api = createApp({ store, judge, ...options }).listeners('request')[0];
+  const api = createApp({ store, judge, analytics, ...options }).listeners(
+    'request',
+  )[0];
   const files = sirv(root, {
     etag: true,
     setHeaders(res, pathname) {
@@ -30,7 +39,21 @@ export function gamesServer({ store, judge, root = 'dist', ...options }) {
   });
   const notFound = readFileSync(`${root}/404.html`);
   const server = createServer((req, res) => {
-    if (req.url.startsWith('/api/life/')) return life(req, res);
+    if (req.url.startsWith('/api/life/')) {
+      if (req.url.split('?')[0] === '/api/life/step') {
+        const started = performance.now();
+        res.once('finish', () => {
+          if (res.statusCode >= 400)
+            analytics.capture(req, 'game_api_failed', {
+              game: 'game-of-life',
+              operation: 'simulation_step',
+              status: res.statusCode,
+              duration_seconds: (performance.now() - started) / 1000,
+            });
+        });
+      }
+      return life(req, res);
+    }
     if (/^\/(api\/|corporate-bs-meter\/(result|unsubscribe)\/)/.test(req.url))
       return api(req, res);
     if (!['GET', 'HEAD'].includes(req.method)) {
@@ -53,7 +76,11 @@ if (
   if (!process.env.TYPESAFE_API_KEY)
     throw new Error('TYPESAFE_API_KEY is required');
   const store = await openStore(); // Migrations finish before accepting traffic.
+  const analytics = createAnalytics(
+    JSON.parse(readFileSync('dist/analytics-config.json', 'utf8')),
+  );
   const server = gamesServer({
+    analytics,
     store,
     judge: createJudge({
       apiKey: process.env.TYPESAFE_API_KEY,
@@ -73,6 +100,7 @@ if (
   );
   const shutdown = () => {
     server.close(async () => {
+      await analytics.shutdown();
       await store.close();
       process.exit(0);
     });
