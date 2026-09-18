@@ -272,6 +272,10 @@ result is binary. It does not prove the entire board algorithm or transport.
 Independent reference tests cover still lifes, oscillators, gliders, edge wrapping,
 multiple generations and JS/native agreement at 1, 2 and 4 CPU threads.
 
+CapRover must use the repository-root `captain-definition-life` file. This installation
+uses the definition file’s directory as its Docker build context, so placing that
+file inside `services/life-engine/` breaks the repository-relative Dockerfile paths.
+
 The private CapRover app `games-life` runs two persistent workers with two Bend CPU
 threads each, limited to four CPUs and 1 GiB. It has no public ingress, published
 ports, volumes or database. Its app token lives only in GitHub's

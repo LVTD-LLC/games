@@ -79,3 +79,7 @@
 
 - Added an interactive Game of Life with classic patterns, drawing, zoom, playback and 100-generation fast-forward.
 - Runs simulation in a private native Bend service with checked rule proofs, bounded multicore workers and automatic deployment alongside the website.
+
+## 2026-09-18 — Bend deployment context
+
+- Moved the Bend CapRover definition to the repository root so native builds retain the correct monorepo build context.
