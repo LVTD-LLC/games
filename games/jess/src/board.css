@@ -1,0 +1,101 @@
+.board {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  aspect-ratio: 1;
+  border: 6px solid #384b42;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px #283a3012;
+  background: #e7e8db;
+}
+.square {
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  min-height: 0;
+  aspect-ratio: 1;
+  background: #e7e8db !important;
+  touch-action: manipulation;
+}
+.square.dark {
+  background: #719080 !important;
+}
+.square svg {
+  width: 83%;
+  height: 83%;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 1px #17211c33);
+  position: relative;
+  z-index: 1;
+}
+.square.last {
+  background: #d6d78e !important;
+}
+.square.dark.last {
+  background: #9eae64 !important;
+}
+.square.selected {
+  background: #b6a2de !important;
+  box-shadow: inset 0 0 0 3px #7052b9;
+}
+.square.legal::after {
+  content: '';
+  position: absolute;
+  width: 22%;
+  height: 22%;
+  border-radius: 50%;
+  background: #213b3455;
+  z-index: 2;
+}
+.square.legal.occupied::after {
+  width: 88%;
+  height: 88%;
+  background: none;
+  border: 5px solid #213b3466;
+}
+.square.check {
+  background: #c97970 !important;
+}
+.square:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 3px #5942c4;
+  z-index: 3;
+}
+.coordinate {
+  position: absolute;
+  font-size: 10px;
+  line-height: 1;
+  color: #375348;
+  font-weight: 700;
+  pointer-events: none;
+}
+.dark .coordinate {
+  color: #f0f1e6;
+}
+.coordinate.rank {
+  top: 4px;
+  left: 4px;
+}
+.coordinate.file {
+  bottom: 3px;
+  right: 4px;
+}
+@media (max-width: 420px) {
+  .board {
+    border-width: 4px;
+  }
+  .coordinate {
+    font-size: 8px;
+  }
+  .coordinate.rank {
+    top: 3px;
+    left: 3px;
+  }
+  .coordinate.file {
+    bottom: 2px;
+    right: 3px;
+  }
+}

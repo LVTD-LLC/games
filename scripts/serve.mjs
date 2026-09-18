@@ -15,6 +15,7 @@ const types = {
 createServer(async (req, res) => {
   if (req.url.startsWith('/api/life/')) return life(req, res);
   if (
+    req.url.startsWith('/api/jess/') ||
     req.url.startsWith('/api/corporate-bs/') ||
     /^\/corporate-bs-meter\/(result|unsubscribe)\//.test(req.url)
   ) {

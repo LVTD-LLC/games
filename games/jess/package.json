@@ -1,0 +1,16 @@
+{
+  "name": "@lvtd-games/jess",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "chess.js": "1.4.0",
+    "posthog-js": "1.434.0"
+  },
+  "devDependencies": {
+    "vite": "8.3.0"
+  }
+}

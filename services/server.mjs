@@ -1,3 +1,5 @@
+import { createJess } from './jess/server.mjs';
+import { createJev } from './jess/jev.mjs';
 import { createAnalytics } from './analytics.mjs';
 import { createServer } from 'node:http';
 import { readFileSync } from 'node:fs';
@@ -10,10 +12,18 @@ import { createJudge } from './corporate-bs-api/scoring.mjs';
 export function gamesServer({
   store,
   judge,
+  chooseJess,
   root = 'dist',
   analytics = { capture() {} },
   ...options
 }) {
+  const jess = createJess({
+    store,
+    choose: chooseJess,
+    origin: options.origin,
+    trustProxy: options.trustProxy,
+    dailyBudget: options.jessDailyBudget,
+  });
   const life = createLifeProxy({
     origin: options.origin,
     trustProxy: options.trustProxy,
@@ -39,6 +49,7 @@ export function gamesServer({
   });
   const notFound = readFileSync(`${root}/404.html`);
   const server = createServer((req, res) => {
+    if (req.url.startsWith('/api/jess/')) return jess(req, res);
     if (req.url.startsWith('/api/life/')) {
       if (req.url.split('?')[0] === '/api/life/step') {
         const started = performance.now();
@@ -82,6 +93,11 @@ if (
   const server = gamesServer({
     analytics,
     store,
+    chooseJess: createJev({
+      apiKey: process.env.TYPESAFE_API_KEY,
+      model: process.env.TYPESAFE_MODEL || 'jev-1.13.0',
+    }),
+    jessDailyBudget: Number(process.env.JESS_DAILY_JUDGING_LIMIT) || 3000,
     judge: createJudge({
       apiKey: process.env.TYPESAFE_API_KEY,
       model: process.env.TYPESAFE_MODEL || 'jev-1.13.0',
