@@ -115,7 +115,7 @@ test('BS Meter events and API correlation omit profile and phrase content, inclu
   await page.getByRole('button', { name: 'Skip and play anonymously' }).click();
   await page
     .locator('#phrase')
-    .fill('Secret confidential synergy from person@example.com');
+    .fill('Secret confidential alignment from person@example.com');
   const request = page.waitForRequest('**/api/corporate-bs/score');
   await page.getByRole('button', { name: 'Measure my BS' }).click();
   const headers = (await request).headers();
@@ -178,11 +178,11 @@ test('opt-out persists across games, strips API correlation, and DNT suppresses 
   await expect(page.locator('#help-dialog')).toBeVisible();
   await page.goto('/corporate-bs-meter/');
   await page.getByRole('button', { name: 'Skip and play anonymously' }).click();
-  await page.locator('#phrase').fill('A little synergy goes a long way.');
+  await page.locator('#phrase').fill('A little clarity goes a long way.');
   const request = page.waitForRequest('**/api/corporate-bs/score');
   await page.locator('#judge-button').click();
   expect((await request).headers()['x-posthog-distinct-id']).toBeUndefined();
-  await expect(page.locator('#score')).toHaveText('92.7');
+  await expect(page.locator('#score')).toHaveText('12.4');
   expect(events.length).toBe(before);
   const other = await context.newPage();
   await other.addInitScript(() =>
