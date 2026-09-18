@@ -1,3 +1,4 @@
+import { createRecording } from './recording.js';
 import { Chess } from 'chess.js';
 import { pieceSVG, pieceName } from './pieces.js';
 import { track } from './analytics.js';
@@ -18,6 +19,15 @@ let busy = false,
   controller = null,
   generation = 0;
 let focusSquare = 'e2';
+const recording = createRecording({
+  state: () => ({
+    player,
+    moves: chess.history({ verbose: true }).map(uci),
+    finished: finished(),
+    checkmate: chess.isCheckmate(),
+  }),
+  save,
+});
 function restore() {
   try {
     const data = JSON.parse(localStorage.getItem(KEY));
@@ -42,6 +52,7 @@ function restore() {
         promotion: move[4],
       });
     }
+    recording.restore(data.recording);
     chess = restored;
     player = data.player;
     flipped = typeof data.flipped === 'boolean' ? data.flipped : player === 'b';
@@ -58,6 +69,7 @@ function save() {
         JSON.stringify({
           player,
           flipped,
+          recording: recording.snapshot(),
           moves: chess.history({ verbose: true }).map(uci),
         }),
       );
@@ -141,7 +153,6 @@ function render() {
   renderBoard();
   const over = player && finished();
   $('setup').hidden = Boolean(player);
-  $('game-status').hidden = !player;
   $('player-color').textContent = player
     ? `Playing ${color(player)}`
     : 'Pick your side';
@@ -159,33 +170,26 @@ function render() {
         : chess.turn() !== player
           ? 'JEV’S TURN'
           : '';
-  $('move-number').textContent =
-    `MOVE ${Math.floor(chess.history().length / 2) + 1}`;
   $('status').textContent = over
     ? outcome()
-    : failure
-      ? 'A moment, please.'
-      : busy
-        ? 'Jev is thinking…'
-        : chess.isCheck()
-          ? 'You’re in check.'
-          : 'Your move.';
-  $('status-detail').textContent = over
-    ? 'Another game? Pick New game below the board.'
-    : failure ||
-      (busy
-        ? 'One board. Every legal move. A judgment call.'
-        : chess.isCheck()
-          ? 'Protect your king. Legal escapes are highlighted when you select a piece.'
-          : 'Select a piece to see where it can go.');
+    : busy
+      ? 'Jev is thinking…'
+      : chess.isCheck()
+        ? 'You’re in check.'
+        : 'Your move.';
+  $('status').classList.toggle('sr-only', !over && !busy && !chess.isCheck());
+  $('status-detail').textContent = failure;
+  $('status-detail').hidden = !failure;
   $('retry').hidden = !failure || Boolean(over) || busy;
   $('undo').disabled =
     !player ||
+    Boolean(over) ||
     chess.history().length === 0 ||
     (player === 'b' && chess.history().length === 1);
   const history = chess.history();
+  const fullMoves = Math.ceil(history.length / 2);
   $('ply-count').textContent =
-    `${history.length} ${history.length === 1 ? 'move' : 'moves'}`;
+    `${fullMoves} ${fullMoves === 1 ? 'move' : 'moves'}`;
   $('empty-history').hidden = history.length > 0;
   const items = [];
   for (let i = 0; i < history.length; i += 2) {
@@ -206,7 +210,7 @@ function render() {
   $('probabilities').replaceChildren();
   $('insight-summary').textContent = insight
     ? `Jev played ${insight.san}, choosing from ${insight.probabilities.length} legal moves.`
-    : 'A little peek into your opponent’s mind.';
+    : 'Move probabilities appear after Jev replies.';
   if (insight)
     for (const entry of insight.probabilities.slice(0, 3)) {
       const row = document.createElement('li');
@@ -233,7 +237,7 @@ function cancelRequest() {
   failure = '';
 }
 function recordFinish() {
-  if (finished())
+  if (finished()) {
     track('game_completed', {
       outcome: chess.isCheckmate()
         ? chess.turn() === player
@@ -241,6 +245,8 @@ function recordFinish() {
           : 'win'
         : 'draw',
     });
+    void recording.finish();
+  }
 }
 async function askJev() {
   if (!player || finished() || chess.turn() === player || busy) return;
@@ -254,11 +260,14 @@ async function askJev() {
   const timer = setTimeout(() => requestController.abort(), 18000);
   render();
   try {
+    const recorded = await recording.start(player, requestController.signal);
+    if (turn !== generation) return;
     const response = await fetch('/api/jess/move', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         player,
+        ...recorded,
         moves: chess.history({ verbose: true }).map(uci),
       }),
       signal: controller.signal,
@@ -393,6 +402,7 @@ for (const button of document.querySelectorAll('[data-side]'))
           ? 'w'
           : 'b'
         : button.dataset.side;
+    recording.reset(true);
     flipped = player === 'b';
     selected = null;
     insight = null;
@@ -423,6 +433,7 @@ $('undo').addEventListener('click', () => {
 });
 function reset() {
   cancelRequest();
+  recording.reset();
   chess = new Chess();
   player = null;
   selected = null;
@@ -459,4 +470,6 @@ for (const button of document.querySelectorAll('[data-promotion]'))
   });
 restore();
 render();
+void recording.leaderboard();
+if (player && finished()) void recording.finish();
 void askJev();

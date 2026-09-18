@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-18 — Jess results and fastest-win rankings
+
+- Remove decorative slogans and the post-selection turn-status card; keep compact check, error and game-over feedback.
+- Save verified game outcomes and chess move counts, rank the ten fastest wins against Jev, and show the current record above the board.
+- Offer an optional public name and separate private newsletter opt-in after checkmate. Anonymous results rank automatically; signup includes consent records and an unsubscribe flow.
+- Persist server-verified Jev turns to reject fabricated wins, replay lost responses without another paid call, and keep completed records immutable apart from the optional name.
+
 ## 2026-09-18 — Jess: chess against Jev
 
 - Add Jess to the catalogue: choose White, Black or random; play legal chess with promotion choices, saved games, take-backs, keyboard/touch controls and responsive vector pieces.

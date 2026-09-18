@@ -370,52 +370,94 @@ initialization policy, and hostname gate, with their own package dependency and 
 
 ## Jess
 
-`/jess/` is a standalone Vite/vanilla JS chess game using pinned `chess.js` 1.4.0
-in both its independent package and the root server package. Rules, legal move
-generation and game termination belong to code; Jev is the opponent, not a rules
-engine. Both sides support castling, en passant and all four promotions. Threefold
-repetition and the 50-move rule end automatically; sessions cap at 600 plies.
-Browser storage is namespaced `lvtd-jess-v1:game` (validated move history, side and
-orientation). No accounts, leaderboard, chess database tables or migrations.
+`/jess/` is an independent Vite/chess.js 1.4.0 game. Code enforces chess rules;
+Jev receives the full legal set through a TypeSafe Choice and selects its argmax.
+The UI shows its top three move preferences, not win probabilities. API failures
+preserve the board and offer explicit retry, never an engine/random fallback.
 
-`POST /api/jess/move` accepts only `{ player: "w" | "b", moves: ["e2e4", ...] }`.
-The server replays history from the standard starting position, rejects illegal,
-finished or human-turn games, then supplies the complete legal set as a TypeSafe
-Choice. State includes FEN, an ASCII board, side to move and recent moves; the
-browser cannot supply prompts, models, candidate lists or API URLs. The adapter
-requires a complete finite probability distribution, legal argmax choice and
-bounded confidence. It uses the documented highest-probability choice, including
-the provider's tie choice. No engine/random fallback masquerades as Jev.
+### Recorded games and rankings
 
-The browser shows the top three move probabilities **for the previous Jev turn**;
-these are relative preferences, not calibrated chess win probabilities. Model
-strength is experimental, not a rated chess-engine claim. Failed requests retain
-the board and require explicit retry. In-flight requests are aborted/invalidated
-on take-back or new game so stale replies cannot move a replacement board.
+Migration `0002_jess_results.sql` adds the `jess` schema to the existing games
+PostgreSQL database. No new service, connection or credential is needed. Startup
+applies the additive migration through the shared transactional/checksummed runner.
+Keep the new schema on code rollback; never delete completed results to roll back.
 
-Uses the existing games runtime `TYPESAFE_API_KEY` and `TYPESAFE_MODEL` (default
-`jev-1.13.0`). Never expose them through Vite, client code or browser storage.
-No additional infrastructure/key setup is required on the existing deployment.
-`JESS_DAILY_JUDGING_LIMIT` defaults to 3,000 paid requests/day **in addition to**
-the separate BS Meter budget. Jess reuses the existing store's atomic `allow`
-primitive/counter table with `jess:`-namespaced keys; it never reads/writes BS
-players, scores or subscriber data. Limits: 30 requests/IP/minute, 300 paid
-requests/IP/day, one in-flight request/IP and 32 globally per process. Counters
-are salted hashes and survive restarts. Keep the existing single games replica.
-Origin checks are defense in depth, not authentication; non-browser clients are
-still controlled by IP/global budgets. Trust only CapRover's last forwarded IP,
-as documented above. The body is bounded to 8 KB, history to 600 plies, and paid
-calls to 12 seconds. No automatic paid retries. Browser timeout is 18 seconds.
+- `POST /api/jess/start` registers a client-generated UUID and chosen side. An
+  independent HttpOnly/SameSite/Secure `lvtd_jess_player` cookie (90 days, `/api/jess/`
+  path) owns the game; the database stores only its SHA-256 hash. No account or
+  verified identity is implied. Start is idempotent for that owner/id.
+- `POST /api/jess/move` accepts `{player,moves,gameId}`. For recorded games the
+  server permits only a verified history prefix plus at most one new **human**
+  move. Each Jev reply and resulting history are persisted with an optimistic
+  compare-and-update; clients cannot invent opponent turns or submit an arbitrary
+  mate. A lost last reply is replayed without another paid call.
+- Take-backs remain allowed during active games and can rewind verified history;
+  rankings are casual-game results, not a no-takeback competition. Completed
+  games are immutable except for the optional public name. New game starts a
+  separate record; completed games cannot be undone/reused for duplicate results.
+- `POST /api/jess/finish` validates and saves the terminal position idempotently.
+  A Jev move that ends a game records it immediately server-side. Winners are
+  `human`, `jev` or `draw`. Move counts use normal chess numbering:
+  `ceil(half-moves / 2)`, including a final unpaired White turn. Castling, en
+  passant, all promotions, automatic repetition/50-move/insufficient-material
+  draws and the 600-ply session cap remain supported.
+- `GET /api/jess/leaderboard` returns the ten fastest **human checkmate wins**,
+  ordered by moves, finish time, then UUID. Each completed game is an entry;
+  repeated wins by the same player are not collapsed. Missing names display as
+  Anonymous. No cookies, owner identifiers, move histories, subscriber emails or
+  unsubscribe tokens appear in public responses. Empty rankings show an invitation
+  to set the first record, never a fabricated best score.
+- After checkmate, the result saves as Anonymous before an optional identity form
+  appears (wins and losses). `POST /api/jess/identity` can attach/change a moderated
+  public name and/or explicitly opted-in private newsletter email. Neither is
+  required to rank. Draws save without the checkmate signup dialog.
 
-Anonymous Jess analytics follow the existing opt-out/test filtering; events cover
-starts, move counts, take-backs and outcomes, never positions or move histories.
-For local play use the consolidated `npm start` setup above; static `npm run preview`
-proxies Jess requests to `BS_API_URL` (the existing local consolidated API address).
-Contract/rules/boundary tests use injected responses; Playwright covers the real
-HTTP endpoint with a deterministic test chooser, plus mocked failures/races.
-Production smoke verification must separately confirm a real Jev reply.
+Browser saves remain under `lvtd-jess-v1:game`, now including the game UUID and
+whether the optional prompt has been shown. No email is stored in browser storage.
+Pre-update saves continue as unranked practice, with a visible explanation: their
+opponent history predates server verification, so they cannot be retroactively
+trusted for rankings. Start a new game to record results. Lost cookies cannot
+claim another browser's existing game; start fresh if that session is gone.
 
-Integration references: [TypeSafe HTTP API](https://docs.typesafe.ai/api),
+### Newsletter consent
+
+`jess.subscribers` is separate from game records/public responses. Signup requires
+an unchecked-by-default, explicit future-games opt-in. Store consent timestamp,
+version and an unguessable unsubscribe token. Email never goes to Jev; only public
+nicknames use the existing server-side name moderation adapter. No messages are
+sent by this feature. Operator export (contains private addresses; do not publish
+or commit its output): `node services/jess/export-subscribers.mjs`. It includes each
+subscriber's `/api/jess/unsubscribe/<token>/` URL. GET displays confirmation without
+removing consent; POST unsubscribes. Honor current consent when using any export.
+BS Meter's subscriber data/export and unsubscribe routes are unchanged.
+
+### Runtime and verification
+
+Uses the existing server-only `TYPESAFE_API_KEY` and `TYPESAFE_MODEL` (default
+`jev-1.13.0`), never Vite variables or client storage. `JESS_DAILY_JUDGING_LIMIT`
+defaults to 3,000 paid requests/day, separate from BS Meter's budget; nickname
+checks share the Jess allowance. Atomic `store.allow` counters use `jess:` prefixes
+in the existing counter table, salted IP hashes and persisted windows. Limits:
+30 POSTs/IP/minute, 300 paid moves/IP/day, 100 new games/IP/day, 10 name checks/owner/day,
+one in-flight POST/IP and 32 globally per process. Keep the existing single replica.
+Origin checks supplement, not replace, these public-API budgets. Trust only the last
+valid proxy IP under the existing CapRover trust configuration. Bodies cap at 8 KB,
+history at 600 plies, upstream at 12 seconds; the browser cancels after 18 seconds.
+
+The legacy `{player,moves}` move endpoint remains available for old browser builds,
+but those moves cannot create ranked records. The server reconstructs and validates
+all legal moves before paid inference, and requires a complete finite distribution,
+legal highest-probability choice and bounded confidence. No arbitrary client prompts,
+models, candidate lists or upstream URLs are accepted.
+
+Tests cover win/loss/draw recording, both colors' move counts, forged histories,
+ownership, lost replies, deduplication, persistence, top-ten ordering, Anonymous,
+consent/unsubscribe/privacy, checkmate UI and responsive layouts. Browser fixtures
+use a deterministic injected chooser; live smoke checks separately verify real Jev
+responses. Never fabricate production leaderboard entries to smoke-test ranking.
+For local development use the consolidated `npm start` instructions above; static
+preview proxies `/api/jess/` to the existing local `BS_API_URL` backend address.
+
+References: [TypeSafe HTTP API](https://docs.typesafe.ai/api),
 [Choice](https://docs.typesafe.ai/primitives/choice),
-[function-calling cookbook](https://docs.typesafe.ai/cookbooks/function_calling),
 [chess.js](https://jhlywa.github.io/chess.js/).
