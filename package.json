@@ -10,10 +10,12 @@
     "build": "node scripts/packages.mjs build",
     "dev": "npm run build && npm run preview",
     "preview": "node scripts/serve.mjs",
-    "test": "node --test games/wordle/src/engine.test.mjs games/city-racers/src/race.test.mjs scripts/deploy-caprover.test.mjs services/corporate-bs-api/*.test.mjs services/database/database.test.mjs services/server.test.mjs",
+    "test": "node --test games/wordle/src/engine.test.mjs games/city-racers/src/race.test.mjs scripts/deploy-caprover.test.mjs services/corporate-bs-api/*.test.mjs services/database/database.test.mjs services/server.test.mjs services/life-proxy.test.mjs",
     "test:e2e": "playwright test",
     "start": "node services/server.mjs",
-    "db:migrate": "node services/database/migrate.mjs"
+    "db:migrate": "node services/database/migrate.mjs",
+    "setup:life": "npm --prefix services/life-engine ci --include=dev",
+    "test:life": "npm --prefix services/life-engine run build && npm --prefix services/life-engine test"
   },
   "devDependencies": {
     "@playwright/test": "1.63.0",

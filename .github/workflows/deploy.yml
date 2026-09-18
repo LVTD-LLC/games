@@ -64,13 +64,15 @@ jobs:
           mkdir -p "$staging_dir"
           git archive "$DEPLOY_SHA" | tar -x -C "$staging_dir"
           printf '%s\n' "$DEPLOY_SHA" > "$staging_dir/apps/site/public/deploy-revision.txt"
+          printf '%s\n' "$DEPLOY_SHA" > "$staging_dir/services/life-engine/revision.txt"
           tar -cf "$RUNNER_TEMP/deploy.tar" -C "$staging_dir" .
 
       - name: Deploy and wait for the tested revision to be live
         if: steps.current.outputs.deploy == 'true'
         env:
           CAPROVER_APP_TOKEN: ${{ secrets.CAPROVER_APP_TOKEN }}
-        run: node scripts/deploy-caprover.mjs "$RUNNER_TEMP/deploy.tar" "$DEPLOY_SHA"
+          LIFE_CAPROVER_APP_TOKEN: ${{ secrets.LIFE_CAPROVER_APP_TOKEN }}
+        run: node scripts/deploy-games.mjs "$RUNNER_TEMP/deploy.tar" "$DEPLOY_SHA"
 
       - name: Publish deployment summary
         if: steps.current.outputs.deploy == 'true'

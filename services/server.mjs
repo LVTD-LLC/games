@@ -2,10 +2,15 @@ import { createServer } from 'node:http';
 import { readFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 import sirv from 'sirv';
+import { createLifeProxy } from './life-proxy.mjs';
 import { createApp } from './corporate-bs-api/server.mjs';
 import { openStore } from './corporate-bs-api/store.mjs';
 import { createJudge } from './corporate-bs-api/scoring.mjs';
 export function gamesServer({ store, judge, root = 'dist', ...options }) {
+  const life = createLifeProxy({
+    origin: options.origin,
+    trustProxy: options.trustProxy,
+  });
   const api = createApp({ store, judge, ...options }).listeners('request')[0];
   const files = sirv(root, {
     etag: true,
@@ -25,6 +30,7 @@ export function gamesServer({ store, judge, root = 'dist', ...options }) {
   });
   const notFound = readFileSync(`${root}/404.html`);
   const server = createServer((req, res) => {
+    if (req.url.startsWith('/api/life/')) return life(req, res);
     if (/^\/(api\/|corporate-bs-meter\/(result|unsubscribe)\/)/.test(req.url))
       return api(req, res);
     if (!['GET', 'HEAD'].includes(req.method)) {

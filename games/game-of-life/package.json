@@ -1,0 +1,14 @@
+{
+  "name": "lvtd-game-of-life",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite --host 127.0.0.1"
+  },
+  "devDependencies": {
+    "@fontsource-variable/inter": "5.2.8",
+    "vite": "8.3.0"
+  }
+}

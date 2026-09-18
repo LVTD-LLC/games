@@ -2,31 +2,14 @@ import { readFile } from 'node:fs/promises';
 import { setTimeout as delay } from 'node:timers/promises';
 import { pathToFileURL } from 'node:url';
 
-export async function deploy({
+export async function uploadApp({
   server,
   appName,
   appToken,
-  productionUrl,
   gitSha,
   archive,
   request = fetch,
-  pause = delay,
-  attempts = 120,
 }) {
-  if (
-    !appToken ||
-    !/^[a-z0-9-]+$/.test(appName ?? '') ||
-    !/^[a-f0-9]{40}$/.test(gitSha ?? '')
-  )
-    throw new Error('Missing deployment token or invalid app name/commit SHA.');
-  for (const value of [server, productionUrl]) {
-    const url = new URL(value);
-    if (url.protocol !== 'https:' || url.username || url.password)
-      throw new Error(
-        'Deployment endpoints must use HTTPS without embedded credentials.',
-      );
-  }
-
   const form = new FormData();
   form.set('gitHash', gitSha);
   form.set(
@@ -52,6 +35,34 @@ export async function deploy({
   console.log(
     'CapRover accepted the upload; waiting for the production revision.',
   );
+}
+
+export async function deploy({
+  server,
+  appName,
+  appToken,
+  productionUrl,
+  gitSha,
+  archive,
+  request = fetch,
+  pause = delay,
+  attempts = 120,
+}) {
+  if (
+    !appToken ||
+    !/^[a-z0-9-]+$/.test(appName ?? '') ||
+    !/^[a-f0-9]{40}$/.test(gitSha ?? '')
+  )
+    throw new Error('Missing deployment token or invalid app name/commit SHA.');
+  for (const value of [server, productionUrl]) {
+    const url = new URL(value);
+    if (url.protocol !== 'https:' || url.username || url.password)
+      throw new Error(
+        'Deployment endpoints must use HTTPS without embedded credentials.',
+      );
+  }
+
+  await uploadApp({ server, appName, appToken, gitSha, archive, request });
 
   // Upload acceptance is not deployment success. Check what the public server actually serves.
   for (let attempt = 0; attempt < attempts; attempt++) {
