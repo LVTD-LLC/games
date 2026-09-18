@@ -169,15 +169,16 @@ test('opt-out persists across games, strips API correlation, and DNT suppresses 
   context,
 }) => {
   const events = await analytics(page);
-  await page.goto('/privacy/');
+  await page.goto('/corporate-bs-meter/');
   await seen(events, '$pageview');
+  await page.getByRole('button', { name: 'Skip and play anonymously' }).click();
+  await page.locator('#privacy-button').click();
   await page.locator('[data-analytics-opt-out]').click();
   const before = events.length;
   await page.goto('/wordle/');
   await page.locator('#help').click();
   await expect(page.locator('#help-dialog')).toBeVisible();
   await page.goto('/corporate-bs-meter/');
-  await page.getByRole('button', { name: 'Skip and play anonymously' }).click();
   await page.locator('#phrase').fill('A little clarity goes a long way.');
   const request = page.waitForRequest('**/api/corporate-bs/score');
   await page.locator('#judge-button').click();

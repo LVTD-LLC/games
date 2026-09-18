@@ -357,7 +357,8 @@ The allowlist drops input text, names/emails, raw queries, result IDs, DOM
 attributes and arbitrary automatic properties. Error messages are redacted;
 stacks retain source locations. IP-based location enrichment, autocapture,
 replay, console recording, heatmaps, surveys, and feature flag requests are off.
-The `/privacy/` page explains collection and provides a persistent browser opt-out.
+The BS Meter’s existing Privacy dialog explains collection and provides a persistent
+browser opt-out that applies across all games.
 Do Not Track, Global Privacy Control, and blocked storage also disable collection.
 Anonymous IDs are still pseudonymous usage data; no promise of full anonymity.
 

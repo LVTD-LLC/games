@@ -22,7 +22,6 @@ function safePath(path) {
     '/city-racers/',
     '/corporate-bs-meter/',
     '/game-of-life/',
-    '/privacy/',
   ].includes(path)
     ? path
     : '/404/';

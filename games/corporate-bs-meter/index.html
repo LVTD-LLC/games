@@ -166,9 +166,6 @@
           Add a leaderboard name <span aria-hidden="true">↗</span>
         </button>
       </aside>
-      <p style="text-align: center">
-        <a href="/privacy/">Privacy &amp; analytics</a>
-      </p>
     </main>
     <footer>
       <span
@@ -265,10 +262,12 @@
         details. This is a comedy game, not a claim about anyone’s honesty.
       </p>
       <p>
-        We use anonymous PostHog analytics for visits, game actions and errors.
-        Names, emails and phrases are excluded.
-        <a href="/privacy/">Read more or disable analytics.</a>
+        We use anonymous PostHog analytics across our games for visits, game
+        actions and errors. Names, emails and phrases are excluded.
       </p>
+      <button class="text-button" type="button" data-analytics-opt-out>
+        Disable analytics in this browser
+      </button>
       <button class="primary" id="privacy-done">Got it</button>
     </dialog>
     <noscript
