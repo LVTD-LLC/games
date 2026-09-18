@@ -1,0 +1,14 @@
+{
+  "name": "lvtd-life-engine",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "proof": "node scripts/build.mjs --proof",
+    "test": "node scripts/build.mjs --test && node --test test/native.test.mjs",
+    "start": "node server.mjs"
+  },
+  "devDependencies": {
+    "bun": "1.3.14"
+  }
+}

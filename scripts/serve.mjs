@@ -1,6 +1,8 @@
 import { createServer, request } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
+import { createLifeProxy } from '../services/life-proxy.mjs';
+const life = createLifeProxy({ origin: 'http://localhost:4173' });
 const root = path.resolve('dist');
 const types = {
   '.html': 'text/html; charset=utf-8',
@@ -11,6 +13,7 @@ const types = {
   '.txt': 'text/plain',
 };
 createServer(async (req, res) => {
+  if (req.url.startsWith('/api/life/')) return life(req, res);
   if (
     req.url.startsWith('/api/corporate-bs/') ||
     /^\/corporate-bs-meter\/(result|unsubscribe)\//.test(req.url)

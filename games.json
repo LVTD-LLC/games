@@ -1,10 +1,10 @@
 [
   {
     "slug": "wordle",
-    "title": "\u041f\u044f\u0442\u044c \u0431\u0443\u043a\u0432",
+    "title": "Пять букв",
     "description": "Guess the five-letter Russian word in six tries.",
     "category": "Word games",
-    "duration": "3\u20135 minutes",
+    "duration": "3–5 minutes",
     "path": "games/wordle",
     "language": "ru",
     "logo": "/logos/wordle.svg"
@@ -14,7 +14,7 @@
     "title": "Little City Racers",
     "description": "Race through a colorful 3D city solo or with a friend on the same screen.",
     "category": "Racing",
-    "duration": "1\u20132 minutes",
+    "duration": "1–2 minutes",
     "path": "games/city-racers",
     "language": "en",
     "logo": "/logos/city-racers.svg"
@@ -28,5 +28,15 @@
     "path": "games/corporate-bs-meter",
     "language": "en",
     "logo": "/logos/corporate-bs-meter.svg"
+  },
+  {
+    "slug": "game-of-life",
+    "title": "Game of Life",
+    "description": "Plant a pattern, watch it grow, and explore Conway’s cellular universe. Powered by Bend.",
+    "category": "Simulation",
+    "duration": "Open-ended",
+    "path": "games/game-of-life",
+    "language": "en",
+    "logo": "/logos/game-of-life.svg"
   }
 ]

@@ -239,3 +239,61 @@ CapRover is the only API ingress and appends the real client IP to `X-Forwarded-
 Public result pages render `services/corporate-bs-api/result-page.mjs` and load the game's `public/result-page.css` and `public/result-share.js`. The detail-only CSP allows same-origin scripts/styles without allowing inline scripts. These pages need no player session or API calls to share. Text attributes the original player rather than claiming the viewer earned the score; links always use the canonical result URL, without tracking query parameters.
 
 X, Threads, WhatsApp and LinkedIn use normal external links with `noopener noreferrer`. Copy and device sharing progressively enhance them; denied clipboard access reveals a labelled, selected text field. LinkedIn shares the URL and separately copies a caption for pasting. With JavaScript disabled, the social links, permalink and copyable text remain available. Browser tests stub native share/clipboard permissions and intercept LinkedIn navigation: they validate our integration, not delivery through a real social account or operating-system share sheet.
+
+## Game of Life
+
+`/game-of-life/` is a static Vite frontend backed by a private native Bend service.
+All B3/S23 rules, neighbor lookup and generation updates live in
+`services/life-engine/bend/life.bend`. The 64 × 64 board wraps on both axes.
+Balanced parallel calls compute the next board from an immutable previous board.
+The browser only draws, edits, seeds, and transports cells; it never calculates a
+new generation. No GPU is required.
+
+Run locally with Node 24, a C compiler (clang 14+) and `tar`:
+
+```sh
+npm ci --include=dev
+npm run setup
+npm run setup:life
+npm run test:life
+npm run build
+npm --prefix services/life-engine start  # terminal 1, 127.0.0.1:4180
+npm run preview                        # terminal 2, localhost:4173/game-of-life/
+```
+
+The backend build downloads Bend 2.0.5 into its own `node_modules/.cache`, verifies
+its pinned SHA-256, checks `PROOF.bend`, and compiles `dist/life-worker`. Bun 1.3.14
+is pinned by the package lockfile. The compiler is only a build dependency; the
+runtime image contains Node and the native executable. No runtime download,
+compiler telemetry, or automatic compiler updates occur.
+
+`LAWS.bend` covers all 18 valid single-cell rule cases and proves that every rule
+result is binary. It does not prove the entire board algorithm or transport.
+Independent reference tests cover still lifes, oscillators, gliders, edge wrapping,
+multiple generations and JS/native agreement at 1, 2 and 4 CPU threads.
+
+The private CapRover app `games-life` runs two persistent workers with two Bend CPU
+threads each, limited to four CPUs and 1 GiB. It has no public ingress, published
+ports, volumes or database. Its app token lives only in GitHub's
+`LIFE_CAPROVER_APP_TOKEN` secret. `games` uses `LIFE_ENGINE_URL=http://games-life:4180`
+on the private overlay network. `services/life-proxy.mjs` exposes only
+`GET /api/life/health` and `POST /api/life/step` on the existing public origin.
+
+Protocol 1 sends a row-major string of 4096 binary characters plus 1–100 steps.
+Requests are bounded to 5 KB, 25 requests/second per proxy client, two active native
+jobs, and a worker deadline. Excess demand returns a recoverable error, without an
+unbounded queue. The service is stateless between jobs: each browser retains its
+board and discards stale responses after edits or reset. Reloading the page starts
+fresh; this release does not persist boards. Browser playback targets up to the
+selected rate, subject to network and computation time. Advance 100 batches work
+into one request; displayed compute time includes worker transport/encoding but
+excludes internet latency. These timings are not claims of speedup over other engines.
+
+CI builds the native service and runs its proofs/tests before the full browser
+suite. Browser tests launch the real local service. On successful main CI, deployment
+uploads the same tested commit to both CapRover apps using separate tokens, then
+verifies both revisions and a live blinker cycle through the public proxy. The
+initial backend upload may still be building while the web app rolls out; the UI
+preserves the board and reports temporary unavailability. Keep protocol 1 compatible
+across rolling upgrades. An engine failure does not change the existing database
+health check or other game routes. Roll back through a revert PR for both apps.

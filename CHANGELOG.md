@@ -74,3 +74,8 @@
 - Added daily UTC puzzles, unlimited practice, a Russian noun dictionary, physical/touch keyboard support, duplicate-letter scoring, saved progress, local statistics, accessible help, and spoiler-free sharing.
 - Added production static hosting, real 404 responses, CI with game/browser/deployment checks, and automatic app-token-authenticated CapRover deployments after successful main CI.
 - Documented package isolation, adding games, dictionary provenance, domain setup, and rollback.
+
+## 2026-09-18 — Game of Life
+
+- Added an interactive Game of Life with classic patterns, drawing, zoom, playback and 100-generation fast-forward.
+- Runs simulation in a private native Bend service with checked rule proofs, bounded multicore workers and automatic deployment alongside the website.

@@ -1,3 +1,4 @@
+import { spawn } from 'node:child_process';
 // Only the browser-test runner starts this fixture. Never imported by production.
 import { gamesServer } from '../services/server.mjs';
 import { openStore } from '../services/corporate-bs-api/store.mjs';
@@ -18,6 +19,24 @@ const judge = {
     model: 'browser-test-fixture',
   }),
 };
+// Run the real native Bend service during browser tests.
+const life = spawn(process.execPath, ['services/life-engine/server.mjs'], {
+  stdio: 'inherit',
+  env: { ...process.env, PORT: '4180' },
+});
+process.on('exit', () => life.kill());
+for (let attempt = 0; ; attempt++) {
+  try {
+    const response = await fetch('http://127.0.0.1:4180/health', {
+      signal: AbortSignal.timeout(500),
+    });
+    if (response.ok) break;
+  } catch {}
+  if (attempt >= 100 || life.exitCode !== null)
+    throw new Error('Native Life engine did not become ready');
+  await new Promise((resolve) => setTimeout(resolve, 100));
+}
+
 gamesServer({
   store,
   judge,

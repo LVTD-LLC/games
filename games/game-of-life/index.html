@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f5f3ed" />
+    <meta
+      name="description"
+      content="Draw cells, discover classic patterns, and explore Conway's Game of Life. A little world built with Bend."
+    />
+    <title>Game of Life — LVTD Games</title>
+    <link rel="stylesheet" href="./src/style.css" />
+    <script type="module" src="./src/main.js"></script>
+  </head>
+  <body>
+    <div class="page">
+      <header class="topbar">
+        <a href="/" class="back" aria-label="Back to all games">← All games</a>
+        <a
+          class="bend-link"
+          href="https://bend-lang.com/"
+          target="_blank"
+          rel="noreferrer"
+          >Made with Bend ↗</a
+        >
+      </header>
+      <main>
+        <div class="heading">
+          <div>
+            <h1>
+              Game of Life<span class="title-dot" aria-hidden="true">.</span>
+            </h1>
+            <p>Plant a pattern. Press play. See what grows.</p>
+          </div>
+          <div class="world-label">
+            CONWAY’S LITTLE UNIVERSE<br /><span
+              >64 × 64 · edges wrap around</span
+            >
+          </div>
+        </div>
+        <div class="workspace">
+          <section class="simulation" aria-label="Simulation">
+            <div class="board-top">
+              <div class="state">
+                <span class="state-dot" aria-hidden="true"></span
+                ><span id="state">Paused</span>
+              </div>
+              <dl class="stats">
+                <div>
+                  <dt>Generation</dt>
+                  <dd id="generation">0</dd>
+                </div>
+                <div>
+                  <dt>Living</dt>
+                  <dd id="population">0</dd>
+                </div>
+              </dl>
+            </div>
+            <div class="board-viewport" id="viewport">
+              <canvas
+                id="board"
+                width="768"
+                height="768"
+                tabindex="0"
+                aria-label="Game of Life board"
+                aria-describedby="board-help cursor-status"
+                >Your browser needs canvas support to display the board.</canvas
+              >
+            </div>
+            <div class="board-bottom">
+              <p id="board-help">Draw on the grid to make it your own.</p>
+              <label class="zoom-label" for="zoom"
+                >Zoom
+                <select name="zoom" id="zoom">
+                  <option value="1">1×</option>
+                  <option value="2">2×</option>
+                  <option value="4">4×</option>
+                </select></label
+              >
+            </div>
+            <div class="transport">
+              <div class="playback">
+                <button type="button" class="primary" id="play" disabled>
+                  <span aria-hidden="true" id="play-icon">▶</span>
+                  <span id="play-label">Play</span>
+                </button>
+                <button type="button" id="step" disabled>
+                  Step <span aria-hidden="true">→</span>
+                </button>
+                <button type="button" id="reset" disabled>Reset</button>
+              </div>
+              <div class="speed-control">
+                <label for="speed"
+                  >Speed
+                  <output id="speed-value" for="speed">8 / sec</output></label
+                ><input
+                  type="range"
+                  name="speed"
+                  id="speed"
+                  min="1"
+                  max="20"
+                  value="8"
+                />
+              </div>
+            </div>
+            <p id="notice" role="status" class="notice">Loading your world…</p>
+            <p class="shortcuts">
+              Space to play · N to step · Arrow keys on the board to move, Space
+              to draw
+            </p>
+          </section>
+          <aside class="sidebar">
+            <section class="seeds" aria-labelledby="patterns-title">
+              <h2 id="patterns-title">Start with a little wonder</h2>
+              <p>Choose a pattern to start a fresh world.</p>
+              <div id="patterns" class="pattern-grid"></div>
+              <div class="world-actions">
+                <button type="button" id="random" disabled>Random world</button
+                ><button type="button" id="clear" disabled>Clear</button>
+              </div>
+            </section>
+            <button type="button" id="fast" class="fast-forward" disabled>
+              Advance 100 generations →
+            </button>
+            <section class="tools" aria-labelledby="tools-title">
+              <h2 id="tools-title">Make your mark</h2>
+              <div class="tool-group" aria-label="Board tools">
+                <button type="button" data-tool="draw" aria-pressed="true">
+                  Draw</button
+                ><button type="button" data-tool="erase" aria-pressed="false">
+                  Erase</button
+                ><button type="button" data-tool="pan" aria-pressed="false">
+                  Move
+                </button>
+              </div>
+              <p>
+                Drawing pauses time. Zoom in for finer details; use Move to
+                explore.
+              </p>
+            </section>
+            <section class="rules" aria-labelledby="rules-title">
+              <h2 id="rules-title">Small rules. Surprising life.</h2>
+              <div class="rule-row">
+                <div class="rule-picture birth" aria-hidden="true">
+                  <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i
+                  ><i></i>
+                </div>
+                <p>
+                  <strong>Three makes life.</strong><br />An empty cell with 3
+                  neighbors comes alive.
+                </p>
+              </div>
+              <div class="rule-row">
+                <div class="rule-picture survive" aria-hidden="true">
+                  <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i
+                  ><i></i>
+                </div>
+                <p>
+                  <strong>Two or three keeps it going.</strong><br />A living
+                  cell survives with 2 or 3 neighbors.
+                </p>
+              </div>
+              <p class="rule-last">
+                Otherwise, a cell dies. Every cell changes together with each
+                generation.
+              </p>
+            </section>
+          </aside>
+        </div>
+        <p id="cursor-status" class="sr-only" aria-live="polite"></p>
+        <noscript
+          ><p>
+            Enable JavaScript to play Game of Life. Bend computes each
+            generation on the server.
+          </p></noscript
+        >
+      </main>
+      <footer>
+        <p>
+          A zero-player game by John Conway. An open-ended playground for you.
+        </p>
+        <p>
+          <span class="legend-cell" aria-hidden="true"></span> Alive
+          <span class="legend-cell trail" aria-hidden="true"></span> Recent life
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>
