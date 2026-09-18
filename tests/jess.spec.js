@@ -1,4 +1,6 @@
+import { isolateJessClient } from './jess-client.mjs';
 import { test, expect } from '@playwright/test';
+test.beforeEach(isolateJessClient);
 import { Chess } from 'chess.js';
 const square = (page, name) => page.locator(`[data-square="${name}"]`);
 async function move(page, from, to) {
@@ -86,7 +88,7 @@ test('Black waits for Jev to open; board is oriented to the player; random selec
   );
   await expect(page.locator('#history')).toContainText('e4');
   await move(page, 'e7', 'e5');
-  await expect(page.locator('#ply-count')).toHaveText('3 moves');
+  await expect(page.locator('#ply-count')).toHaveText('2 moves');
   await page.getByRole('button', { name: 'Take back' }).click();
   await expect(page.locator('#ply-count')).toHaveText('1 move');
   await page.getByRole('button', { name: 'New game', exact: true }).click();
@@ -116,7 +118,8 @@ test('API errors keep the position, retry recovers, stale replies cannot alter a
   await expect(page.locator('#retry')).toBeVisible();
   await expect(page.locator('#ply-count')).toHaveText('1 move');
   await page.locator('#retry').click();
-  await expect(page.locator('#ply-count')).toHaveText('2 moves');
+  await expect(page.locator('#status')).toHaveText('Your move.');
+  await expect(page.locator('#ply-count')).toHaveText('1 move');
   await page.unroute('**/api/jess/move');
   let release;
   const hold = new Promise((resolve) => (release = resolve));
@@ -219,7 +222,7 @@ test('checkmate and repetition terminate without further inference', async ({
     let requests = 0;
     await saved(page, moves);
     page.on('request', (req) => {
-      if (req.url().includes('/api/jess/')) requests++;
+      if (req.url().endsWith('/api/jess/move')) requests++;
     });
     await page.goto('/jess/');
     await expect(page.locator('#status')).toHaveText(expected);

@@ -44,6 +44,7 @@ gamesServer({
     const moves = chess.moves({ verbose: true });
     const id = (m) => m.from + m.to + (m.promotion || '');
     const move =
+      moves.find((m) => m.san.endsWith('#')) ||
       moves.find((m) => m.san === 'e5') ||
       moves.find((m) => m.san === 'e4') ||
       moves[0];
@@ -62,5 +63,6 @@ gamesServer({
   },
   origin: 'http://localhost:4173',
   secure: false,
+  trustProxy: true,
   dailyBudget: 1000,
 }).listen(4173, '127.0.0.1', () => console.log('Browser-test API ready'));

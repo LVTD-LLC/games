@@ -20,6 +20,8 @@ export function gamesServer({
   const jess = createJess({
     store,
     choose: chooseJess,
+    nameAllowed: judge?.nameAllowed,
+    secure: options.secure,
     origin: options.origin,
     trustProxy: options.trustProxy,
     dailyBudget: options.jessDailyBudget,

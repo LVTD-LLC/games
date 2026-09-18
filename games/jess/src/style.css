@@ -68,11 +68,6 @@ a:hover {
 .back {
   font-weight: 700;
 }
-.edition {
-  letter-spacing: 2px;
-  font-size: 10px;
-  color: var(--muted);
-}
 main {
   max-width: 1120px;
   margin: 0 auto;
@@ -98,14 +93,6 @@ main {
 .intro p {
   margin: 0;
   font-size: 16px;
-}
-.intro-note {
-  color: var(--muted);
-  line-height: 1.7;
-  font-family: Georgia, serif;
-  font-style: italic;
-  font-size: 17px;
-  text-align: right;
 }
 .game-layout {
   display: grid;
@@ -189,19 +176,12 @@ aside {
   border-radius: 14px;
   padding: 24px;
 }
-.eyebrow {
-  font-size: 9px;
-  letter-spacing: 1.5px;
-  font-weight: bold;
-  color: var(--accent);
-}
 h2 {
   font-size: 18px;
   margin: 0;
   letter-spacing: -0.3px;
 }
-.setup h2,
-.status-panel h2 {
+.setup h2 {
   font-family: Georgia, serif;
   font-weight: 400;
   font-size: 33px;
@@ -362,14 +342,6 @@ h2 {
 .how p {
   margin: 12px 0;
 }
-footer {
-  color: var(--muted);
-  font-family: Georgia, serif;
-  font-style: italic;
-  font-size: 13px;
-  padding: 38px 0;
-  text-align: center;
-}
 dialog {
   border: 1px solid var(--line);
   border-radius: 16px;
@@ -403,9 +375,6 @@ dialog p {
   justify-content: flex-end;
   margin-top: 24px;
 }
-.status-panel {
-  border-top: 3px solid var(--accent);
-}
 @media (min-width: 1400px) {
   main {
     max-width: 1160px;
@@ -421,9 +390,6 @@ dialog p {
   .topbar {
     padding: 18px 20px;
   }
-  .edition {
-    display: none;
-  }
   main {
     padding: 0 18px;
     max-width: 620px;
@@ -436,9 +402,6 @@ dialog p {
   }
   .intro p {
     font-size: 13px;
-  }
-  .intro-note {
-    font-size: 12px;
   }
   .game-layout {
     grid-template-columns: 1fr;
@@ -453,9 +416,6 @@ dialog p {
   .setup {
     grid-row: auto;
   }
-  footer {
-    padding: 28px 0;
-  }
   .turn-badge {
     font-size: 8px;
   }
@@ -464,9 +424,6 @@ dialog p {
   }
   .board-tools button {
     padding: 8px 5px;
-  }
-  .intro-note {
-    max-width: 130px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -478,11 +435,135 @@ dialog p {
   aside {
     display: contents;
   }
-  .setup,
-  .status-panel {
+  .setup {
     grid-row: 1;
   }
   .table {
     grid-row: 2;
+  }
+}
+/* Compact game status; ordinary turn text remains available to screen readers. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.intro {
+  padding-bottom: 8px;
+}
+.record-challenge {
+  margin: 0 0 28px;
+  font-size: 17px;
+  line-height: 1.6;
+}
+.game-notice {
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 10px 0;
+}
+.game-notice:empty {
+  display: none;
+}
+.leaderboard-panel .panel-heading > span {
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+#leaderboard {
+  list-style: none;
+  padding: 0;
+  margin: 18px 0 0;
+}
+#leaderboard li {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) auto;
+  gap: 10px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+  align-items: center;
+}
+#leaderboard .rank {
+  color: var(--muted);
+  font-size: 12px;
+}
+#leaderboard .name {
+  overflow-wrap: anywhere;
+  font-weight: 700;
+}
+#leaderboard .moves {
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+  font-size: 13px;
+}
+#result-form {
+  display: grid;
+  gap: 10px;
+}
+#result-form > label {
+  font-size: 13px;
+  font-weight: 700;
+}
+#result-form label span {
+  color: var(--muted);
+  font-weight: 400;
+}
+#result-form input:not([type='checkbox']) {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: white;
+  font: inherit;
+}
+#result-form input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+#result-form .opt-in {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-weight: 400;
+  line-height: 1.6;
+  margin: 8px 0;
+}
+#result-form [type='checkbox'] {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  accent-color: var(--accent);
+}
+#result-form .fine {
+  font-size: 12px;
+  margin: 0;
+}
+#identity-error {
+  color: #9a322a;
+  font-size: 13px;
+  margin: 0;
+}
+#identity-error:empty {
+  display: none;
+}
+#result-dialog {
+  max-height: calc(100dvh - 32px);
+  overflow: auto;
+}
+#edit-result {
+  margin: 0 0 14px;
+}
+@media (max-width: 760px) {
+  .table {
+    grid-row: auto;
+  }
+  .record-challenge {
+    font-size: 15px;
+    margin-bottom: 20px;
   }
 }
