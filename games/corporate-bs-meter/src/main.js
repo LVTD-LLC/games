@@ -1,4 +1,4 @@
-import { track, analyticsHeaders, reportError } from './analytics.js';
+import { track, analyticsHeaders } from './analytics.js';
 import './style.css';
 const $ = (id) => document.getElementById(id);
 const API = '/api/corporate-bs';
@@ -38,7 +38,6 @@ async function api(path, body) {
 }
 function showError(id, error) {
   track('game_action_failed', { operation: id });
-  reportError(id);
   $(id).textContent = error.message || 'Connection lost. Please try again.';
   $(id).hidden = false;
 }

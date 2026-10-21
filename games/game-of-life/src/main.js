@@ -1,4 +1,4 @@
-import { track, analyticsHeaders, reportError } from './analytics.js';
+import { track, analyticsHeaders } from './analytics.js';
 import { patterns, seedPattern } from './patterns.mjs';
 
 const SIZE = 64;
@@ -138,7 +138,6 @@ async function advance(steps) {
     track('simulation_failed', {
       reason: error.name === 'AbortError' ? 'timeout' : 'unavailable',
     });
-    reportError('simulation_unavailable');
     playing = false;
     notice(
       error.name === 'AbortError'

@@ -47,7 +47,7 @@ async function analytics(page) {
         const data = JSON.parse(text);
         events.push(...(data.batch || (Array.isArray(data) ? data : [data])));
       }
-      // Exception/web-vitals extension scripts are bundled separately by the SDK.
+      // Web-vitals extension scripts are bundled separately by the SDK.
       // These are read-only static assets; no events reach the real project.
       if (request.resourceType() === 'script') return route.continue();
       await route.fulfill({ json: { status: 1 } });
@@ -208,7 +208,7 @@ test('unavailable analytics configuration leaves gameplay and the 404 page usabl
   expect(errors).toEqual([]);
 });
 
-test('racing configuration/start/pause and sanitized exception stacks reach the SDK', async ({
+test('racing configuration/start/pause reach the SDK without exception capture', async ({
   page,
 }) => {
   const events = await analytics(page);
@@ -226,9 +226,7 @@ test('racing configuration/start/pause and sanitized exception stacks reach the 
       throw new Error('private-player@example.com');
     }, 0),
   );
-  const exception = await seen(events, '$exception');
-  expect(
-    exception.properties.$exception_list[0].stacktrace.frames.length,
-  ).toBeGreaterThan(0);
-  expect(JSON.stringify(exception)).not.toContain('private-player@example.com');
+  // Let the SDK's batch flush; uncaught errors must not become $exception events.
+  await page.waitForTimeout(4000);
+  expect(events.some((event) => event.event === '$exception')).toBe(false);
 });
