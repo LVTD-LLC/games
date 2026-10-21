@@ -1,4 +1,4 @@
-import { track, reportError } from './analytics.js';
+import { track } from './analytics.js';
 import './style.css';
 import {
   MAX_CARS,
@@ -392,7 +392,6 @@ function recover(index) {
 function fail() {
   if (race.phase === 'error') return;
   track('game_load_failed', { reason: 'graphics_unavailable' });
-  reportError('city_graphics_unavailable');
   clearInput();
   phase('error');
   closeModal();

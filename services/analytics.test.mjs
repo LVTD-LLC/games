@@ -47,8 +47,9 @@ test('server events correlate anonymous browser sessions without cookies or requ
     status: 503,
     operation: 'score',
   });
-  assert.equal(errors.length, 1);
-  assert.equal(errors[0][1], distinct);
+  assert.equal(captured.length, 2);
+  assert.equal(captured[1].event, 'game_api_failed');
+  assert.equal(errors.length, 0);
   await analytics.shutdown();
   assert.equal(stopped, true);
 });

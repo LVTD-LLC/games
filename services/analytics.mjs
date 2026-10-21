@@ -36,12 +36,6 @@ export function createAnalytics(
         $geoip_disable: true,
       };
       client.capture({ distinctId, event, properties: metadata });
-      if (event === 'game_api_failed' && properties.status >= 500)
-        client.captureException(
-          new Error(`Game API unavailable: ${properties.operation}`),
-          distinctId,
-          metadata,
-        );
     } catch {
       /* Optional telemetry cannot change a response. */
     }

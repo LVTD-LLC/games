@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-21 — Remove PostHog error tracking
+
+- Turn off PostHog exception capture in the catalogue and every game, and stop sending server `$exception` events. Product analytics events, failure events and web vitals are unchanged.
+
 ## 2026-09-18 — Jess results and fastest-win rankings
 
 - Remove decorative slogans and the post-selection turn-status card; keep compact check, error and game-over feedback.

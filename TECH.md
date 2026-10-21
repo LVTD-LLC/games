@@ -342,7 +342,7 @@ captured; the server records failed step requests only.
 | `simulation_*`                                                                            | Pattern/reset/edit/play/pause controls, manual advances, speed and failures; never board contents                      |
 | `bs_example_used`, `bs_profile_saved`, `bs_score_completed`                               | Examples, successful profile update (booleans only), server-confirmed saved score                                      |
 | `game_result_shared`, `game_share_opened`, `game_share_fallback`, `bs_challenge_accepted` | Confirmed clipboard/native shares, share button intent, fallbacks, challenge entry                                     |
-| `game_api_failed`, `game_action_failed`, `game_load_failed`, `$exception`                 | Failure category/status and sanitized error stacks, correlated with browser sessions                                   |
+| `game_api_failed`, `game_action_failed`, `game_load_failed`                               | Failure category/status, correlated with browser sessions                                                              |
 | `$web_vitals`                                                                             | Numeric loading/responsiveness/layout-shift measurements                                                               |
 
 `game_completed` means a won/lost Wordle round, a finished race, a displayed BS
@@ -354,8 +354,8 @@ assuming every open-ended simulation has a finish. `bs_score_completed` is the
 server confirmation; do not sum it with the browser `game_completed` event.
 
 The allowlist drops input text, names/emails, raw queries, result IDs, DOM
-attributes and arbitrary automatic properties. Error messages are redacted;
-stacks retain source locations. IP-based location enrichment, autocapture,
+attributes and arbitrary automatic properties. PostHog error tracking (exception
+capture) is off. IP-based location enrichment, autocapture,
 replay, console recording, heatmaps, surveys, and feature flag requests are off.
 Analytics is enabled by default on production. No separate analytics page or
 preference flow is added; the existing BS Meter privacy dialog briefly describes

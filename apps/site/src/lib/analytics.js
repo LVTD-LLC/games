@@ -72,7 +72,10 @@ const properties = new Set([
   'subscribed',
 ]);
 function sanitize(event) {
-  if (['$set', '$identify', '$create_alias'].includes(event.event)) return null;
+  if (
+    ['$set', '$identify', '$create_alias', '$exception'].includes(event.event)
+  )
+    return null;
   delete event.$set;
   delete event.$set_once;
   delete event.$unset;
@@ -83,25 +86,6 @@ function sanitize(event) {
       /^\$web_vitals_(LCP|CLS|FCP|INP|TTFB)_value$/.test(key)
     )
       clean[key] = value;
-  }
-  if (event.event === '$exception') {
-    clean.$exception_list = (event.properties.$exception_list || []).map(
-      (item) => ({
-        type: item.type,
-        value: 'Browser exception (message redacted)',
-        mechanism: item.mechanism,
-        stacktrace: {
-          frames: (item.stacktrace?.frames || []).map((frame) => ({
-            platform: frame.platform,
-            function: frame.function,
-            filename: String(frame.filename || '').split(/[?#]/)[0],
-            lineno: frame.lineno,
-            colno: frame.colno,
-            in_app: frame.in_app,
-          })),
-        },
-      }),
-    );
   }
   const path = safePath(location.pathname);
   event.properties = {
@@ -153,11 +137,6 @@ export function analyticsHeaders() {
     return {};
   }
 }
-export function reportError(operation) {
-  try {
-    client?.captureException(new Error(operation), { operation });
-  } catch {}
-}
 async function init() {
   try {
     const response = await fetch('/analytics-config.json', {
@@ -188,7 +167,7 @@ async function init() {
       autocapture: false,
       capture_pageview: true,
       capture_pageleave: true,
-      capture_exceptions: true,
+      capture_exceptions: false,
       capture_performance: { web_vitals: true, network_timing: false },
       capture_dead_clicks: false,
       capture_heatmaps: false,
