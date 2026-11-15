@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-11-15 — Deploy to the new CapRover server
+
+- Point deployment at `captain.cr.lvtd.dev` and verify revisions through `games.cr.lvtd.dev`, after the apps and database moved to the new server. The public address `games.lvtd.dev` is unchanged.
+- Replace the retired `games.cap.gregagi.com` analytics host with `games.cr.lvtd.dev`.
+
 ## 2026-10-21 — Remove PostHog error tracking
 
 - Turn off PostHog exception capture in the catalogue and every game, and stop sending server `$exception` events. Product analytics events, failure events and web vitals are unchanged.
