@@ -26,9 +26,9 @@ jobs:
     timeout-minutes: 30
     env:
       DEPLOY_SHA: ${{ github.event.workflow_run.head_sha }}
-      CAPROVER_SERVER: https://captain.cap.gregagi.com
+      CAPROVER_SERVER: https://captain.cr.lvtd.dev
       CAPROVER_APP_NAME: games
-      PRODUCTION_URL: https://games.cap.gregagi.com
+      PRODUCTION_URL: https://games.cr.lvtd.dev
     steps:
       - name: Checkout tested commit
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5

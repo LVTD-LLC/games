@@ -13,8 +13,8 @@ const archive = await readFile(process.argv[2]);
 const server = process.env.CAPROVER_SERVER;
 const productionUrl = process.env.PRODUCTION_URL;
 if (
-  server !== 'https://captain.cap.gregagi.com' ||
-  productionUrl !== 'https://games.cap.gregagi.com'
+  server !== 'https://captain.cr.lvtd.dev' ||
+  productionUrl !== 'https://games.cr.lvtd.dev'
 )
   throw new Error('Unexpected deployment target');
 

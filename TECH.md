@@ -54,9 +54,9 @@ Games are separate HTML documents at `/<slug>/`; no iframe and no runtime import
 
 CapRover app `games` runs a Node 24 server: static game packages plus server-side APIs in one deployment. PostgreSQL is a separate **shared** private app, `games-postgres`; browser code never receives its connection string. Static games remain independent packages and do not use the database. `sirv` serves built assets with ETags and immutable fingerprinted-asset caching; unknown routes return the English 404 page.
 
-The **CI** workflow validates PRs/main against a disposable PostgreSQL service. **Deploy to CapRover** follows successful main CI, checks out the tested SHA, skips superseded commits, and uploads tracked source plus `/deploy-revision.txt`. Only the existing app-scoped `CAPROVER_APP_TOKEN` is needed. There is no per-game API or database deployment in CI. The server applies committed migrations before accepting traffic; startup fails if a migration fails or an applied migration was changed. Container health checks verify a database query.
+The **CI** workflow validates PRs/main against a disposable PostgreSQL service. **Deploy to CapRover** follows successful main CI, checks out the tested SHA, skips superseded commits, and uploads tracked source plus `/deploy-revision.txt`. The app-scoped `CAPROVER_APP_TOKEN` (app `games`) and `LIFE_CAPROVER_APP_TOKEN` (app `games-life`) are the only credentials needed. There is no per-game API or database deployment in CI. The server applies committed migrations before accepting traffic; startup fails if a migration fails or an applied migration was changed. Container health checks verify a database query.
 
-The public hostname `games.lvtd.dev` uses HTTPS on app `games` (195.201.166.171). Deployment verifies the exact SHA using `https://games.cap.gregagi.com/deploy-revision.txt`; also smoke-test the public game and health routes.
+The public hostname `games.lvtd.dev` uses HTTPS on app `games` on the CapRover instance `captain.cr.lvtd.dev` (138.201.126.181). Deployment verifies the exact SHA using `https://games.cr.lvtd.dev/deploy-revision.txt`; also smoke-test the public game and health routes.
 
 ### Shared database and migrations
 
