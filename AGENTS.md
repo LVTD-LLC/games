@@ -1,6 +1,6 @@
 # Working on LVTD Games
 
-This repo is a collection of independent browser games at https://games.lvtd.dev/.
+This repo is a collection of independent browser games at https://lvtd.dev/games/.
 Read this file for any change; read [TECH.md](TECH.md) for package/deployment details
 and [DESIGN.md](DESIGN.md) before changing the Astro catalogue. Game-specific rules
 live beside the game, currently [games/wordle/AGENTS.md](games/wordle/AGENTS.md).
@@ -22,7 +22,7 @@ npm run test:e2e
 - `npm run preview` serves the existing root `dist/`; build first.
 - `npm --prefix apps/site run dev` starts catalogue-only Astro hot reload.
 - `npm --prefix games/wordle run dev` starts Vite; visit its `/wordle/` path.
-- `BASE_URL=https://games.lvtd.dev npm run test:e2e` checks the live deployment.
+- `BASE_URL=https://lvtd.dev npm run test:e2e` checks the live deployment.
 - No lint script exists. Format changed supported files with `npx prettier --write <paths>`;
   verify them with `npx prettier --check <paths>` and `git diff --check`.
 

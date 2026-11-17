@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-11-17 — Games on lvtd.dev
+
+- Publish the game registry and shared assets under /games/, link back to the main-site catalogue, and use the root domain for game analytics and sharing.
+
 ## 2026-11-15 — Deploy to the new CapRover server
 
 - Point deployment at `captain.cr.lvtd.dev` and verify revisions through `games.cr.lvtd.dev`, after the apps and database moved to the new server. The public address `games.lvtd.dev` is unchanged.

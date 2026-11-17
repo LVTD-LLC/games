@@ -1,0 +1,14 @@
+<% if (s.publicDomain === 'games.lvtd.dev') { %>
+location = / {
+    return 308 https://lvtd.dev/games/$is_args$args;
+}
+location = /index.html {
+    return 308 https://lvtd.dev/games/$is_args$args;
+}
+location ~ ^/(?:_astro/|logos/|favicon\.svg$|analytics-config\.json$|deploy-revision\.txt$) {
+    return 308 https://lvtd.dev/games$request_uri;
+}
+location ~ ^/(?!\.well-known/).+ {
+    return 308 https://lvtd.dev$request_uri;
+}
+<% } %>

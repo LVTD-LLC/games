@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 test('catalogue includes the third game and its logo at narrow widths', async ({
   page,
 }) => {
-  await page.goto('/');
+  await page.goto('/games/');
   const game = page.getByRole('link', { name: /Corporate BS Meter/ });
   await expect(game).toBeVisible();
   await expect(game.locator('img')).toHaveJSProperty('naturalWidth', 104);

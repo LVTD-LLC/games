@@ -13,5 +13,5 @@ test('analytics defaults off and refuses private keys or an unexpected ingestion
   });
   assert.equal(config.enabled, true);
   assert.equal(config.revision, 'revision');
-  assert.deepEqual(config.hosts, ['games.lvtd.dev', 'games.cr.lvtd.dev']);
+  assert.deepEqual(config.hosts, ['lvtd.dev', 'games.cr.lvtd.dev']);
 });

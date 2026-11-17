@@ -45,7 +45,8 @@ test('consolidated server routes APIs and serves revision, images, cache headers
   assert.equal(image.headers.get('content-type'), 'image/png');
   const asset = await fetch(base + '/assets/game.js');
   assert.match(asset.headers.get('cache-control'), /immutable/);
-  const head = await fetch(base + '/', { method: 'HEAD' });
-  assert.equal(head.status, 200);
+  const head = await fetch(base + '/', { method: 'HEAD', redirect: 'manual' });
+  assert.equal(head.status, 302);
+  assert.equal(head.headers.get('location'), '/games/');
   assert.equal(await head.text(), '');
 });

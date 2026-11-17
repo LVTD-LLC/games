@@ -43,7 +43,7 @@ test('catalogue, legal user move, real HTTP fixture reply, reload, takeback and 
 }) => {
   const errors = [];
   page.on('pageerror', (e) => errors.push(e.message));
-  await page.goto('/');
+  await page.goto('/games/');
   await page.getByRole('link').filter({ hasText: 'Jess' }).click();
   await expect(page).toHaveURL(/\/jess\/$/);
   await expect(page.locator('#board button')).toHaveCount(64);

@@ -13,6 +13,10 @@ const types = {
   '.txt': 'text/plain',
 };
 createServer(async (req, res) => {
+  if (req.url.split('?')[0] === '/') {
+    res.writeHead(302, { Location: '/games/' + req.url.slice(1) });
+    return res.end();
+  }
   if (req.url.startsWith('/api/life/')) return life(req, res);
   if (
     req.url.startsWith('/api/jess/') ||

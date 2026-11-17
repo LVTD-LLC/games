@@ -1,7 +1,7 @@
 // Operator-only export. Contains private email addresses; never publish or commit its output.
 import { openPool } from '../database/pool.mjs';
 const db = openPool();
-const origin = process.env.PUBLIC_ORIGIN || 'https://games.lvtd.dev';
+const origin = process.env.PUBLIC_ORIGIN || 'https://lvtd.dev';
 const csv = (value) => '"' + String(value).replaceAll('"', '""') + '"';
 try {
   console.log('email,consent_at,consent_version,unsubscribe_url');

@@ -14,7 +14,7 @@ test('catalogue, garage customization, saved settings and narrow layout', async 
 }) => {
   const errors = [];
   page.on('pageerror', (e) => errors.push(e.message));
-  await page.goto('/');
+  await page.goto('/games/');
   await page
     .getByRole('link')
     .filter({ hasText: 'Little City Racers' })

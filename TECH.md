@@ -56,7 +56,7 @@ CapRover app `games` runs a Node 24 server: static game packages plus server-sid
 
 The **CI** workflow validates PRs/main against a disposable PostgreSQL service. **Deploy to CapRover** follows successful main CI, checks out the tested SHA, skips superseded commits, and uploads tracked source plus `/deploy-revision.txt`. The app-scoped `CAPROVER_APP_TOKEN` (app `games`) and `LIFE_CAPROVER_APP_TOKEN` (app `games-life`) are the only credentials needed. There is no per-game API or database deployment in CI. The server applies committed migrations before accepting traffic; startup fails if a migration fails or an applied migration was changed. Container health checks verify a database query.
 
-The public hostname `games.lvtd.dev` uses HTTPS on app `games` on the CapRover instance `captain.cr.lvtd.dev` (138.201.126.181). Deployment verifies the exact SHA using `https://games.cr.lvtd.dev/deploy-revision.txt`; also smoke-test the public game and health routes.
+The legacy hostname `games.lvtd.dev` redirects to the main domain. The backend runs on app `games` on the CapRover instance `captain.cr.lvtd.dev` (138.201.126.181). Deployment verifies the exact SHA using `https://games.cr.lvtd.dev/deploy-revision.txt`; also smoke-test the public game and health routes.
 
 ### Shared database and migrations
 
@@ -192,7 +192,7 @@ Runtime variables on **games**:
 
 - `DATABASE_URL`: private shared PostgreSQL connection (never `VITE_` or build arguments).
 - `TYPESAFE_API_KEY`: existing server-only scoring key; initially from Infisical Openclaw/prod `/projects/corporate-bs-meter`.
-- `TYPESAFE_MODEL=jev-1.13.0`, `PUBLIC_ORIGIN=https://games.lvtd.dev`, `TRUST_PROXY=true`, `PORT=80`, `DAILY_JUDGING_LIMIT=3000`.
+- `TYPESAFE_MODEL=jev-1.13.0`, `PUBLIC_ORIGIN=https://lvtd.dev`, `TRUST_PROXY=true`, `PORT=80`, `DAILY_JUDGING_LIMIT=3000`.
 
 CapRover is the only API ingress and appends the real client IP to `X-Forwarded-For`. The API trusts only the last address, and only with `TRUST_PROXY=true`. Do not publish the container port or enable proxy trust behind an untrusted ingress. Rate counters store salted hashes, not raw IPs. Budget reservations use short atomic PostgreSQL transactions; no lock is held during remote judging. Keep one games replica for now: the per-player in-flight judging guard remains process-local, although persisted budgets and result uniqueness are database-enforced.
 
@@ -461,3 +461,14 @@ preview proxies `/api/jess/` to the existing local `BS_API_URL` backend address.
 References: [TypeSafe HTTP API](https://docs.typesafe.ai/api),
 [Choice](https://docs.typesafe.ai/primitives/choice),
 [chess.js](https://jhlywa.github.io/chess.js/).
+
+### Main-domain routing
+
+The public catalogue is rendered by lvtd-site at https://lvtd.dev/games/.
+It reads the deployed /games/manifest.json on the private games service.
+Adding a games.json entry publishes both the card and its root path in one
+games deployment. Keep assets and any new backend endpoints under the game's
+slug. The existing three /api/ namespaces are supported for compatibility.
+The legacy hostname uses ops/legacy-games-redirect.ejs inside the CapRover
+HTTPS server block. The default CapRover hostname still serves revision and
+health checks directly.

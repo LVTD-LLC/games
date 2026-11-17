@@ -6,15 +6,33 @@ import path from 'node:path';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const games = JSON.parse(await readFile(path.join(root, 'games.json'), 'utf8'));
+// Top-level namespaces owned by the main site or the arcade's shared assets.
+const reserved = new Set([
+  'admin',
+  'ai-steering',
+  'api',
+  'blog',
+  'games',
+  'jev-benchamrk',
+  'jev-benchmark',
+  'media',
+  'privacy',
+  'projects',
+  'research',
+  'services',
+  'static',
+  'tos',
+]);
 const seen = new Set();
 for (const game of games) {
   if (
     !/^[a-z][a-z0-9-]*$/.test(game.slug) ||
+    reserved.has(game.slug) ||
     seen.has(game.slug) ||
     game.path !== `games/${game.slug}`
   ) {
     throw new Error(
-      'Each game needs a unique URL-safe slug and matching games/<slug> directory.',
+      'Each game needs an unreserved, unique URL-safe slug and matching games/<slug> directory.',
     );
   }
   seen.add(game.slug);
@@ -33,11 +51,28 @@ if (command === 'install') {
 } else if (command === 'build') {
   await rm(path.join(root, 'dist'), { recursive: true, force: true });
   run('apps/site', ['run', 'build']);
-  await cp(path.join(root, 'apps/site/dist'), path.join(root, 'dist'), {
+  await cp(path.join(root, 'apps/site/dist'), path.join(root, 'dist/games'), {
     recursive: true,
   });
+  await cp(
+    path.join(root, 'dist/games/404.html'),
+    path.join(root, 'dist/404.html'),
+  );
+  // CapRover checks the revision at the original operations URL.
+  try {
+    await cp(
+      path.join(root, 'dist/games/deploy-revision.txt'),
+      path.join(root, 'dist/deploy-revision.txt'),
+    );
+  } catch (error) {
+    if (error.code !== 'ENOENT') throw error;
+  }
   await writeFile(
-    path.join(root, 'dist/analytics-config.json'),
+    path.join(root, 'dist/games/manifest.json'),
+    JSON.stringify(games),
+  );
+  await writeFile(
+    path.join(root, 'dist/games/analytics-config.json'),
     JSON.stringify(
       await readAnalyticsConfig(path.join(root, 'posthog-public.json')),
     ),
