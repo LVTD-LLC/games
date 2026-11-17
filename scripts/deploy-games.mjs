@@ -26,14 +26,6 @@ await uploadApp({
   gitSha,
   archive,
 });
-await deploy({
-  server,
-  appName: 'games',
-  appToken: process.env.CAPROVER_APP_TOKEN,
-  productionUrl,
-  gitSha,
-  archive,
-});
 
 // The engine has no public ingress. Verify it through the website's fixed proxy.
 let verified = false;
@@ -58,6 +50,16 @@ for (let attempt = 0; attempt < 120; attempt++) {
 }
 if (!verified)
   throw new Error('Native engine did not serve the tested revision');
+// Submit the web build only after the native deployment has left CapRover's queue.
+await deploy({
+  server,
+  appName: 'games',
+  appToken: process.env.CAPROVER_APP_TOKEN,
+  productionUrl,
+  gitSha,
+  archive,
+});
+
 const seed = Array(4096).fill('0');
 for (const index of [2015, 2016, 2017]) seed[index] = '1';
 const response = await fetch(`${productionUrl}/api/life/step`, {

@@ -78,6 +78,10 @@ jobs:
           LIFE_CAPROVER_APP_TOKEN: ${{ secrets.LIFE_CAPROVER_APP_TOKEN }}
         run: node scripts/deploy-games.mjs "$RUNNER_TEMP/deploy.tar" "$DEPLOY_SHA"
 
+      - name: Verify released games on the public domain
+        if: steps.current.outputs.deploy == 'true'
+        run: node scripts/check-public-games.mjs
+
       - name: Publish deployment summary
         if: steps.current.outputs.deploy == 'true'
         env:

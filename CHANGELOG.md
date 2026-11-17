@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-11-17 — Sequential arcade releases
+
+- Wait for the native engine before deploying the games app, then check the public catalogue and every registered game URL.
+
 ## 2026-11-17 — Games on lvtd.dev
 
 - Publish the game registry and shared assets under /games/, link back to the main-site catalogue, and use the root domain for game analytics and sharing.
