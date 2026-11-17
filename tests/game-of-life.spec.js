@@ -5,7 +5,7 @@ test('catalogue, real native simulation, presets and fast-forward', async ({
 }) => {
   const errors = [];
   page.on('pageerror', (e) => errors.push(e.message));
-  await page.goto('/');
+  await page.goto('/games/');
   await page.getByRole('link').filter({ hasText: 'Game of Life' }).click();
   await expect(page.locator('#board')).toHaveAttribute('data-ready', 'true');
   await page.getByRole('button', { name: /Blinker —/ }).click();

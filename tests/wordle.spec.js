@@ -14,7 +14,7 @@ test('catalogue navigation, keyboard validation, reload, help and daily win', as
   const errors = [];
   page.on('pageerror', (error) => errors.push(error.message));
   await page.clock.setFixedTime(new Date('2026-09-11T12:00:00Z'));
-  await page.goto('/');
+  await page.goto('/games/');
   await page.getByRole('link').filter({ hasText: 'Пять букв' }).click();
   await expect(page).toHaveURL(/\/wordle\/$/);
   await expect(page.getByRole('heading', { name: 'Пять букв.' })).toBeVisible();

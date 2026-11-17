@@ -51,6 +51,10 @@ export function gamesServer({
   });
   const notFound = readFileSync(`${root}/404.html`);
   const server = createServer((req, res) => {
+    if (req.url.split('?')[0] === '/') {
+      res.writeHead(302, { Location: '/games/' + req.url.slice(1) });
+      return res.end();
+    }
     if (req.url.startsWith('/api/jess/')) return jess(req, res);
     if (req.url.startsWith('/api/life/')) {
       if (req.url.split('?')[0] === '/api/life/step') {
@@ -90,7 +94,7 @@ if (
     throw new Error('TYPESAFE_API_KEY is required');
   const store = await openStore(); // Migrations finish before accepting traffic.
   const analytics = createAnalytics(
-    JSON.parse(readFileSync('dist/analytics-config.json', 'utf8')),
+    JSON.parse(readFileSync('dist/games/analytics-config.json', 'utf8')),
   );
   const server = gamesServer({
     analytics,
@@ -104,7 +108,7 @@ if (
       apiKey: process.env.TYPESAFE_API_KEY,
       model: process.env.TYPESAFE_MODEL || 'jev-1.13.0',
     }),
-    origin: process.env.PUBLIC_ORIGIN || 'https://games.lvtd.dev',
+    origin: process.env.PUBLIC_ORIGIN || 'https://lvtd.dev',
     secure: process.env.COOKIE_SECURE !== 'false',
     trustProxy: process.env.TRUST_PROXY === 'true',
     dailyBudget: Number(process.env.DAILY_JUDGING_LIMIT) || 3000,

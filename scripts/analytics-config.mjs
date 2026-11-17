@@ -15,7 +15,7 @@ export function analyticsConfig(env = process.env) {
     enabled: Boolean(token),
     token,
     host,
-    hosts: ['games.lvtd.dev', 'games.cr.lvtd.dev'],
+    hosts: ['lvtd.dev', 'games.cr.lvtd.dev'],
     revision: env.DEPLOY_SHA || 'development',
   };
 }

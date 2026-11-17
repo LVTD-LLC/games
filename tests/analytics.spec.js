@@ -68,7 +68,7 @@ test('anonymous identity follows catalogue to Wordle; guesses and URL secrets st
 }) => {
   const events = await analytics(page);
   await page.clock.setFixedTime(new Date('2026-09-11T12:00:00Z'));
-  await page.goto('/?email=secret@example.com&utm_source=private-secret');
+  await page.goto('/games/?email=secret@example.com&utm_source=private-secret');
   const catalogue = await seen(events, '$pageview');
   await page.locator('[data-game="wordle"]').click();
   await seen(events, 'game_selected');

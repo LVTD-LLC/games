@@ -7,7 +7,7 @@ function safePath(path) {
   if (/^\/corporate-bs-meter\/result\//.test(path))
     return '/corporate-bs-meter/result/';
   return [
-    '/',
+    '/games/',
     '/wordle/',
     '/city-racers/',
     '/corporate-bs-meter/',
@@ -138,7 +138,7 @@ export function analyticsHeaders() {
 }
 async function init() {
   try {
-    const response = await fetch('/analytics-config.json', {
+    const response = await fetch('/games/analytics-config.json', {
       signal: AbortSignal.timeout(2000),
     });
     if (!response.ok) throw new Error('Analytics not configured');
