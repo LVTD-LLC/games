@@ -1,3 +1,5 @@
+@import '../../../shared/studio.css';
+
 @font-face {
   font-family: InterVariable;
   src: url('../node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2')
