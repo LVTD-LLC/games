@@ -1,3 +1,4 @@
+import { createQuizApi } from './quiz-club/http.mjs';
 import { createJess } from './jess/server.mjs';
 import { createJev } from './jess/jev.mjs';
 import { createAnalytics } from './analytics.mjs';
@@ -25,6 +26,11 @@ export function gamesServer({
     origin: options.origin,
     trustProxy: options.trustProxy,
     dailyBudget: options.jessDailyBudget,
+  });
+  const quiz = createQuizApi({
+    origin: options.origin,
+    trustProxy: options.trustProxy,
+    ...options.quiz,
   });
   const life = createLifeProxy({
     origin: options.origin,
@@ -55,6 +61,7 @@ export function gamesServer({
       res.writeHead(302, { Location: '/games/' + req.url.slice(1) });
       return res.end();
     }
+    if (req.url.startsWith('/quiz-club/api/')) return quiz.handle(req, res);
     if (req.url.startsWith('/api/jess/')) return jess(req, res);
     if (req.url.startsWith('/api/life/')) {
       if (req.url.split('?')[0] === '/api/life/step') {
@@ -82,6 +89,7 @@ export function gamesServer({
       res.end(req.method === 'HEAD' ? undefined : notFound);
     });
   });
+  server.once('close', quiz.close);
   server.requestTimeout = 20000;
   server.headersTimeout = 10000;
   return server;

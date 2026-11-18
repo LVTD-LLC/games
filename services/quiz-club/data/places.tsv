@@ -1,0 +1,2400 @@
+Tokyo	Токио	JP
+Mexico City	Мехико	MX
+Mumbai	Мумбаи	IN
+São Paulo	Сан-Паулу	BR
+Delhi	Дели	IN
+Shanghai	Шанхай	CN
+Kolkata	Калькутта	IN
+Dhaka	Дакка	BD
+Buenos Aires	Буэнос-Айрес	AR
+Karachi	Карачи	PK
+Cairo	Каир	EG
+Rio de Janeiro	Рио-де-Жанейро	BR
+Osaka	Осака	JP
+Beijing	Пекин	CN
+Manila	Манила	PH
+Moscow	Москва	RU
+Istanbul	Стамбул	TR
+Lagos	Лагос	NG
+Jakarta	Джакарта	ID
+Guangzhou	Гуанчжоу	CN
+Tehran	Тегеран	IR
+Kinshasa	Киншаса	CD
+Bogotá	Богота	CO
+Shenzhen	Шэньчжэнь	CN
+Wuhan	Ухань	CN
+Tianjin	Тяньцзинь	CN
+Chennai	Ченнаи	IN
+Bengaluru	Бангалор	IN
+Bangkok	Бангкок	TH
+Lahore	Лахор	PK
+Chongqing	Чунцин	CN
+Amaravati	Амаравати	IN
+Belo Horizonte	Белу-Оризонти	BR
+Ahmedabad	Ахмадабад	IN
+Ho Chi Minh City	Хошимин	VN
+Toronto	Торонто	CA
+Singapore	Сингапур	SG
+Luanda	Луанда	AO
+Baghdad	Багдад	IQ
+Howrah	Хаора	IN
+Shenyang	Шэньян	CN
+Khartoum	Хартум	SD
+Pune	Пуна	IN
+Saint Petersburg	Санкт-Петербург	RU
+Chattogram	Читтагонг	BD
+Dongguan	Дунгуань	CN
+Riyadh	Эр-Рияд	SA
+Hanoi	Ханой	VN
+Chengdu	Чэнду	CN
+Yangon	Янгон	MM
+Xi'an	Сиань	CN
+Porto Alegre	Порту-Алегри	BR
+Surat	Сурат	IN
+Hechi	Хэчи	CN
+Abidjan	Абиджан	CI
+Brasília	Бразилиа	BR
+Ankara	Анкара	TR
+Monterrey	Монтеррей	MX
+Yokohama	Иокогама	JP
+Nanjing	Нанкин	CN
+Montreal	Монреаль	CA
+Guiyang	Гуйян	CN
+Recife	Ресифи	BR
+Harbin	Харбин	CN
+Fortaleza	Форталеза	BR
+Ürümqi	Урумчи	CN
+Zhangzhou	Чжанчжоу	CN
+Salvador	Салвадор	BR
+Johannesburg	Йоханнесбург	ZA
+Berlin	Берлин	DE
+Algiers	Алжир	DZ
+Rome	Рим	IT
+Medellin	Медельин	CO
+Kabul	Кабул	AF
+Nagoya	Нагоя	JP
+Cape Town	Кейптаун	ZA
+Changchun	Чанчунь	CN
+Casablanca	Касабланка	MA
+Dalian	Далянь	CN
+Kanpur	Канпур	IN
+Kano	Кано	NG
+Tel Aviv	Тель-Авив	IL
+Addis Ababa	Аддис-Абеба	ET
+Curitiba	Куритиба	BR
+Zibo	Цзыбо	CN
+Jeddah	Джидда	SA
+Nairobi	Найроби	KE
+Hangzhou	Ханчжоу	CN
+Benoni	Бенони	ZA
+Caracas	Каракас	VE
+Milan	Милан	IT
+Stuttgart	Штутгарт	DE
+Kunming	Куньмин	CN
+Jaipur	Джайпур	IN
+Taiyuan	Тайюань	CN
+Frankfurt	Франкфурт-на-Майне	DE
+Qingdao	Циндао	CN
+Surabaya	Сурабая	ID
+Lisbon	Лиссабон	PT
+Jinan	Цзинань	CN
+Fukuoka	Фукуока	JP
+Campinas	Кампинас	BR
+Quezon City	Кесон-Сити	PH
+Katowice	Катовице	PL
+Aleppo	Алеппо	SY
+Durban	Дурбан	ZA
+Kyiv	Киев	UA
+Lucknow	Лакхнау	IN
+Giza	Эль-Гиза	EG
+Zhengzhou	Чжэнчжоу	CN
+Ibadan	Ибадан	NG
+Faisalabad	Фейсалабад	PK
+Fuzhou	Фучжоу	CN
+Changsha	Чанша	CN
+Dakar	Дакар	SN
+İzmir	Измир	TR
+Xiangtan	Сянтань	CN
+Lanzhou	Ланьчжоу	CN
+Sapporo	Саппоро	JP
+Xiamen	Сямэнь	CN
+Guayaquil	Гуаякиль	EC
+Mashhad	Мешхед	IR
+Damascus	Дамаск	SY
+Nagpur	Нагпур	IN
+Lianshan	Цзиньси	CN
+Shijiazhuang	Шицзячжуан	CN
+Tunis	Тунис	TN
+Vienna	Вена	AT
+Jilin City	Гирин	CN
+Omdurman	Омдурман	SD
+Bandung	Бандунг	ID
+Bekasi	Бекаси	ID
+Mannheim	Мангейм	DE
+Nanchang	Наньчан	CN
+Cali	Кали	CO
+Sendai	Сендай	JP
+Puebla City	Пуэбла-де-Сарагоса	MX
+Tashkent	Ташкент	UZ
+Nanchong	Наньчун	CN
+Havana	Гавана	CU
+Nanning	Наньнин	CN
+Patna	Патна	IN
+Santo Domingo	Санто-Доминго	DO
+Zaozhuang	Цзаочжуан	CN
+Baku	Баку	AZ
+Accra	Аккра	GH
+Yantai	Яньтай	CN
+Medan	Медан	ID
+Santa Cruz de la Sierra	Санта-Крус-де-ла-Сьерра	BO
+Xuzhou	Сюйчжоу	CN
+Linyi	Линьи	CN
+Maracaibo	Маракайбо	VE
+Kuwait City	Эль-Кувейт	KW
+Dammam	Даммам	SA
+Haikou	Хайкоу	CN
+Hiroshima	Хиросима	JP
+Baotou	Баотоу	CN
+Hefei	Хэфэй	CN
+Indore	Индаур	IN
+Goiânia	Гояния	BR
+Sanaa	Сана	YE
+Port-au-Prince	Порт-о-Пренс	HT
+Haiphong	Хайфон	VN
+Nanyang	Наньян	CN
+Bucharest	Бухарест	RO
+Ningbo	Нинбо	CN
+Douala	Дуала	CM
+Tangshan	Таншань	CN
+Datong	Датун	CN
+Asunción	Асунсьон	PY
+Saidu Sharif	Сайду-Шариф	PK
+Brisbane	Брисбен	AU
+Rawalpindi	Равалпинди	PK
+Beirut	Бейрут	LB
+Kyoto	Киото	JP
+Minsk	Минск	BY
+Barranquilla	Барранкилья	CO
+Shuyang	Шуян	CN
+Hamburg	Гамбург	DE
+Vadodara	Вадодара	IN
+Shangqiu	Шанцю	CN
+Manaus	Манаус	BR
+Wuxi	Уси	CN
+Palembang	Палембанг	ID
+Brussels	Брюссель	BE
+Essen	Эссен	DE
+Bhopal	Бхопал	IN
+Hohhot	Хух-Хото	CN
+Luoyang	Лоян	CN
+Santos	Сантус	BR
+Warsaw	Варшава	PL
+Rabat	Рабат	MA
+Vitoria	Витория	BR
+Quito	Кито	EC
+Antananarivo	Антананариву	MG
+Coimbatore	Коимбатур	IN
+Daqing	Дацин	CN
+Lu'an	Луань	CN
+Budapest	Будапешт	HU
+Turin	Турин	IT
+Ludhiana	Лудхияна	IN
+Kumasi	Кумаси	GH
+Qiqihar	Цицикар	CN
+Anshan	Аньшань	CN
+Handan	Ханьдань	CN
+Tai'an	Тайань	CN
+Isfahan	Исфахан	IR
+Yaoundé	Яунде	CM
+Shantou	Шаньтоу	CN
+Agra	Агра	IN
+Zhanjiang	Чжаньцзян	CN
+Kalyan	Кальян	IN
+Abuja	Абуджа	NG
+Harare	Хараре	ZW
+Xiantao City	Сяньтао	CN
+Weifang	Вэйфан	CN
+Khulna	Кхулна	BD
+Tijuana	Тихуана	MX
+Santiago de los Caballeros	Сантьяго-де-лос-Трейнта-Кабальерос	DO
+Xinyang	Синьян	CN
+Luzhou	Лучжоу	CN
+Toluca	Толука-де-Лердо	MX
+Visakhapatnam	Вишакхапатнам	IN
+Kōbe	Кобе	JP
+Multan	Мултан	PK
+Kochi	Кочин	IN
+Gujranwala	Гуджранвала	PK
+Montevideo	Монтевидео	UY
+Niterói	Нитерой	BR
+Ganzhou	Ганьчжоу	CN
+Liuzhou	Лючжоу	CN
+Bamako	Бамако	ML
+Conakry	Конакри	GN
+Bursa	Бурса	TR
+León de Los Aldama	Леон-де-лос-Альдама	MX
+Nashik	Насик	IN
+Fushun	Фушунь	CN
+Changde	Чандэ	CN
+Neijiang	Нэйцзян	CN
+Phnom Penh	Пномпень	KH
+Quanzhou	Цюаньчжоу	CN
+Kharkiv	Харьков	UA
+Lomé	Ломе	TG
+Huainan	Хуайнань	CN
+Doha	Доха	QA
+Kuala Lumpur	Куала-Лумпур	MY
+Maputo	Мапуту	MZ
+Kaduna	Кадуна	NG
+Kawasaki	Кавасаки	JP
+San Salvador	Сан-Сальвадор	SV
+Suining	Суйнин	CN
+Karaj	Кередж	IR
+Kampala	Кампала	UG
+Tabriz	Тебриз	IR
+Davao City	Давао	PH
+Meerut	Мератх	IN
+Mianyang	Мяньян	CN
+Semarang	Семаранг	ID
+Faridabad	Фаридабад	IN
+Novosibirsk	Новосибирск	RU
+Mecca	Мекка	SA
+Dubai	Дубай	AE
+Ma'anshan	Мааньшань	CN
+Brazzaville	Браззавиль	CG
+Yiyang	Иян	CN
+Lubumbashi	Лубумбаши	CD
+Varanasi	Варанаси	IN
+Ciudad Juárez	Сьюдад-Хуарес	MX
+Ghaziabad	Газиабад	IN
+Heze	Хэцзэ	CN
+Pretoria	Претория	ZA
+Porto	Порту	PT
+Lusaka	Лусака	ZM
+Asansol	Асансол	IN
+Changzhou	Чанчжоу	CN
+Mosul	Мосул	IQ
+Yekaterinburg	Екатеринбург	RU
+Peshawar	Пешавар	PK
+Mandalay	Мандалай	MM
+Jamshedpur	Джамшедпур	IN
+Mbuji-Mayi	Мбужи-Майи	CD
+Madurai	Мадурай	IN
+Adana	Адана	TR
+Sheffield	Шеффилд	GB
+Jabalpur	Джабалпур	IN
+Nizhny Novgorod	Нижний Новгород	RU
+Chifeng	Чифэн	CN
+Duisburg	Дуйсбург	DE
+Munich	Мюнхен	DE
+Huai'an	Хуайань	CN
+Stockholm	Стокгольм	SE
+Makassar	Макасар	ID
+Rajkot	Раджкот	IN
+Dhanbad	Дханбад	IN
+Mudanjiang	Муданьцзян	CN
+Shiraz	Шираз	IR
+Geneva	Женева	CH
+Huzhou	Хучжоу	CN
+Tianshui	Тяньшуй	CN
+Liupanshui	Люпаньшуй	CN
+Düsseldorf	Дюссельдорф	DE
+Maoming	Маомин	CN
+Amritsar	Амритсар	IN
+Almaty	Алма-Ата	KZ
+Warangal	Варангал	IN
+Rosario	Росарио	AR
+Allahabad	Праяградж	IN
+Benin City	Бенин-Сити	NG
+Maceió	Масейо	BR
+Sofia	София	BG
+Abbottabad	Абботтабад	PK
+Benghazi	Бенгази	LY
+Cilacap	Чилачап	ID
+Prague	Прага	CZ
+Leshan	Лэшань	CN
+Ouagadougou	Уагадугу	BF
+Ottawa	Оттава	CA
+Adelaide	Аделаида	AU
+Shangrao	Шанжао	CN
+Torreón	Торреон	MX
+Srinagar	Сринагар	IN
+Vijayawada	Виджаявада	IN
+Samara	Самара	RU
+Omsk	Омск	RU
+Xianyang	Сяньян	CN
+Cagayan de Oro	Кагаян-де-Оро	PH
+Cần Thơ	Кантхо	VN
+Barquisimeto	Баркисимето	VE
+Kazan	Казань	RU
+Helsinki	Хельсинки	FI
+Calgary	Калгари	CA
+Ciudad Nezahualcóyotl	Несауалькойотль	MX
+Zürich	Цюрих	CH
+Baoding	Баодин	CN
+Zigong	Цзыгун	CN
+Sharjah	Шарджа	AE
+Yerevan	Ереван	AM
+Ankang	Анькан	CN
+Mogadishu	Могадишо	SO
+Tbilisi	Тбилиси	GE
+Huambo	Уамбо	AO
+Ikare	Икаре	NG
+Bhilai	Бхилаи	IN
+Jinhua	Цзиньхуа	CN
+Chelyabinsk	Челябинск	RU
+Dushanbe	Душанбе	TJ
+Copenhagen	Копенгаген	DK
+Zhuzhou	Чжучжоу	CN
+Vereeniging	Феринихинг	ZA
+Xiangyang	Сянъян	CN
+Zhucheng	Чжучэн	CN
+Amman	Амман	JO
+Edmonton	Эдмонтон	CA
+Solapur	Солапур	IN
+Rostov-on-Don	Ростов-на-Дону	RU
+Dnipro	Днепр	UA
+Xining	Синин	CN
+Zhangjiakou	Чжанцзякоу	CN
+Gaziantep	Газиантеп	TR
+Ranchi	Ранчи	IN
+Monrovia	Монровия	LR
+Jerusalem	Иерусалим	IL
+Guatemala City	Гватемала	GT
+Zhuhai	Чжухай	CN
+Florianópolis	Флорианополис	BR
+Port Elizabeth	Порт-Элизабет	ZA
+Port Harcourt	Порт-Харкорт	NG
+Jiamusi	Цзямусы	CN
+Ufa	Уфа	RU
+Hengyang	Хэнъян	CN
+Benxi	Бэньси	CN
+Haifa	Хайфа	IL
+Medina	Медина	SA
+Maracay	Маракай	VE
+Homs	Хомс	SY
+Cologne	Кёльн	DE
+Qinhuangdao	Циньхуандао	CN
+Fez	Фес	MA
+Yongzhou	Юнчжоу	CN
+Cochabamba	Кочабамба	BO
+Da Nang	Дананг	VN
+Baoshan	Баошань	CN
+Aden	Аден	YE
+Kitakyūshū	Китакюсю	JP
+Perm	Пермь	RU
+Ahwaz	Ахваз	IR
+Jodhpur	Джодхпур	IN
+San Luis Potosí	Сан-Луис-Потоси	MX
+Yinchuan	Иньчуань	CN
+N'Djamena	Нджамена	TD
+Jiaxing	Цзясин	CN
+Joinville	Жоинвили	BR
+Donetsk	Донецк	UA
+Guilin	Гуйлинь	CN
+Duhok	Дахук	IQ
+Volgograd	Волгоград	RU
+Guwahati	Гувахати	IN
+Yangquan	Янцюань	CN
+Chandigarh	Чандигарх	IN
+Gwalior	Гвалиор	IN
+Hamamatsu	Хамамацу	JP
+Qom	Кум	IR
+Jixi	Цзиси	CN
+Xinyi	Синьи	CN
+Santiago de Querétaro	Сантьяго-де-Керетаро	MX
+Klang	Кланг	MY
+Jinzhou	Цзиньчжоу	CN
+João Pessoa	Жуан-Песоа	BR
+Salerno	Салерно	IT
+Thiruvananthapuram	Тривандрам	IN
+Kozhikode	Кожикоде	IN
+Ogbomosho	Огбомошо	NG
+Trichy	Тируччираппалли	IN
+General Santos	Генерал-Сантос	PH
+Huế	Хюэ	VN
+Bacolod	Баколод	PH
+Nantong	Наньтун	CN
+Tegucigalpa	Тегусигальпа	HN
+Foshan	Фошань	CN
+Naypyidaw	Нейпьидо	MM
+Erbil	Эрбиль	IQ
+Krasnoyarsk	Красноярск	RU
+Djibouti	Джибути	DJ
+Olinda	Олинда	BR
+Antwerp	Антверпен	BE
+Managua	Манагуа	NI
+Konya	Конья	TR
+Bogor	Богор	ID
+Huaibei	Хуайбэй	CN
+Xinyu	Синьюй	CN
+Teresina	Терезина	BR
+Naha	Наха	JP
+Xinxiang	Синьсян	CN
+Yibin	Ибинь	CN
+Aba	Аба	NG
+Maiduguri	Майдугури	NG
+Tirana	Тирана	AL
+Kathmandu	Катманду	NP
+Zarqa	Эз-Зарка	JO
+Tarsus	Тарсус	TR
+Bengbu	Бэнбу	CN
+Mendoza	Мендоса	AR
+Hubli	Хубли	IN
+Zaria	Зариа	NG
+Anyang	Аньян	CN
+Mysore	Майсур	IN
+Mexicali	Мехикали	MX
+Ulaanbaatar	Улан-Батор	MN
+Tongliao	Тунляо	CN
+Newcastle upon Tyne	Ньюкасл-апон-Тайн	GB
+Mombasa	Момбаса	KE
+Novo Hamburgo	Нову-Амбургу	BR
+Callao	Кальяо	PE
+Johor Bahru	Джохор-Бару	MY
+Yichang	Ичан	CN
+Raipur	Райпур	IN
+Yangjiang	Янцзян	CN
+Kaifeng	Кайфэн	CN
+Marrakesh	Марракеш	MA
+Dandong	Даньдун	CN
+Basra	Басра	IQ
+Aguascalientes City	Агуаскальентес	MX
+Okayama	Окаяма	JP
+Xuancheng	Сюаньчэн	CN
+Rizhao	Жичжао	CN
+Palermo	Палермо	IT
+Cardiff	Кардифф	GB
+Kigali	Кигали	RW
+Ciudad Madero Tamaulipas	Тампико	MX
+Jiaozuo	Цзяоцзо	CN
+Jalandhar	Джаландхар	IN
+Padang	Паданг	ID
+Zhenjiang	Чжэньцзян	CN
+Yarkant County	Яркенд	CN
+Anshun	Аньшунь	CN
+Zunyi	Цзуньи	CN
+Pingdingshan	Пиндиншань	CN
+Nova Iguaçu	Нова-Игуасу	BR
+Voronezh	Воронеж	RU
+Bhubaneswar	Бхубанешвар	IN
+Saratov	Саратов	RU
+Duque de Caxias	Дуки-ди-Кашиас	BR
+Yuci	Юйцы	CN
+Yancheng	Яньчэн	CN
+Bishkek	Бишкек	KG
+Cuernavaca	Куэрнавака	MX
+Linfen	Линьфэнь	CN
+Bangui	Банги	CF
+Warri	Варри	NG
+Basel	Базель	CH
+San Miguel de Tucumán	Сан-Мигель-де-Тукуман	AR
+Kermanshah	Керманшах	IR
+Thessaloniki	Салоники	GR
+Kota	Кота	IN
+Freetown	Фритаун	SL
+Braga	Брага	PT
+Jhansi	Джханси	IN
+Yueyang	Юэян	CN
+Nottingham	Ноттингем	GB
+Agadir	Агадир	MA
+Butterworth	Баттерворт	MY
+Bareilly	Барели	IN
+Jos	Джос	NG
+Xingyi	Синъи	CN
+Arequipa	Арекипа	PE
+Cebu City	Себу	PH
+Wuhu	Уху	CN
+Langfang	Ланфан	CN
+Rajshahi	Раджшахи	BD
+Zhaotong	Чжаотун	CN
+Culiacán	Кульякан	MX
+Lingyuan	Линъюань	CN
+Cuiabá	Куяба	BR
+Qui Nhơn	Куинён	VN
+Aligarh	Алигарх	IN
+Malang	Маланг	ID
+Lviv	Львов	UA
+Baoji	Баоцзи	CN
+Pekanbaru	Пеканбару	ID
+Oran	Оран	DZ
+Yingkou	Инкоу	CN
+Bhiwandi	Бхиванди	IN
+Liaoyang	Ляоян	CN
+Chihuahua City	Чиуауа	MX
+Jammu	Джамму	IN
+Melaka City	Малакка	MY
+Zaporizhzhia	Запорожье	UA
+Muradabad	Морадабад	IN
+Antalya	Анталья	TR
+Al Hudaydah	Ходейда	YE
+Islamabad	Исламабад	PK
+Campo Grande	Кампу-Гранди	BR
+Shaoxing	Шаосин	CN
+Mangalore	Мангалор	IN
+Wuppertal	Вупперталь	DE
+Zamboanga City	Замбоанга	PH
+Ilorin	Илорин	NG
+Saarbrücken	Саарбрюккен	DE
+Shiyan	Шиянь	CN
+Fuxin	Фусинь	CN
+Quetta	Кветта	PK
+Kananga	Кананга	CD
+Trabzon	Трабзон	TR
+Cotonou	Котону	BJ
+Jincheng	Цзиньчэн	CN
+Łódź	Лодзь	PL
+Kraków	Краков	PL
+Saltillo	Сальтильо	MX
+Vientiane	Вьентьян	LA
+São José dos Campos	Сан-Жозе-дус-Кампус	BR
+Ta'izz	Таиз	YE
+Pietermaritzburg	Питермарицбург	ZA
+Tangier	Танжер	MA
+Fergana	Фергана	UZ
+Namangan	Наманган	UZ
+Kolhapur	Колхапур	IN
+Liège	Льеж	BE
+Ciudad Guayana	Сьюдад-Гуаяна	VE
+Hegang	Хэган	CN
+Riga	Рига	LV
+Nouakchott	Нуакшот	MR
+Naga	Нага	PH
+Gdańsk	Гданьск	PL
+Nuremberg	Нюрнберг	DE
+Oyo	Ойо	NG
+Muscat	Маскат	OM
+Amravati	Амравати	IN
+Sokoto	Сокото	NG
+Beihai	Бэйхай	CN
+Ashgabat	Ашхабад	TM
+Bremen	Бремен	DE
+Sulaymaniyah	Сулеймания	IQ
+Zagreb	Загреб	HR
+Hanover	Ганновер	DE
+Cúcuta	Кукута	CO
+Shaoguan	Шаогуань	CN
+Kumamoto	Кумамото	JP
+Lianyungang	Ляньюньган	CN
+Acapulco de Juárez	Акапулько	MX
+Kandahar	Кандагар	AF
+Dehradun	Дехрадун	IN
+Samarkand	Самарканд	UZ
+Qingyuan	Цинъюань	CN
+Changzhi	Чанчжи	CN
+Tolyatti	Тольятти	RU
+Jaboatão dos Guararapes	Жабоатан-дус-Гуарарапис	BR
+Shizuoka	Сидзуока	JP
+Bulawayo	Булавайо	ZW
+Soledad	Соледад	CO
+Meknes	Мекнес	MA
+Sarajevo	Сараево	BA
+La Plata	Ла-Плата	AR
+Malegaon	Малегаон	IN
+Enugu	Энугу	NG
+Chișinău	Кишинёв	MD
+Huangshi	Хуанши	CN
+Aracaju	Аракажу	BR
+Bonn	Бонн	DE
+San Pedro Sula	Сан-Педро-Сула	HN
+Nellore	Неллуру	IN
+Catania	Катания	IT
+Gorakhpur	Горакхпур	IN
+Ipoh	Ипох	MY
+Utsunomiya	Уцуномия	JP
+Puyang	Пуян	CN
+Najaf	Ан-Наджаф	IQ
+São José dos Pinhais	Сан-Жозе-дус-Пиньяйс	BR
+Santo André	Санту-Андре	BR
+Bytom	Бытом	PL
+Pointe-Noire	Пуэнт-Нуар	CG
+Ta'if	Эт-Таиф	SA
+Ismailia	Исмаилия	EG
+Shivamogga	Шимога	IN
+Biên Hòa	Бьенхоа	VN
+Zhanyi	Чжаньи	CN
+Kryvyi Rih	Кривой Рог	UA
+Turpan	Турфан	CN
+Irbid	Ирбид	JO
+Tirupur	Тируппур	IN
+Andijan	Андижан	UZ
+Krasnodar	Краснодар	RU
+Genoa	Генуя	IT
+Lilongwe	Лилонгве	MW
+Diyarbakır	Диярбакыр	TR
+Morelia	Морелия	MX
+Ulyanovsk	Ульяновск	RU
+Shihezi	Шихэцзы	CN
+Kikwit	Киквит	CD
+Hofuf	Эль-Хуфуф	SA
+Yogyakarta City	Джокьякарта	ID
+Wrocław	Вроцлав	PL
+Winnipeg	Виннипег	CA
+Izhevsk	Ижевск	RU
+Zhuozhou	Чжочжоу	CN
+Rourkela	Руркла	IN
+Quebec City	Квебек	CA
+Poznań	Познань	PL
+Port Said	Порт-Саид	EG
+Nanded	Нандер	IN
+Bannu	Банну	PK
+Asmara	Асмэра	ER
+Southend-on-Sea	Саутенд-он-Си	GB
+Dresden	Дрезден	DE
+Wiesbaden	Висбаден	DE
+Mersin	Мерсин	TR
+Changping	Чанпин	CN
+Korla	Корла	CN
+Palu	Палу	ID
+Taizhou	Тайчжоу	CN
+Xingtai	Синтай	CN
+Samsun	Самсун	TR
+Luxor	Луксор	EG
+Belgaum	Белгаум	IN
+Pontianak	Понтианак	ID
+Yaroslavl	Ярославль	RU
+Constantine	Константина	DZ
+Banjarmasin	Банджармасин	ID
+Abu Dhabi	Абу-Даби	AE
+Kirkuk	Киркук	IQ
+Sangli	Сангли	IN
+Canoas	Каноас	BR
+sharkia	Эль-Мансура	EG
+Sohag	Сохаг	EG
+Barnaul	Барнаул	RU
+Zahedan	Захедан	IR
+Jalalabad	Джелалабад	AF
+Chiclayo	Чиклайо	PE
+Hermosillo	Эрмосильо	MX
+Port Louis	Порт-Луи	MU
+Chandrapur	Чандрапур	IN
+Al Hillah	Аль-Хилла	SA
+Hillah	Хилла	IQ
+Rasht	Решт	IR
+Nagano	Нагано	JP
+Vinh	Винь	VN
+Abeokuta	Абеокута	NG
+Kayseri	Кайсери	TR
+Samarinda	Самаринда	ID
+Ajmer	Аджмер	IN
+Dortmund	Дортмунд	DE
+Vladivostok	Владивосток	RU
+Irkutsk	Иркутск	RU
+Blantyre	Блантайр	MW
+Anqing	Аньцин	CN
+Pochinki	Каттак	IN
+Yizhou	Ичжоу	CN
+Hachiōji	Хатиодзи	JP
+Khabarovsk	Хабаровск	RU
+Veracruz	Веракрус	MX
+Kisangani	Кисангани	CD
+Libreville	Либревиль	GA
+Kerman	Керман	IR
+Urmia	Урмия	IR
+Bikaner	Биканер	IN
+Quetzaltenango	Кесальтенанго	GT
+Kuching	Кучинг	MY
+Shuozhou	Шочжоу	CN
+Niigata	Ниигата	JP
+Pereira	Перейра	CO
+Bouaké	Буаке	CI
+Binjai	Бинджай	ID
+Manama	Манама	BH
+Uberlândia	Уберландия	BR
+Sorocaba	Сорокаба	BR
+Tongling	Тунлин	CN
+Weihai	Вэйхай	CN
+Mar del Plata	Мар-дель-Плата	AR
+Santiago de Cuba	Сантьяго-де-Куба	CU
+Siping	Сыпин	CN
+Kagoshima	Кагосима	JP
+Surakarta	Суракарта	ID
+Makhachkala	Махачкала	RU
+Bhavnagar	Бхавнагар	IN
+Uyo	Уйо	NG
+Bahawalpur	Бахавалпур	PK
+Kenitra	Кенитра	MA
+Ribeirão Preto	Рибейран-Прету	BR
+Kanazawa	Канадзава	JP
+Orenburg	Оренбург	RU
+Tabuk	Табук	SA
+Puerto la Cruz	Пуэрто-ла-Крус	VE
+Jiujiang	Цзюцзян	CN
+Hisar	Хисар	IN
+Matola	Матола	MZ
+Bilaspur	Биласпур	IN
+Sargodha	Саргодха	PK
+Leipzig	Лейпциг	DE
+Yining City	Кульджа	CN
+Vilnius	Вильнюс	LT
+Tirunelveli	Тирунелвели	IN
+Cancun	Канкун	MX
+Newcastle	Ньюкасл	AU
+Yangzhou	Янчжоу	CN
+Novokuznetsk	Новокузнецк	RU
+Latakia	Латакия	SY
+Matamoros	Матаморос	MX
+Gothenburg	Гётеборг	SE
+Ōtsu	Оцу	JP
+Tomsk	Томск	RU
+Linxia City	Линься	CN
+Matsuyama	Мацуяма	JP
+Jiangmen	Цзянмэнь	CN
+Oaxaca de Juárez	Оахака-де-Хуарес	MX
+Beira	Бейра	MZ
+Guntur	Гунтур	IN
+Hamadan	Хамадан	IR
+Cangzhou	Цанчжоу	CN
+Kota Kinabalu	Кота-Кинабалу	MY
+Gold Coast	Голд-Кост	AU
+Ji'an	Цзиань	CN
+Londrina	Лондрина	BR
+Ryazan	Рязань	RU
+Jingzhou	Цзинчжоу	CN
+Bello	Бельо	CO
+Tyumen	Тюмень	RU
+Lipetsk	Липецк	RU
+Siliguri	Силигури	IN
+Eskişehir	Эскишехир	TR
+Banda Aceh	Банда-Ачех	ID
+Ujjain	Удджайн	IN
+Salta	Сальта	AR
+Penza	Пенза	RU
+Blida	Блида	DZ
+Mykolaiv	Николаев	UA
+Karbala	Кербела	IQ
+Suez	Суэц	EG
+Gliwice	Гливице	PL
+Bukittinggi	Букиттинги	ID
+Kashgar City	Кашгар	CN
+Liaoyuan	Ляоюань	CN
+Kota Bharu	Кота-Бару	MY
+Jundiaí	Жундиаи	BR
+Tlaxcala	Тласкала	MX
+Davangere	Даванагере	IN
+Viña del Mar	Винья-дель-Мар	CL
+Annaba	Аннаба	DZ
+Akola	Акола	IN
+Brighton	Брайтон	GB
+Astrakhan	Астрахань	RU
+Bradford	Брадфорд	GB
+Bari	Бари	IT
+Awka	Авка	NG
+Pasuruan	Пасуруан	ID
+Damanhur	Даманхур	EG
+Shuangyashan	Шуанъяшань	CN
+Tsu	Цу	JP
+Thái Nguyên	Тхайнгуен	VN
+Minya	Эль-Минья	EG
+Mataram	Матарам	ID
+Macapá	Макапа	BR
+Reynosa	Рейноса	MX
+Shahrisabz	Шахрисабз	UZ
+Douma	Дума	SY
+Songyuan	Сунъюань	CN
+Skopje	Скопье	MK
+Wuwei	Увэй	CN
+Port Sudan	Порт-Судан	SD
+Tula	Тула	RU
+Beni Suef	Бени-Суэйф	EG
+Yanji	Яньцзи	CN
+Bologna	Болонья	IT
+Saharanpur	Сахаранпур	IN
+Gulbarga	Гулбарга	IN
+Bhatpara	Бхатпара	IN
+Ife	Ифе	NG
+Feira de Santana	Фейра-ди-Сантана	BR
+Shah Alam	Шах-Алам	MY
+Mariupol	Мариуполь	UA
+Tuxtla Gutiérrez	Тустла-Гутьеррес	MX
+Herat	Герат	AF
+Gomel	Гомель	BY
+Zhaoqing	Чжаоцин	CN
+Americana	Американа	BR
+Dhule	Дхуле	IN
+Ostrava	Острава	CZ
+Yazd	Йезд	IR
+Sialkot	Сиалкот	PK
+Kemerovo	Кемерово	RU
+Adama	Назрет	ET
+Jiaojiang	Цзяоцзян	CN
+Kuqa County	Куча	CN
+Chaoyang	Чаоян	CN
+Juiz de Fora	Жуис-ди-Фора	BR
+Udaipur	Удайпур	IN
+İzmit	Измит	TR
+Piraeus	Пирей	GR
+Shymkent	Шымкент	KZ
+Iligan	Илиган	PH
+Qazvin	Казвин	IR
+Bloemfontein	Блумфонтейн	ZA
+Calabar	Калабар	NG
+Malatya	Малатья	TR
+Panzhihua	Паньчжихуа	CN
+Bandar Abbas	Бендер-Аббас	IR
+Naberezhnye Chelny	Набережные Челны	RU
+Hama	Хама	SY
+Cranbourne	Кранборн	AU
+Iquitos	Икитос	PE
+Mazar-i-Sharif	Мазари-Шариф	AF
+Leicester	Лестер	GB
+Jingdezhen	Цзиндэчжэнь	CN
+Jambi	Джамби	ID
+Volta Redonda	Волта-Редонда	BR
+Hengshui	Хэншуй	CN
+Sfax	Сфакс	TN
+Sunderland	Сандерленд	GB
+Xalapa	Халапа-Энрикес	MX
+Luhansk	Луганск	UA
+Manado	Манадо	ID
+Karaganda	Караганда	KZ
+Nasiriya	Насирия	IQ
+Oshawa	Ошава	CA
+Qitaihe	Цитайхэ	CN
+Belfast	Белфаст	GB
+Şanlıurfa	Шанлыурфа	TR
+Chengde	Чэндэ	CN
+Xuchang	Сюйчан	CN
+Chlef	Шлеф	DZ
+Ōita	Оита	JP
+Baguio	Багио	PH
+Cheboksary	Чебоксары	RU
+Ado Ekiti	Адо-Экити	NG
+Balikpapan	Баликпапан	ID
+Bellary	Беллари	IN
+Bamenda	Баменда	CM
+Ghent	Гент	BE
+Tokushima	Токусима	JP
+Wuzhou	Учжоу	CN
+Portsmouth	Портсмут	GB
+Cabimas	Кабимас	VE
+Foz do Iguaçu	Фос-ду-Игуасу	BR
+Wakayama	Вакаяма	JP
+Mawlamyine	Моламьяйн	MM
+Khujand	Худжанд	TJ
+Guangyuan	Гуанъюань	CN
+Khomeyni Shahr	Хомейнишехр	IR
+Garoua	Гаруа	CM
+Bukavu	Букаву	CD
+Thoothukudi	Тутикорин	IN
+Nagasaki	Нагасаки	JP
+Kaliningrad	Калининград	RU
+Likasi	Ликаси	CD
+Spanish Town	Спаниш-Таун	JM
+Katsina	Кацина	NG
+Welkom	Велком	ZA
+Santa Marta	Санта-Марта	CO
+Villahermosa	Вильяэрмоса	MX
+Bryansk	Брянск	RU
+Bournemouth	Борнмут	GB
+Bengkulu	Бенкулу	ID
+Heidelberg	Гейдельберг	DE
+Kurnool	Карнул	IN
+Chaozhou	Чаочжоу	CN
+Batangas City	Батангас	PH
+Bratislava	Братислава	SK
+Ibagué	Ибаге	CO
+Ivanovo	Иваново	RU
+Erzurum	Эрзурум	TR
+Akure	Акуре	NG
+Asyut	Асьют	EG
+Kolwezi	Колвези	CD
+Sukkur	Суккур	PK
+Luohe	Лохэ	CN
+Campina Grande	Кампина-Гранди	BR
+Kitchener	Китченер	CA
+Middlesbrough	Мидлсбро	GB
+Meizhou	Мэйчжоу	CN
+Ardabil	Ардебиль	IR
+Magnitogorsk	Магнитогорск	RU
+Gifu	Гифу	JP
+Huancayo	Уанкайо	PE
+Nha Trang	Нячанг	VN
+Maturín	Матурин	VE
+Xuanhua	Сюаньхуа	CN
+Kursk	Курск	RU
+Hotan	Хотан	CN
+Al Ain	Эль-Айн	AE
+Osogbo	Ошогбо	NG
+Ipatinga	Ипатинга	BR
+Szczecin	Щецин	PL
+Tanta	Танта	EG
+Kitwe	Китве-Нкана	ZM
+Taubaté	Таубате	BR
+Bissau	Бисау	GW
+Pasay	Пасай	PH
+Mbale	Мбале	UG
+Kassala	Кассала	SD
+Tver	Тверь	RU
+Sikar	Сикар	IN
+Surgut	Сургут	RU
+Tumkur	Тумкур	IN
+Gómez Palacio	Гомес-Паласио	MX
+Buraidah	Бурайда	SA
+Khmelnytskyi	Хмельницкий	UA
+Chiang Mai	Чиангмай	TH
+Piura	Пьюра	PE
+Horlivka	Горловка	UA
+Ndola	Ндола	ZM
+Yuxi	Юйси	CN
+Kisumu	Кисуму	KE
+Kollam	Коллам	IN
+Tallinn	Таллин	EE
+Wellington	Веллингтон	NZ
+Al-Ubayyid	Эль-Обейд	SD
+Nyala	Ньяла	SD
+Sandakan	Сандакан	MY
+Ahmednagar	Ахмеднагар	IN
+Osh	Ош	KG
+Stoke-on-Trent	Сток-он-Трент	GB
+Bhilwara	Бхилвара	IN
+Cumilla	Комилла	BD
+Samut Prakan	Самутпракан	TH
+Nampula	Нампула	MZ
+Nizamabad	Низамабад	IN
+Brno	Брно	CZ
+Coventry	Ковентри	GB
+Alajuela	Алахуэла	CR
+Iloilo City	Илоило	PH
+Campos dos Goytacazes	Кампус-дус-Гойтаказис	BR
+Resistencia	Ресистенсия	AR
+Qarshi	Карши	UZ
+Misrata	Мисурата	LY
+Saudi Arabia	Хаиль	SA
+Bejaïa	Беджая	DZ
+Southampton	Саутгемптон	GB
+Guanajuato	Селая	MX
+San Juan de Pasto	Пасто	CO
+Caxias do Sul	Кашиас-ду-Сул	BR
+Nizhny Tagil	Нижний Тагил	RU
+Xichang	Сичан	CN
+Dezhou	Дэчжоу	CN
+Parbhani	Парбхани	IN
+Karlsruhe	Карлсруэ	DE
+Zhoukou	Чжоукоу	CN
+Makiivka	Макеевка	UA
+Putian	Путянь	CN
+Kahramanmaraş	Кахраманмараш	TR
+Manizales	Манисалес	CO
+Manukau City	Манукау	NZ
+Shillong	Шиллонг	IN
+Khorramabad	Хорремабад	IR
+Villavicencio	Вильявисенсьо	CO
+São José do Rio Preto	Сан-Жозе-ду-Риу-Прету	BR
+Kaunas	Каунас	LT
+Latur	Латур	IN
+Seremban	Серембан	MY
+Denizli	Денизли	TR
+Van	Ван	TR
+Abadan	Абадан	IR
+Quzhou	Цюйчжоу	CN
+Rajapalayam	Раджапалаям	IN
+Reading	Рединг	GB
+Najran	Наджран	SA
+Mogilev	Могилёв	BY
+Qatif governorate	Эль-Катиф	SA
+Valletta	Валлетта	MT
+Longyan	Лунъянь	CN
+Bydgoszcz	Быдгощ	PL
+Kuantan	Куантан	MY
+Gorontalo	Горонтало	ID
+Nakuru	Накуру	KE
+Vladikavkaz	Владикавказ	RU
+Larkana	Ларкана	PK
+Christchurch	Крайстчерч	NZ
+Stavropol	Ставрополь	RU
+Sanya	Санья	CN
+Bhagalpur	Бхагалпур	IN
+Maseru	Масеру	LS
+Sheikhupura	Шекхупура	PK
+Cuzco	Куско	PE
+Tamale	Тамале	GH
+Ulan-Ude	Улан-Удэ	RU
+Bobo Dioulasso	Бобо-Диуласо	BF
+Lublin	Люблин	PL
+Halifax	Галифакс	CA
+Augsburg	Аугсбург	DE
+Sungai Petani	Сунгай Петани	MY
+Al Diwaniyah	Эд-Дивания	IQ
+Taraz	Тараз	KZ
+Zanjan	Зенджан	IR
+Iwaki	Иваки	JP
+Encarnación	Энкарнасьон	PY
+Posadas	Посадас	AR
+Cà Mau	Камау	VN
+Asahikawa	Асахикава	JP
+Mirpur Khas	Мирпур-Хас	PK
+Arkhangelsk	Архангельск	RU
+Wafangdian	Вафандянь	CN
+Ambon	Амбон	ID
+Orizaba	Орисаба	MX
+Longxi	Лунси	CN
+Santiago del Estero	Сантьяго-дель-Эстеро	AR
+Mito	Мито	JP
+Safi	Сафи	MA
+Eldoret	Элдорет	KE
+Rahim Yar Khan	Рахимъяр-Хан	PK
+Neiva	Нейва	CO
+Vinnytsia	Винница	UA
+Kuala Terengganu	Куала-Тренгану	MY
+Yumen City	Юймэнь	CN
+Kokand	Коканд	UZ
+Việt Trì	Вьетчи	VN
+Long Xuyên	Лонгсюен	VN
+Buôn Ma Thuột	Буонметхуот	VN
+Chimbote	Чимботе	PE
+Muzaffarnagar	Музаффарнагар	IN
+Nuevo Laredo	Нуэво-Ларедо	MX
+Sanandaj	Сенендедж	IR
+Linz	Линц	AT
+Mbombela	Мбомбела	ZA
+Camagüey	Камагуэй	CU
+Verona	Верона	IT
+Nur-Sultan	Нур-Султан	KZ
+Charleroi	Шарлеруа	BE
+Belgorod	Белгород	RU
+Kosti	Кости	SD
+Thi Qar	Эль-Амара	IQ
+Maebashi	Маэбаси	JP
+Kurgan	Курган	RU
+Kohat	Кохат	PK
+Vitebsk	Витебск	BY
+Piracicaba	Пирасикаба	BR
+Jhang	Джанг	PK
+Pematangsiantar	Пематангсиантар	ID
+Corrientes	Корриентес	AR
+Kōriyama	Корияма	JP
+Plovdiv	Пловдив	BG
+Chitungwiza	Читунгвиза	ZW
+Ya'an	Яань	CN
+Tieling	Телин	CN
+Irapuato	Ирапуато	MX
+Kaluga	Калуга	RU
+East London	Ист-Лондон	ZA
+Ciudad Bolívar	Сьюдад-Боливар	VE
+Kawagoe	Кавагоэ	JP
+Lalitpur	Лалитпур	NP
+Phan Thiết	Фантхьет	VN
+Alor Setar	Алор-Сетар	MY
+Kōchi	Коти	JP
+Bauru	Бауру	BR
+Nakhon Ratchasima	Накхонратчасима	TH
+Oryol	Орёл	RU
+Takamatsu	Такамацу	JP
+Muzaffarpur	Музаффарпур	IN
+Beni	Бени	CD
+Toyama	Тояма	JP
+Lunan	Лунань	CN
+Wad Madani	Вад-Медани	SD
+Montes Claros	Монтис-Кларус	BR
+Bielefeld	Билефельд	DE
+Bujumbura	Бужумбура	BI
+Heyuan	Хэюань	CN
+Mathura	Матхура	IN
+Mymensingh	Мименсингх	BD
+Baishan	Байшань	CN
+Patiala	Патиала	IN
+Pavlodar	Павлодар	KZ
+Maringá	Маринга	BR
+Sagar	Сагар	IN
+Canberra	Канберра	AU
+Sochi	Сочи	RU
+Itajaí	Итажаи	BR
+Sousse	Сус	TN
+Iași	Яссы	RO
+Berhampur	Берхампур	IN
+Birjand	Бирдженд	IR
+Yoshkar-Ola	Йошкар-Ола	RU
+Miyazaki	Миядзаки	JP
+Volzhsky	Волжский	RU
+Chenzhou	Чэньчжоу	CN
+Kut	Эль-Кут	IQ
+Smolensk	Смоленск	RU
+Ciudad del Este	Сьюдад-дель-Эсте	PY
+Pelotas	Пелотас	BR
+Podolsk	Подольск	RU
+Kherson	Херсон	UA
+Shahjahanpur	Шахджаханпур	IN
+Itu	Иту	BR
+Legazpi	Легаспи	PH
+Akita	Акита	JP
+Maroua	Маруа	CM
+Anápolis	Анаполис	BR
+Pachuca	Пачука-де-Сото	MX
+Bukhara	Бухара	UZ
+Murmansk	Мурманск	RU
+Holguín	Ольгин	CU
+Oskemen	Усть-Каменогорск	KZ
+Tepic	Тепик	MX
+Vladimir	Владимир	RU
+Hat Yai	Хатъяй	TH
+Poltava	Полтава	UA
+New Delhi	Нью-Дели	IN
+Cumaná	Кумана	VE
+Grodno	Гродно	BY
+Rohtak	Рохтак	IN
+Faiyum	Файюм	EG
+Cluj-Napoca	Клуж-Напока	RO
+Bauchi	Баучи	NG
+Dezful	Дизфуль	IR
+Maiquetía	Майкетия	VE
+Armenia	Армения	CO
+Timișoara	Тимишоара	RO
+Ljubljana	Любляна	SI
+Pescara	Пескара	IT
+Gdynia	Гдыня	PL
+Angeles	Анхелес	PH
+Jiaocheng	Цзяочэн	CN
+Aswan	Асуан	EG
+Varna	Варна	BG
+Koblenz	Кобленц	DE
+Cherepovets	Череповец	RU
+Bokhtar	Бохтар	TJ
+Semey	Семей	KZ
+Galați	Галац	RO
+Brașov	Брашов	RO
+Sambalpur	Самбалпур	IN
+Pucallpa	Пукальпа	PE
+Antofagasta	Антофагаста	CL
+Sapele	Сапеле	NG
+Deir ez-Zor	Дайр-эз-Заур	SY
+Chita	Чита	RU
+Valledupar	Вальедупар	CO
+Vitória da Conquista	Витория-да-Конкиста	BR
+Antsirabe	Анцирабе	MG
+Nalchik	Нальчик	RU
+Chernihiv	Чернигов	UA
+Ratlam	Ратлам	IN
+Ksar el-Kebir	Эль-Ксар-эль-Кебир	MA
+Tawau	Тавау	MY
+Firozabad	Фирозабад	IN
+Porto Velho	Порту-Велью	BR
+San Salvador de Jujuy	Сан-Сальвадор-де-Жужуй	AR
+Franca	Франка	BR
+Rajamahendravaram	Раджамандри	IN
+Olongapo	Олонгапо	PH
+Craiova	Крайова	RO
+Kom Ombo	Ком-Омбо	EG
+Los Teques	Лос-Текес	VE
+Constanța	Констанца	RO
+Saransk	Саранск	RU
+Mengzi City	Мэнцзы	CN
+Ganja	Гянджа	AZ
+Hakodate	Хакодате	JP
+Chemnitz	Хемниц	DE
+Kingston upon Hull	Кингстон-апон-Халл	GB
+Batman	Батман	TR
+Qena	Кена	EG
+Bardhaman	Бардхаман	IN
+Jinja	Джинджа	UG
+Gujrat	Гуджрат	PK
+Tambov	Тамбов	RU
+Mardan	Мардан	PK
+Bidar	Бидар	IN
+Rạch Giá	Ратьзя	VN
+Sóc Trăng	Шокчанг	VN
+Kyzylorda	Кызылорда	KZ
+Porto-Novo	Порто-Ново	BJ
+Curepipe	Кюрпип	MU
+Baqubah	Баакуба	IQ
+Damietta	Думьят	EG
+Jember	Йембер	ID
+Al-Mubarraz	Эль-Мубарраз	SA
+Al-Kharj governorate	Эль-Хардж	SA
+Aomori	Аомори	JP
+Chernivtsi	Черновцы	UA
+İskenderun	Искендерун	TR
+Cherkasy	Черкассы	UA
+Bandar Seri Begawan	Бандар-Сери-Бегаван	BN
+Rampur	Рампур	IN
+Morioka	Мориока	JP
+Ramadi	Эр-Рамади	IQ
+Port of Spain	Порт-оф-Спейн	TT
+Vologda	Вологда	RU
+Sumy	Сумы	UA
+Swansea	Суонси	GB
+Fukushima	Фукусима	JP
+Blumenau	Блуменау	BR
+Thiès	Тиес	SN
+Kakinada	Какинада	IN
+Panipat	Панипат	IN
+Makurdi	Макурди	NG
+Ponta Grossa	Понта-Гроса	BR
+Minna	Минна	NG
+Białystok	Белосток	PL
+Cagliari	Кальяри	IT
+Khammam	Кхаммам	IN
+Bafoussam	Бафусам	CM
+Kasur	Касур	PK
+Fularji	Фулаэрцзи	CN
+Kassel	Кассель	DE
+Limeira	Лимейра	BR
+Bhojpur	Бхудж	IN
+Huizhou	Хойчжоу	CN
+Karimnagar	Каримнагар	IN
+Talcahuano	Талькауано	CL
+Ciudad Obregon	Сьюдад-Обрегон	MX
+Coatzacoalcos	Коацакоалькос	MX
+Tirupathi	Тирупати	IN
+Cuenca	Куэнка	EC
+Butembo	Бутембо	CD
+Sekondi-Takoradi	Секонди-Такоради	GH
+Petrópolis	Петрополис	BR
+Hospet	Хоспет	IN
+Rangpur	Рангпур	BD
+Zagazig	Эз-Заказик	EG
+Mandya	Мандья	IN
+Bago	Пегу	MM
+Barinas	Баринас	VE
+Port Moresby	Порт-Морсби	PG
+Alwar	Алвар	IN
+Aizawl	Аиджал	IN
+Kupang	Купанг	ID
+Tongchuan	Тунчуань	CN
+Zhytomyr	Житомир	UA
+Bahía Blanca	Баия-Бланка	AR
+Cap-Haïtien	Кап-Аитьен	HT
+Ambato	Амбато	EC
+Gorgan	Горган	IR
+Batna	Батна	DZ
+Tacna	Такна	PE
+Tacloban	Таклобан	PH
+Xinzhou	Синьчжоу	CN
+Cotabato City	Котабато	PH
+Rize	Ризе	TR
+Ica	Ика	PE
+Sumqayit	Сумгайыт	AZ
+Taganrog	Таганрог	RU
+Kaolack	Каолак	SN
+Kostroma	Кострома	RU
+Owo	Ово	NG
+Sukabumi	Сукабуми	ID
+Komsomolsk-on-Amur	Комсомольск-на-Амуре	RU
+Prokopyevsk	Прокопьевск	RU
+Bern	Берн	CH
+Montería	Монтерия	CO
+Mbandaka	Мбандака	CD
+Ciudad Victoria	Сьюдад-Виктория	MX
+Sétif	Сетиф	DZ
+Jinshi	Цзиньши	CN
+Ubon Ratchathani	Убонратчатхани	TH
+Guantánamo	Гуантанамо	CU
+Blackpool	Блэкпул	GB
+Majene	Маджене	ID
+Yamagata	Ямагата	JP
+Pekalongan	Пекалонган	ID
+Elazığ	Элязыг	TR
+Sari	Сари	IR
+Tasikmalaya	Тасикмалая	ID
+Vijayapura	Биджапур	IN
+Venice	Венеция	IT
+Gombe	Гомбе	NG
+Münster	Мюнстер	DE
+Thohoyandou	Тхохояндоу	ZA
+Kiel	Киль	DE
+Malmö	Мальмё	SE
+Windhoek	Виндхук	NA
+Tebing Tinggi	Тебингтинги	ID
+Yanbu governorate	Янбу	SA
+Tshikapa	Чикапа	CD
+Sterlitamak	Стерлитамак	RU
+Padang Sidempuan	Падангсидемпуан	ID
+Myeik	Мьей	MM
+Temuco	Темуко	CL
+Lausanne	Лозанна	CH
+Petrozavodsk	Петрозаводск	RU
+Imphal	Импхал	IN
+Umuahia	Умуахия	NG
+Uruapan	Уруапан	MX
+Sivas	Сивас	TR
+Tobruk	Тобрук	LY
+Graz	Грац	AT
+Kindu	Кинду	CD
+Aktobe	Актобе	KZ
+Paraná	Парана	AR
+Az Zubayr	Эз-Зубайр	IQ
+Cabo Frio	Кабу-Фриу	BR
+Balıkesir	Балыкесир	TR
+Zhuanghe	Чжуанхэ	CN
+Karamay	Карамай	CN
+Sincelejo	Синселехо	CO
+Petrolina	Петролина	BR
+Acarigua	Акаригуа	VE
+Wollongong	Вуллонгонг	AU
+Uberaba	Убераба	BR
+Konibodom	Канибадам	TJ
+Kunduz	Кундуз	AF
+Tampere	Тампере	FI
+Popayán	Попаян	CO
+Nonthaburi	Нонтхабури	TH
+Mukalla	Эль-Мукалла	YE
+Rio Branco	Риу-Бранку	BR
+Etawah	Этавах	IN
+Mendefera	Мэндэфэра	ER
+Cascavel	Каскавел	BR
+Ondo City	Ондо	NG
+Chimoio	Шимойо	MZ
+Ensenada	Энсенада	MX
+Dzerzhinsk	Дзержинск	RU
+Da Lat	Далат	VN
+Damaturu	Даматуру	NG
+Raichur	Райчур	IN
+Daloa	Далоа	CI
+Rivne	Ровно	UA
+Freiburg im Breisgau	Фрайбург-им-Брайсгау	DE
+Poza Rica	Поса-Рика-де-Идальго	MX
+Chuxiong City	Чусюн	CN
+Cirebon	Чиребон	ID
+Paramaribo	Парамарибо	SR
+Pathankot	Патханкот	IN
+Chirala	Чирала	IN
+Buenaventura	Буэнавентура	CO
+Al-Fashir	Эль-Фашир	SD
+Dire Dawa	Дыре-Дауа	ET
+Suihua	Суйхуа	CN
+Messina	Мессина	IT
+Borujerd	Боруджерд	IR
+Linhai	Линьхай	CN
+Khon Kaen	Кхонкэн	TH
+Governador Valadares	Говернадор-Валадарис	BR
+Sonipat	Сонипат	IN
+Santa Clara	Санта-Клара	CU
+Iwo	Иво	NG
+Caserta	Казерта	IT
+Como	Комо	IT
+Lucerne	Люцерн	CH
+Quảng Ngãi	Куангнгай	VN
+Arua	Аруа	UG
+Zumpango	Сумпанго	MX
+Kashan	Кашан	IR
+Laiyang	Лайян	CN
+Jaffna	Джафна	LK
+Várzea Grande	Варзеа-Гранди	BR
+Kropyvnytskyi	Кропивницкий	UA
+Mutare	Мутаре	ZW
+Hafar Al-Batin governorate	Хафар-эль-Батин	SA
+Los Mochis	Лос-Мочис	MX
+Jalal-Abad	Джалал-Абад	KG
+Vũng Tàu	Вунгтау	VN
+Fukui	Фукуи	JP
+Singkawang	Сингкаванг	ID
+Miskolc	Мишкольц	HU
+Plymouth	Плимут	GB
+Udon Thani	Удонтхани	TH
+Katta-Kurgan	Каттакурган	UZ
+Orsk	Орск	RU
+San Bernardo	Сан-Бернардо	CL
+Oruro	Оруро	BO
+Bratsk	Братск	RU
+Matadi	Матади	CD
+Mirzapur	Мирзапур	IN
+Shimonoseki	Симоносеки	JP
+Rzeszów	Жешув	PL
+Juliaca	Хульяка	PE
+Qinzhou	Циньчжоу	CN
+Nizhnevartovsk	Нижневартовск	RU
+Ternopil	Тернополь	UA
+Hebi	Хэби	CN
+Thủ Dầu Một	Тхузаумот	VN
+Jashore	Джессор	BD
+Manisa	Маниса	TR
+Nam Định	Намдинь	VN
+Angarsk	Ангарск	RU
+Hapur	Хапур	IN
+Caruaru	Каруару	BR
+Neuquén	Неукен	AR
+Ulan Hot	Улан-Хото	CN
+Novorossiysk	Новороссийск	RU
+Tehuacán	Теуакан	MX
+Ivano-Frankivsk	Ивано-Франковск	UA
+Linchuan	Линьчуань	CN
+San Pablo	Сан-Пабло	PH
+Hachinohe	Хатинохе	JP
+Fürth	Фюрт	DE
+Seeb	Эс-Сиб	OM
+Aarhus	Орхус	DK
+Sasebo	Сасебо	JP
+Jubail governorate	Эль-Джубайль	SA
+Taiping	Тайпинг	MY
+Pathein	Бассейн	MM
+Tegal	Тегал	ID
+Zhicheng	Цзычэн	CN
+Sylhet	Силхет	BD
+Kostanay	Костанай	KZ
+Košice	Кошице	SK
+Monclova	Монклова	MX
+Dera Ghazi Khan	Дера-Гази-Хан	PK
+Springs	Спрингс	ZA
+Luton	Лутон	GB
+Sahiwal	Сахивал	PK
+Yakutsk	Якутск	RU
+Lübeck	Любек	DE
+Jizzakh	Джизак	UZ
+Boa Vista	Боа-Виста	BR
+Kediri	Кедири	ID
+Kismayo	Кисмайо	SO
+Ibb	Ибб	YE
+Türkmenabat	Туркменабад	TM
+Punto Fijo	Пунто-Фихо	VE
+Porbandar	Порбандар	IN
+Zacatecas	Сакатекас	MX
+Santa Ana del Yacuma	Санта-Ана-дель-Якума	BO
+Santa Ana	Санта-Ана	SV
+Singaraja	Сингараджа	ID
+Dili	Дили	TL
+Nizhnekamsk	Нижнекамск	RU
+Zabol	Заболь	IR
+Rancagua	Ранкагуа	CL
+Kremenchuk	Кременчуг	UA
+Ploiești	Плоешти	RO
+Nakhon Si Thammarat	Накхонситхаммарат	TH
+Hetauda	Хетауда	NP
+Saidpur	Саидпур	BD
+Fallujah	Эль-Фаллуджа	IQ
+Shishou	Шишоу	CN
+Ngaoundéré	Нгаундере	CM
+Debrecen	Дебрецен	HU
+Osnabrück	Оснабрюк	DE
+Hailar	Хайлар	CN
+Syktyvkar	Сыктывкар	RU
+Zhangye	Чжанъе	CN
+Ilhéus	Ильеус	BR
+Zinder	Зиндер	NE
+Nukus	Нукус	UZ
+Magdeburg	Магдебург	DE
+Tlemcen	Тлемсен	DZ
+Nawabshah	Навабшах	PK
+Bharatpur	Бхаратпур	IN
+Uitenhage	Эйтенхахе	ZA
+Beipiao	Бэйпяо	CN
+Errachidia	Эр-Рашидия	MA
+Petropavl	Петропавловск	KZ
+Miri	Мири	MY
+Iquique	Икике	CL
+Pondicherry	Пондичерри	IN
+Quillacollo	Кильякольо	BO
+Stary Oskol	Старый Оскол	RU
+Liaocheng	Ляочэн	CN
+Gusau	Гусау	NG
+Tanjung Pinang	Танджунг-Пинанг	ID
+Chon Buri	Чонбури	TH
+Monywa	Моунъюа	MM
+Sabzevar	Себзевар	IR
+Grozny	Грозный	RU
+Kolpino	Колпино	RU
+Sikasso	Сикасо	ML
+Mubi	Муби	NG
+Juazeiro do Norte	Жуазейру-ду-Норти	BR
+Nyanza	Ньянза	RW
+Skikda	Скикда	DZ
+Karnal	Карнал	IN
+Bạc Liêu	Бакльеу	VN
+Matsumoto	Мацумото	JP
+Sucre	Сукре	BO
+Nacala	Накала	MZ
+Nagercoil	Нагеркойл	IN
+Nicosia	Никосия	CY
+Adıyaman	Адыяман	TR
+Okara	Окара	PK
+Narayanganj	Нараянгандж	BD
+Colima	Колима	MX
+Hancheng	Ханьчэн	CN
+Arar	Аръар	SA
+Itabuna	Итабуна	BR
+Banja Luka	Баня-Лука	BA
+Guéckédougou	Гекеду	GN
+Nishapur	Нишапур	IR
+Amol	Амоль	IR
+Tapachula	Тапачула	MX
+Shakhty	Шахты	RU
+Blagoveshchensk	Благовещенск	RU
+Saint-Louis	Сен-Луи	MR
+Babruysk	Бобруйск	BY
+Cabanatuan	Кабанатуан	PH
+Polokwane	Полокване	ZA
+Lhasa	Лхаса	CN
+Thanjavur	Танджавур	IN
+Gabès	Габес	TN
+Baghlan	Баглан	AF
+Veliky Novgorod	Великий Новгород	RU
+Wuhai	Ухай	CN
+Bertoua	Бертуа	CM
+Imperatriz	Императрис	BR
+Potsdam	Потсдам	DE
+San Pedro de Macorís	Сан-Педро-де-Макорис	DO
+Mallawi	Маллави	EG
+Sibolga	Сиболга	ID
+Denov	Денау	UZ
+Colombo	Коломбо	LK
+Gilgit	Гилгит	PK
+Rybinsk	Рыбинск	RU
+Trieste	Триест	IT
+Kielce	Кельце	PL
+Biysk	Бийск	RU
+Owerri	Оверри	NG
+Navoiy	Навои	UZ
+Split	Сплит	HR
+Oradea	Орадя	RO
+Lutsk	Луцк	UA
+Portoviejo	Портовьехо	EC
+Brăila	Брэила	RO
+Nanping	Наньпин	CN
+Machala	Мачала	EC
+Limbe	Лимбе	CM
+Marília	Марилия	BR
+Kırıkkale	Кырыккале	TR
+Abha	Абха	SA
+Toamasina	Туамасина	MG
+Pali	Пали	IN
+Thái Bình	Тхайбинь	VN
+Oral	Уральск	KZ
+Presidente Prudente	Президенти-Пруденти	BR
+Sanming	Саньмин	CN
+Ijebu Ode	Иджебу-Оде	NG
+Tema	Тема	GH
+Sidi Bel Abbès	Сиди-Бель-Аббес	DZ
+Bojnord	Боджнурд	IR
+La Romana	Ла-Романа	DO
+Gaborone	Габороне	BW
+Hajjah	Хадджа	YE
+Waitakere City	Уаитакере	NZ
+Lobito	Лобиту	AO
+Pingliang	Пинлян	CN
+Laoag	Лаоаг	PH
+Bahir Dar	Бахр-Дар	ET
+Yamoussoukro	Ямусукро	CI
+Beersheba	Беэр-Шева	IL
+Salzburg	Зальцбург	AT
+Kalemie	Калемие	CD
+North Shore	Норт-Шор-Сити	NZ
+Jiutai	Цзютай	CN
+Campeche	Сан-Франсиско-де-Кампече	MX
+Puqi	Пуци	CN
+São Carlos	Сан-Карлус	BR
+Funchal	Фуншал	PT
+Criciúma	Крисиума	BR
+Lampang	Лампанг	TH
+Salalah	Салала	OM
+Sibu	Сибу	MY
+Las Tunas	Лас-Тунас	CU
+Lianzhou	Ляньчжоу	CN
+Guaratinguetá	Гуаратингета	BR
+Pisa	Пиза	IT
+Agartala	Агартала	IN
+Erfurt	Эрфурт	DE
+Timon	Тимон	BR
+Edéa	Эдеа	CM
+Rostock	Росток	DE
+Ongole	Онголе	IN
+Djougou	Джугу	BJ
+Khoy	Хой	IR
+Mossoró	Мосоро	BR
+Barisal	Барисал	BD
+Biskra	Бискра	DZ
+Angren	Ангрен	UZ
+Taranto	Таранто	IT
+Pskov	Псков	RU
+Khoms	Аль-Хумс	LY
+Minatitlán	Минатитлан	MX
+Chiniot	Чиниот	PK
+San Miguel	Сан-Мигель	SV
+Lashkar Gah	Лашкаргах	AF
+Daşoguz	Дашогуз	TM
+Sete Lagoas	Сети-Лагоас	BR
+Al Qadarif	Гедареф	SD
+Puri	Пури	IN
+Dindigul	Диндигул	IN
+Haldia	Халдия	IN
+Kasama	Касама	ZM
+Moratuwa	Моратува	LK
+Néma	Нема	MR
+Zawiya	Эз-Завия	LY
+Bergamo	Бергамо	IT
+Pokhara	Покхара	NP
+Maymana	Меймене	AF
+Bacău	Бакэу	RO
+Batu Pahat	Бату-Пахат	MY
+Balakovo	Балаково	RU
+Armavir	Армавир	RU
+Rosetta	Рашид	EG
+Bila Tserkva	Белая Церковь	UA
+Saskatoon	Саскатун	CA
+Aydın	Айдын	TR
+Huangyan	Хуанъянь	CN
+Bulandshahr	Буландшахр	IN
+Kushiro	Кусиро	JP
+Purnia	Пурния	IN
+Martapura	Мартапура	ID
+Gemena	Гемена	CD
+Thanh Hóa	Тханьхоа	VN
+Nkamba	Мбанза-Нгунгу	CD
+Kōfu	Кофу	JP
+Talca	Талька	CL
+Proddatur	Проддатур	IN
+El Tigre	Эль-Тигре	VE
+Gurugram	Гургаон	IN
+Burhanpur	Бурханпур	IN
+Kure	Куре	JP
+Porlamar	Порламар	VE
+Engels	Энгельс	RU
+Burgas	Бургас	BG
+Gandhinagar	Гандинагар	IN
+Iskandar	Искандер	UZ
+Nagaoka	Нагаока	JP
+Coro	Коро	VE
+Severodvinsk	Северодвинск	RU
+Al Jahra	Эль-Джахра	KW
+Bongor	Бонгор	TD
+Divinópolis	Дивинополис	BR
+Tarakan	Таракан	ID
+Machilipatnam	Мачилипатнам	IN
+Oxford	Оксфорд	GB
+Ciudad Madero	Сьюдад-Мадеро	MX
+Bayamo	Баямо	CU
+Klaipėda	Клайпеда	LT
+Dunhua	Дуньхуа	CN
+Ziguinchor	Зигиншор	SN
+Barrancabermeja	Барранкабермеха	CO
+Zlatoust	Златоуст	RU
+Muar	Муар	MY
+Dhamar	Дамар	YE
+Valera	Валера	VE
+Bridgetown	Бриджтаун	BB
+Bhiwani	Бхивани	IN
+Norwich	Норидж	GB
+Butuan	Бутуан	PH
+Sadiqabad	Садикабад	PK
+Sơn Tây	Шонтэй	VN
+Syzran	Сызрань	RU
+Đồng Hới	Донгхой	VN
+Mwene-Ditu	Мвене-Диту	CD
+Kabwe	Кабве	ZM
+Quelimane	Келимане	MZ
+Cork	Корк	IE
+Parakou	Параку	BJ
+San Fernando del Valle de Catamarca	Сан-Фернандо-дель-Валье-де-Катамарка	AR
+Nandyal	Нандьял	IN
+Mostaganem	Мостаганем	DZ
+Laayoune	Эль-Аюн	MA
+Paarl	Паарл	ZA
+Rio Grande	Риу-Гранди	BR
+Szeged	Сегед	HU
+Arapiraca	Арапирака	BR
+Ternate	Тернате	ID
+Petropavlovsk-Kamchatsky	Петропавловск-Камчатский	RU
+Puerto Vallarta	Пуэрто-Вальярта	MX
+Cachoeiro de Itapemirim	Кашуэйру-ди-Итапемирин	BR
+Pinar del Rio	Пинар-дель-Рио	CU
+Olsztyn	Ольштын	PL
+San Cristóbal de las Casas	Сан-Кристобаль-де-лас-Касас	MX
+Cienfuegos	Сьенфуэгос	CU
+Shendi	Шенди	SD
+Madiun	Мадиун	ID
+Ad-Damazin	Эд-Дамазин	SD
+Arica	Арика	CL
+Jamame	Джамаме	SO
+Kütahya	Кютахья	TR
+Yei	Ей	SS
+Mainz	Майнц	DE
+Ruse	Русе	BG
+Tiaret	Тиарет	DZ
+Fianarantsoa	Фианаранцуа	MG
+Kramatorsk	Краматорск	UA
+Kutaisi	Кутаиси	GE
+Tarlac City	Тарлак	PH
+Dessie	Дэссе	ET
+Çorum	Чорум	TR
+Gweru	Гверу	ZW
+Manta	Манта	EC
+Bhusawal	Бхусавал	IN
+Shibin Al Kawm	Шибин-эль-Ком	EG
+Atyrau	Атырау	KZ
+Pinrang	Пинранг	ID
+Kamensk-Uralsky	Каменск-Уральский	RU
+Chilpancingo	Чильпансинго-де-лос-Браво	MX
+Biratnagar	Биратнагар	NP
+Bahraich	Бахрайч	IN
+Barrie	Барри	CA
+Chingola	Чингола	ZM
+Tonk	Тонк	IN
+Probolinggo	Проболинго	ID
+Sirsa	Сирса	IN
+Anda	Аньда	CN
+Hinthada	Хинтада	MM
+Funtua	Фунтуа	NG
+El Jadida	Эль-Джадида	MA
+Reggio Calabria	Реджо-ди-Калабрия	IT
+Zuwara	Зуара	LY
+Rio Claro	Риу-Клару	BR
+Tangail	Тангайл	BD
+Obuasi	Обуаси	GH
+Zhaodong	Чжаодун	CN
+Balkh	Балх	AF
+Potosí	Потоси	BO
+Phan Rang–Tháp Chàm	Фанранг-Тхаптям	VN
+Varamin	Варамин	IR
+Passo Fundo	Пасу-Фунду	BR
+Vizianagaram	Визианагарам	IN
+Sittwe	Ситуэ	MM
+Klerksdorp	Клерксдорп	ZA
+Si Racha	Сирача	TH
+Mary	Мары	TM
+Arish	Эль-Ариш	EG
+Boma	Бома	CD
+Sangolquí	Сангольки	EC
+Nogales	Ногалес	MX
+Teziutlán	Тесьюлтан	MX
+Korhogo	Корого	CI
+Termez	Термез	UZ
+Raqqa	Эр-Ракка	SY
+El Oued	Эль-Уэд	DZ
+Treviso	Тревизо	IT
+Vellore	Веллуру	IN
+Kaduqli	Кадугли	SD
+Nyíregyháza	Ньиредьхаза	HU
+Alappuzha	Аллеппи	IN
+Malayer	Мелайер	IR
+Letpandan	Летпадан	MM
+Yuzhno-Sakhalinsk	Южно-Сахалинск	RU
+Ouargla	Уаргла	DZ
+Regina	Реджайна	CA
+Salatiga	Салатига	ID
+Turku	Турку	FI
+Saveh	Саве	IR
+Modena	Модена	IT
+Les Cayes	Ле-Ке	HT
+Suva	Сува	FJ
+Entebbe	Энтеббе	UG
+Sirjan	Сирджан	IR
+Harar Jugol	Харэр	ET
+Samawah	Эс-Самава	IQ
+Hirosaki	Хиросаки	JP
+Tomakomai	Томакомай	JP
+Puerto Montt	Пуэрто-Монт	CL
+George	Джордж	ZA
+Bo	Бо	SL
+Puerto Cabello	Пуэрто-Кабельо	VE
+Sidon	Сайда	LB
+Obihiro	Обихиро	JP
+Bida	Бида	NG
+Shimla	Шимла	IN
+Esmeraldas	Эсмеральдас	EC
+Bata	Бата	GQ
+Ulm	Ульм	DE
+Hạ Long	Халонг	VN
+Lishui	Лишуй	CN
+Riobamba	Риобамба	EC
+Banyuwangi	Баньюванги	ID
+Isparta	Ыспарта	TR
+Weinan	Вэйнань	CN
+Nova Friburgo	Нова-Фрибургу	BR
+Tébessa	Тебесса	DZ
+Pitești	Питешти	RO
+Rijeka	Риека	HR
+Djelfa	Джельфа	DZ
+Temirtau	Темиртау	KZ
+Uvira	Увира	CD
+Takaoka	Такаока	JP
+Araçatuba	Арасатуба	BR
+Kluang	Клуанг	MY
+Campament of Al Marj	Эль-Мардж	LY
+Barra Mansa	Барра-Манса	BR
+Jayapura	Порт-Нумбай	ID
+Sarh	Сарх	TD
+Medinipur	Мидинипур	IN
+Arad	Арад	RO
+Bushehr	Бушир	IR
+Sonsonate	Сонсонате	SV
+Baranavichy	Барановичи	BY
+Atbarah	Атбара	SD
+Würzburg	Вюрцбург	DE
+Hindupur	Хиндупур	IN
+Nzérékoré	Нзерекоре	GN
+Baramulla	Барамула	IN
+Jamalpur	Джамалпур	BD
+Chirchiq	Чирчик	UZ
+Berezniki	Березники	RU
+Volgodonsk	Волгодонск	RU
+Ormoc	Ормок	PH
+Miass	Миасс	RU
+Oldenburg	Ольденбург	DE
+Abakan	Абакан	RU
+Banha	Банха	EG
+Novocherkassk	Новочеркасск	RU
+Gonaïves	Гонаив	HT
+Fatehpur	Фатехпур	IN
+Dibrugarh	Дибругарх	IN
+Ayacucho	Аякучо	PE
+Reykjavík	Рейкьявик	IS
+Marabá	Мараба	BR
+Ocumare del Tuy	Окумаре-дель-Туй	VE
+Parma	Парма	IT
+Rustenburg	Рюстенбург	ZA
+Norilsk	Норильск	RU
+Carpina	Карпина	BR
+Tuluá	Тулуа	CO
+Hà Tĩnh	Хатинь	VN
+Kendari	Кендари	ID
+Kimberley	Кимберли	ZA
+Elbasan	Эльбасан	AL
+Serang	Серанг	ID
+Lages	Лажис	BR
+Sitapur	Ситапур	IN
+Zenica	Зеница	BA
+Regensburg	Регенсбург	DE
+Hawalli	Хавалли	KW
+Plzeň	Пльзень	CZ
+Phitsanulok	Пхитсанулок	TH
+Myingyan	Мьинджан	MM
+Dagupan	Дагупан	PH
+Patras	Патры	GR
+Ingolstadt	Ингольштадт	DE
+La Vega	Консепсион-де-ла-Вега	DO
+Mostar	Мостар	BA
+Navsari	Навсари	IN
+Geneina	Эль-Генейна	SD
+Tartus	Тартус	SY
+Simao	Сымао	CN
+La Rioja	Ла-Риоха	AR
+Lecce	Лечче	IT
+Mahabad	Мехабад	IR
+Dourados	Дорадус	BR
+Ash Shatrah	Эш-Шатра	IQ
+Settat	Сеттат	MA
+Budaun	Бадаюн	IN
+Tunja	Тунха	CO
+Atlético Morelia	Кокимбо	CL
+Rubtsovsk	Рубцовск	RU
+Bhisho	Бишо	ZA
+Geelong	Джелонг	AU
+Ras al-Khaimah	Рас-эль-Хайма	AE
+Sullana	Сульяна	PE
+Malakal	Малакаль	SS
+Bumba	Бумба	CD
+Xiaogan	Сяогань	CN
+Chapecó	Шапеко	BR
+Taunggyi	Таунджи	MM
+Lázaro Cárdenas	Ласаро-Карденас	MX
+Gonbad-e Kavus	Гомбеде-Кавус	IR
+Salavat	Салават	RU
+Valdivia	Вальдивия	CL
+Pagadian	Пагадиан	PH
+Tarija	Тариха	BO
+Zarzis	Зарзис	TN
+Punta del Este	Пунта-дель-Эсте	UY
+Cuddalore	Куддалор	IN
+Rio Largo	Риу-Ларгу	BR
+Samarra	Самарра	IQ
+Maykop	Майкоп	RU
+Abéché	Абеше	TD
+Barreiras	Баррейрас	BR
+Odense	Оденсе	DK
+Huánuco	Уануко	PE
+Hoshiarpur	Хошиарпур	IN
+Melitopol	Мелитополь	UA
+Greater Sudbury	Грейтер-Садбери	CA
+Surat Thani	Сураттхани	TH
+Hurghada	Хургада	EG
+Isiro	Исиро	CD
+Puerto Princesa	Пуэрто-Принсеса	PH
+Kashmar	Кашмер	IR
+Ussuriysk	Уссурийск	RU
+Rustavi	Рустави	GE
+Tiraspol	Тирасполь	MD
+Afyonkarahisar	Афьонкарахисар	TR
+Zonguldak	Зонгулдак	TR
+Matsue	Мацуэ	JP
+Moundou	Мунду	TD
+Koforidua	Кофоридуа	GH
+Istarawshan	Истаравшан	TJ
+Livorno	Ливорно	IT
+Gondar	Гондэр	ET
+Ciudad del Carmen	Сьюдад-дель-Кармен	MX
+Malabo	Малабо	GQ
+Shkodër	Шкодер	AL
+Muroran	Муроран	JP
+Sibiu	Сибиу	RO
+Batumi	Батуми	GE
+Barysaw	Борисов	BY
+Innsbruck	Инсбрук	AT
+Foggia	Фоджа	IT
+Ordu	Орду	TR
+Kanchipuram	Канчипурам	IN
+Bei'an	Бэйань	CN
+Antakya	Антакья	TR
+Battambang	Баттамбанг	KH
+Guangshui	Гуаншуй	CN
+Mahajanga	Махадзанга	MG
+La Serena	Ла-Серена	CL
+Chetumal	Четумаль	MX
+Gandajika	Гандажика	CD
+Pathum Thani	Патхумтхани	TH
+Cairns	Кэрнс	AU
+Kovrov	Ковров	RU
+Osorno	Осорно	CL
+Tottori	Тоттори	JP
+Limassol	Лимасол	CY
+Río Cuarto	Рио-Куарто	AR
+Masjed Soleyman	Месджеде-Солейман	IR
+Mufulira	Муфулира	ZM
+Chincha Alta	Чинча-Альта	PE
+Dingzhou	Динчжоу	CN
+Rondonópolis	Рондонополис	BR
+Uşak	Ушак	TR
+Nusaybin	Нусайбин	TR
+San Francisco de Macorís	Сан-Франсиско-де-Макорис	DO
+Zabid	Забид	YE
+Silchar	Силчар	IN
+Wenshan City	Вэньшань	CN
+Novokuybyshevsk	Новокуйбышевск	RU
+Mudon	Мудоун	MM
+Kerch	Керчь	RU
+Deyang	Дэян	CN
+Samalut	Самалут	EG
+Luanshya	Луаншья	ZM
+El Manaqil	Эль-Менакил	SD
+Abbotsford	Абботсфорд	CA
+Guanare	Гуанаре	VE
+Bintulu	Бинтулу	MY
+Dundee	Данди	GB
+Nazareth	Назарет	IL
+Maragheh	Мероге	IR
+Bălți	Бельцы	MD
+Sohar	Сухар	OM
+Benguela	Бенгела	AO
+Guarapuava	Гуарапуава	BR
+Uzhhorod	Ужгород	UA
+Kitale	Китале	KE
+Chillán	Чильян	CL
+Urgench	Ургенч	UZ
+Vryheid	Фрейхейд	ZA
+Pattani	Паттани	TH
+M'Sila	Мсила	DZ
+Tororo	Тороро	UG
+Keren	Кэрэн	ER
+Cao Lãnh	Каолань	VN
+Khiva	Хива	UZ
+Carora	Карора	VE
+Târgu Mureș	Тыргу-Муреш	RO
+Perugia	Перуджа	IT
+Gejiu	Гэцзю	CN
+Gyumri	Гюмри	AM
+Palangkaraya	Палангкарая	ID
+Jiayuguan City	Цзяюйгуань	CN
+Yala	Яла	TH
+Diourbel	Диурбель	SN
+Lạng Sơn	Лангшон	VN
+Jijel	Джиджель	DZ
+Trang	Транг	TH
+Turbat	Турбат	PK
+Médéa	Медеа	DZ
+Kolomna	Коломна	RU
+San Juan del Río	Сан-Хуан-дель-Рио	MX
+El Progreso	Эль-Прогресо	GT
+Man	Ман	CI
+Wamba Territory	Вамба	CD
+Gulu	Гулу	UG
+Gharyan	Гарьян	LY
+Ambala	Амбала	IN
+Cam Ranh	Камрань	VN
+Ibarra	Ибарра	EC
+Matanzas	Матансас	CU
+Poços de Caldas	Посус-ди-Калдас	BR
+Daraa	Даръа	SY
+Bruges	Брюгге	BE
+Cabo de Santo Agostinho	Кабу-ди-Санту-Агостинью	BR
+Dawei	Тавой	MM
+Hanzhong	Ханьчжун	CN
+La Ceiba	Ла-Сейба	HN
+Krishnanagar	Кришнанагар	IN
+Podgorica	Подгорица	ME
+Phra Nakhon Si Ayutthaya	Аюттхая	TH
+Quchan	Кучан	IR
+Los Ángeles	Лос-Анхелес	CL
+Machakos	Мачакос	KE
+Kolar	Колар	IN
+Kairouan	Кайруан	TN
+Tal Afar	Талль-Афар	IQ
+Kumba	Кумба	CM
+Jinchang	Цзиньчан	CN
+Tuzla	Тузла	BA
+Székesfehérvár	Секешфехервар	HU
+Sarnia	Сарния	CA
+Goma	Гома	CD
+Tizi Ouzou	Тизи-Узу	DZ
+Kafr el-Sheikh	Кафр-эш-Шейх	EG
+Ajdabiya	Адждабия	LY
+Otaru	Отару	JP
+Ipswich	Ипсуич	GB
+Stara Zagora	Стара-Загора	BG
+Béchar	Бешар	DZ
+Kenema	Кенема	SL
+Calama	Калама	CL
+Macaé	Макаэ	BR
+Cape Coast	Кейп-Кост	GH
+Pleiku	Плейку	VN
+Pyatigorsk	Пятигорск	RU
+Cajamarca	Кахамарка	PE
+Arzamas	Арзамас	RU
+Massawa	Массауа	ER
+Durrës	Дуррес	AL
+Nawabganj	Навабгандж	BD
+Saida	Саида	DZ
+Ciego de Ávila	Сьего-де-Авила	CU
+Jieshou	Цзешоу	CN
+Phuket	Пхукет	TH
+Nong'an	Нунъань	CN
+Paranaguá	Паранагуа	BR
+Ghazni	Газни	AF
+Comodoro Rivadavia	Комодоро-Ривадавия	AR
+Salt	Эс-Салт	JO
+Labé	Лабе	GN
+Almetyevsk	Альметьевск	RU
+Lhokseumawe	Лхоксёмаве	ID
+Orekhovo-Zuyevo	Орехово-Зуево	RU
+Dunhuang	Дуньхуан	CN
+Bordj Bou Arréridj	Бордж-Бу-Арреридж	DZ
+Bizerte	Бизерта	TN
+Sherbrooke	Шербрук	CA
+Piedras Negras	Пьедрас-Неграс	MX
+Göttingen	Гёттинген	DE
+Kumbakonam	Кумбаконам	IN
+Myitkyina	Мьичина	MM
+Chinandega	Чинандега	NI
+Townsville	Таунсвилл	AU
+Tiruvannaamalai	Тируваннамалай	IN
+Zalantun	Чжаланьтунь	CN
+Parnaíba	Парнаиба	BR
+Pabna	Пабна	BD
+Mthatha	Умтата	ZA
+Bremerhaven	Бремерхафен	DE
+Tân An	Танан	VN
+Castanhal	Кастаньял	BR
+Cerro de Pasco	Серро-де-Паско	PE
+Heraklion	Ираклион	GR
+Oulu	Оулу	FI
+Shizuishan	Шицзуйшань	CN
+Baia Mare	Бая-Маре	RO
+Győr	Дьёр	HU
+Serpukhov	Серпухов	RU
+Jequié	Жекие	BR
+Cẩm Phả	Камфа	VN
+Lira	Лира	UG
+Pyay	Пьи	MM
+Orsha	Орша	BY
+May Pen	Мей-Пен	JM
+Souk Ahras	Сук-Ахрас	DZ
+Zakho	Заху	IQ
+Caxias	Кашиас	BR
+Ravenna	Равенна	IT
+Nevinnomyssk	Невинномысск	RU
+Touggourt	Туггурт	DZ
+Pervouralsk	Первоуральск	RU
+Yun County	Юньсянь	CN
+Šiauliai	Шяуляй	LT
+Birgunj	Биргандж	NP
+Riohacha	Риоача	CO
+Uppsala	Уппсала	SE
+Awasa	Ауаса	ET
+Moçâmedes	Намибе	AO
+Kislovodsk	Кисловодск	RU
+Blitar	Блитар	ID
+Dimitrovgrad	Димитровград	RU
+Pindamonhangaba	Пиндамоньянгаба	BR
+Shahrud	Имамшехр	IR
+Opole	Ополе	PL
+Trà Vinh	Чавинь	VN
+Murom	Муром	RU
+Ciénaga	Сьенага	CO
+Lae	Лаэ	PG
+Pilibhit	Пилибхит	IN
+Ferrara	Феррара	IT
+Novomoskovsk	Новомосковск	RU
+Buzău	Бузэу	RO
+Pinsk	Пинск	BY
+Shuangcheng	Шуанчэн	CN
+Abohar	Абохар	IN
+Ninh Bình	Ниньбинь	VN
+Nikopol	Никополь	UA
+Florencia	Флоренсия	CO
+Girardot	Хирардот	CO
+Jaraguá do Sul	Жарагуа-ду-Сул	BR
+Sennar	Сеннар	SD
+Masaya	Масая	NI
+Baidoa	Байдабо	SO
+Tokat	Токат	TR
+Erzincan	Эрзинджан	TR
+Tete	Тете	MZ
+Copiapó	Копьяпо	CL
+Batticaloa	Баттикалоа	LK
+Shahrekord	Шехре-Корд	IR
+Kokshetau	Кокшетау	KZ
+Idlib	Идлиб	SY
+Xai-Xai	Шаи-Шаи	MZ
+Kamina	Камина	CD
+Larissa	Лариса	GR
+Moroni	Морони	KM
+Kamyshin	Камышин	RU
+Karabük	Карабюк	TR
+Sakakah governorate	Сакака	SA
+Jimma	Джимма	ET
+Girga	Гирга	EG
+Sirte	Сирт	LY
+Al-Hasakah	Эль-Хасака	SY
+Derna	Дерна	LY
+Ekibastuz	Экибастуз	KZ
+Divo	Диво	CI
+San Nicolás de los Arroyos	Сан-Николас-де-лос-Аройос	AR
+Bragança Paulista	Браганса-Паулиста	BR
+Port Blair	Порт-Блэр	IN
+Elbląg	Эльблонг	PL
+Panevezys	Паневежис	LT
+Wau	Вау	SS
+Alipurduar	Алипурдуар	IN
+Lafia	Лафиа	NG
+Sancti Spíritus	Санкти-Спиритус	CU
+Pakokku	Пакхоуку	MM
+Hathras	Хатхрас	IN
+Neftekamsk	Нефтекамск	RU
+Gafsa	Гафса	TN
+Sogamoso	Согамосо	CO
+Edirne	Эдирне	TR
+Tây Ninh	Тэйнинь	VN
+Loja	Лоха	EC
+Macheng	Мачэн	CN
+Carúpano	Карупано	VE
+Itapetininga	Итапетининга	BR
+Tengyue	Тэнчун	CN
+Montego Bay	Монтего-Бей	JM
+Magway	Магуэ	MM
+Pangkal Pinang	Панкалпинанг	ID
+Malanje	Маланже	AO
+Gashua	Гашуа	NG
+Lubango	Лубанго	AO
+Sorong	Соронг	ID
+Kumbo	Кумбо	CM
+Ghardaia	Гардая	DZ
+Kelowna	Келоуна	CA
+Marvdasht	Мервдешт	IR
+Semnan	Семнан	IR
+Santa Tecla	Санта-Текла	SV
+Zlín	Злин	CZ
+Fasa	Феса	IR
+Lysychansk	Лисичанск	UA
+Drohobych	Дрогобыч	UA
+Mỹ Tho	Митхо	VN
+Laiwu	Лайу	CN
+Alagoinhas	Алагоиньяс	BR
+Rudniy	Рудный	KZ
+Salvaleón de Higüey	Игуэй	DO
+Potchefstroom	Потчефструм	ZA
+Guelma	Гельма	DZ
+Uruguaiana	Уругуаяна	BR
+Indramayu	Индрамаю	ID
+Gagnoa	Ганьоа	CI
+Porto Seguro	Порту-Сегуру	BR
+Jiaohe	Цзяохэ	CN
+Ségou	Сегу	ML
+Pati	Пати	ID
+San Fernando de Apure	Сан-Фернандо-де-Апуре	VE
+Brits	Бритс	ZA
+Tekirdağ	Текирдаг	TR
+Aalborg	Ольборг	DK
+Barbacena	Барбасена	BR
+Tauranga	Тауранга	NZ
+Nancha	Наньча	CN
+Olmaliq	Алмалык	UZ
+Xilinhot	Шилин-Хото	CN
+Sassari	Сассари	IT
+Karaman	Караман	TR
+Manbij	Манбидж	SY
+Larache	Лараш	MA
+Huanghua	Хуанхуа	CN
+Puerto Plata	Сан-Фелипе-де-Пуэрто-Плата	DO
+Maxixe	Машише	MZ
+Trois-Rivières	Труа-Ривьер	CA
+Jaú	Жау	BR
+Tetovo	Тетово	MK
+Udine	Удине	IT
+Pleven	Плевен	BG
+Zielona Góra	Зелёна-Гура	PL
+Anuradhapura	Анурадхапура	LK
+Shahreza	Шехреза	IR
+Tongren	Тунжэнь	CN
+Berdiansk	Бердянск	UA
+Bandundu	Бандунду	CD
+Bama	Бама	NG
+Setúbal	Сетубал	PT
+Nakhon Pathom	Накхонпатхом	TH
+Sokodé	Сокоде	TG
+Agadez	Агадес	NE
+Jalingo	Джалинго	NG
+Dunedin	Данидин	NZ
+Achinsk	Ачинск	RU
+Anaco	Анако	VE
+Punta Arenas	Пунта-Аренас	CL
+Langsa	Лангса	ID
+Vyborg	Выборг	RU
+Calabozo	Калабосо	VE
+Chiang Rai	Чианграй	TH
+Nkongsamba	Нконгсамба	CM
+Kindia	Киндия	GN
+Gao	Гао	ML
+Port-Gentil	Порт-Жантиль	GA
+Huanren	Хуаньжэнь	CN
+Taonan	Таонань	CN
+Puno	Пуно	PE
+Nizhyn	Нежин	UA
+Yakeshi	Якэши	CN
+Boké	Боке	GN
+Cherkessk	Черкесск	RU
+Navojoa	Навохоа	MX
+Tahoua	Тахуа	NE
+Yelets	Елец	RU
+Binzhou	Биньчжоу	CN
+Sri Jayawardenepura Kotte	Шри-Джаяварденепура-Котте	LK
+Inhambane	Иньямбане	MZ
+Toliara	Тулиара	MG
+Guelmim	Гулимин	MA
+Pouso Alegre	Позу-Алегри	BR
+Kulob	Куляб	TJ
+Nabeul	Набуль	TN
+Tuguegarao	Тугегарао	PH
+Ciudad Valles	Сьюдад-Вальес	MX
+Botoșani	Ботошани	RO
+Delicias	Делисьяс	MX
+Kamianets-Podilskyi	Каменец-Подольский	UA
+Waliso	Гыйон	ET
+Shashamane	Шашэмэнне	ET
+Valparai	Вальпараи	IN
+Kuito	Квито	AO
+Maribor	Марибор	SI
+Siirt	Сиирт	TR
+Kankan	Канкан	GN
+Zhijiang Town	Чжэцзян	CN
+Kecskemét	Кечкемет	HU
+Laghouat	Лагуат	DZ
+Botucatu	Ботукату	BR
+Tobolsk	Тобольск	RU
+Curicó	Курико	CL
+Santa Cruz do Sul	Санта-Крус-ду-Сул	BR
+Kipushi	Кипуши	CD
+Kitami	Китами	JP
+Exeter	Эксетер	GB
+Malé	Мале	MV
+Tokmok	Токмак	KG
+Nefteyugansk	Нефтеюганск	RU
+Shaowu	Шаоу	CN
+Mojokerto	Моджокерто	ID
+Satu Mare	Сату-Маре	RO
+Guanajuato City	Гуанахуато	MX
+Mazyr	Мозырь	BY
+Iguala	Игуала-де-ла-Индепенденсия	MX
+Juba	Джуба	SS
+Nakhon Sawan	Накхонсаван	TH
+Conselheiro Lafaiete	Консельейру-Лафаети	BR
+Daugavpils	Даугавпилс	LV
+Magelang	Магеланг	ID
+Jowhar	Джоухар	SO
+Nsukka	Нсукка	NG
+Nguru	Нгуру	NG
+Balkanabat	Балканабад	TM
+Pemba	Пемба	MZ
+Volos	Волос	GR
+Noyabrsk	Ноябрьск	RU
+Yenangyaung	Енанджаун	MM
+Manzini	Манзини	SZ
+Mzuzu	Мзузу	MW
+Bouïra	Буира	DZ
+Garanhuns	Гараньюнс	BR
+Linqing	Линьцин	CN
+David	Давид	PA
+Milagro	Милагро	EC
+Bataysk	Батайск	RU
+Hailun	Хайлунь	CN
+Lichinga	Лишинга	MZ
+Tieli	Тели	CN
+Ipiales	Ипьялес	CO
+Catanduva	Катандува	BR
+Szombathely	Сомбатхей	HU
+Heihe	Хэйхэ	CN
+Siem Reap	Сиемреап	KH
+Szolnok	Сольнок	HU
+Sergiyev Posad	Сергиев Посад	RU
+Tumbes	Тумбес	PE
+Matagalpa	Матагальпа	NI
+Leninsk-Kuznetsky	Ленинск-Кузнецкий	RU
+Soubré	Субре	CI
+Kaposvár	Капошвар	HU
+Mopti	Мопти	ML
+Trincomalee	Тринкомали	LK
+Nehe	Нэхэ	CN
+Kyzyl	Кызыл	RU
+Mascara	Маскара	DZ
+Birnin Kebbi	Бирнин-Кебби	NG
+En Nahud	Эн-Нухуд	SD
+Estelí	Эстели	NI
+Barletta	Барлетта	IT
+Trento	Тренто	IT
+Kagan	Каган	UZ
+Râmnicu Vâlcea	Рымнику-Вылча	RO
+Koszalin	Кошалин	PL
+Obninsk	Обнинск	RU
+Luxembourg	Люксембург	LU
+Västerås	Вестерос	SE
+Chapayevsk	Чапаевск	RU
+Luang Prabang	Луангпхабанг	LA
+Ilebo	Илебо	CD
+Golmud	Голмуд	CN
+Apucarana	Апукарана	BR
+Pardubice	Пардубице	CZ
+Ratchaburi	Ратбури	TH
+Elista	Элиста	RU
+Taungoo	Тауннгу	MM
+Coimbra	Коимбра	PT
+Drobeta-Turnu Severin	Дробета-Турну-Северин	RO
+Longjiang	Лунцзян	CN
+Namur	Намюр	BE
+Novotroitsk	Новотроицк	RU
+Raba	Раба	ID
+Bagé	Баже	BR
+Derbent	Дербент	RU
+Suceava	Сучава	RO
+Salto	Сальто	UY
+Azare	Азаре	NG
+Lahad Datu	Лахад-Дату	MY
+Sa'dah	Саада	YE
+Assab	Асэб	ER
+Kon Tum	Контум	VN
+Fresnillo	Фреснильо	MX
+Lugano	Лугано	CH
+Hòa Bình	Хоабинь	VN
+Yevpatoria	Евпатория	RU
+Kongolo	Конголо	CD
+Jizan	Джизан	SA
+Focșani	Фокшаны	RO
+Linhares	Линьярис	BR
+Cottbus	Котбус	DE
+Koutiala	Кутиала	ML
+Prijedor	Приедор	BA
+Jena	Йена	DE
+Gera	Гера	DE
+Torbat-e Jam	Торбете-Джам	IR
+Nong Khai	Нонгкхай	TH
+Brindisi	Бриндизи	IT
+Mmabatho	Ммабато	ZA
+Jezkazgan	Жезказган	KZ
+Tandil	Тандиль	AR
+Maumere	Маумере	ID
+Albury	Олбери	AU
+Qamishli	Эль-Камышлы	SY
+Adigrat	Адди-Грат	ET
+Abengourou	Абенгуру	CI
+Kiselyovsk	Киселёвск	RU
+Kroonstad	Крунстад	ZA
+Ad-Damir	Эд-Дамер	SD
+Dolisie	Лубомо	CG
+Kilinochchi	Килиноччи	LK
+Ahar	Ахар	IR
+Biak	Биак	ID
+Gardēz	Гардез	AF

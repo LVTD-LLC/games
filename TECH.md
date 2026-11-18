@@ -472,3 +472,13 @@ slug. The existing three /api/ namespaces are supported for compatibility.
 The legacy hostname uses ops/legacy-games-redirect.ejs inside the CapRover
 HTTPS server block. The default CapRover hostname still serves revision and
 health checks directly.
+
+## Quiz Club
+
+The standalone game and its JSON API live under `/quiz-club/`. Vite development and the assembled preview both serve rooms locally. The production games service holds rooms and scores in memory on its single replica. A tab keeps a random bearer credential in session storage for reconnection. A code or invite link admits a new player while the lobby has space. Inactive seats expire after two minutes. Empty rooms and their scores disappear. A service restart ends active games.
+
+Set `OPENROUTER_API_KEY` only in the games service environment. When two to ten players are ready, the server requests ten localized questions using `google/gemma-4-31b-it:free` with `openrouter/free` as its free fallback. The request has a zero-price ceiling, an 18-second deadline, and a process limit of 50 requests per 24 hours and three simultaneous requests. Only the room language and topic go upstream. If credentials, capacity, or a valid response are unavailable, the room draws ten questions locally. Every device receives the same questions and shuffled choices. The server owns deadlines, scores, and answer reveals.
+
+Each language supports 2,400 art questions from bilingual painting and artist labels in Wikidata (CC0), 2,400 city questions from Natural Earth's public-domain populated places, and 2,400 arithmetic and logic problems. UTF-8 tab-separated rows in `services/quiz-club/data/` hold English and Russian names plus artist labels or the ISO country code. Number questions are indexed by problem type and operands. Distractors are chosen at play time. No external data download is required at build or play time.
+
+Sources: [Wikidata structured data](https://www.wikidata.org/wiki/Wikidata:Licensing), [Natural Earth populated places](https://www.naturalearthdata.com/downloads/10m-cultural-vectors/10m-populated-places/), [OpenRouter free models](https://openrouter.ai/openrouter/free).
