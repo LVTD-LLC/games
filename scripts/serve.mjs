@@ -1,13 +1,17 @@
+import { createQuizApi } from '../services/quiz-club/http.mjs';
 import { createServer, request } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { createLifeProxy } from '../services/life-proxy.mjs';
 const life = createLifeProxy({ origin: 'http://localhost:4173' });
+const quiz = createQuizApi();
 const root = path.resolve('dist');
 const types = {
   '.html': 'text/html; charset=utf-8',
   '.js': 'text/javascript',
   '.css': 'text/css',
+  '.webp': 'image/webp',
+  '.woff2': 'font/woff2',
   '.svg': 'image/svg+xml',
   '.json': 'application/json',
   '.txt': 'text/plain',
@@ -17,6 +21,7 @@ createServer(async (req, res) => {
     res.writeHead(302, { Location: '/games/' + req.url.slice(1) });
     return res.end();
   }
+  if (req.url.startsWith('/quiz-club/api/')) return quiz.handle(req, res);
   if (req.url.startsWith('/api/life/')) return life(req, res);
   if (
     req.url.startsWith('/api/jess/') ||

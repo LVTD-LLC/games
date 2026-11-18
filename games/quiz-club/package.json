@@ -1,0 +1,14 @@
+{
+  "name": "@lvtd-games/quiz-club",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite --host"
+  },
+  "devDependencies": {
+    "vite": "8.3.0",
+    "@fontsource/barlow-condensed": "5.2.8",
+    "@fontsource/dm-sans": "5.2.8"
+  }
+}

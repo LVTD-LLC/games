@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-11-18 — Quiz Club
+
+- Add ten-question multiplayer trivia in English and Russian, with invite codes, public matchmaking, free OpenRouter generation and a built-in bilingual question bank.
+
 ## 2026-11-18 — Studio navigation
 
 - Carry the LVTD fire-heart and a consistent return link through all five games. Use the studio palette and navigation in the catalogue.

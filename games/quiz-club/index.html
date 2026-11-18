@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#085c50" />
+    <meta
+      name="description"
+      content="A multiplayer trivia game for 2–10 friends. Play ten questions in English or Russian, join with a code, or find a public table."
+    />
+    <title>Quiz Club · LVTD Games</title>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <a class="studio-link" href="/games/">LVTD / Games</a>
+        <nav>
+          <button id="rules" class="quiet"></button
+          ><select id="locale" aria-label="Language / Язык">
+            <option value="en">English</option>
+            <option value="ru">Русский</option>
+          </select>
+        </nav>
+      </header>
+      <main id="main"></main>
+      <p id="notice" role="status"></p>
+    </div>
+    <dialog id="dialog" aria-labelledby="dialog-heading">
+      <form id="dialog-form"></form>
+    </dialog>
+    <noscript
+      >Quiz Club needs JavaScript. Для игры включите JavaScript.</noscript
+    >
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

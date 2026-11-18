@@ -48,5 +48,15 @@
     "path": "games/jess",
     "language": "en",
     "logo": "/logos/jess.svg"
+  },
+  {
+    "slug": "quiz-club",
+    "title": "Quiz Club",
+    "description": "Meet friends at a private table or join a public ten-question trivia round in English or Russian.",
+    "category": "Trivia",
+    "duration": "3–7 minutes",
+    "path": "games/quiz-club",
+    "language": "en",
+    "logo": "/logos/quiz-club.webp"
   }
 ]

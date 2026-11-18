@@ -1,5 +1,6 @@
 import { spawn } from 'node:child_process';
 // Only the browser-test runner starts this fixture. Never imported by production.
+import { createQuestionSource } from '../services/quiz-club/questions.mjs';
 import { gamesServer } from '../services/server.mjs';
 import { openStore } from '../services/corporate-bs-api/store.mjs';
 import { testDatabase } from './database.mjs';
@@ -38,6 +39,7 @@ for (let attempt = 0; ; attempt++) {
 }
 
 gamesServer({
+  quiz: { questions: createQuestionSource({ apiKey: null }), revealMs: 2400 },
   store,
   judge,
   chooseJess: async (chess) => {
