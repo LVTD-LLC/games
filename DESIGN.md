@@ -6,15 +6,7 @@ their intended language via `lang` from the registry.
 
 ## Visual direction
 
-Purple is the main color: dark violet canvas, brighter violet actions, lavender
-accents, and off-white text. Phaser.io is the requested color/feel reference, not
-an asset source or a layout to clone. Canonical CSS tokens live in
-`apps/site/src/layouts/Catalogue.astro`:
-
-- Canvas `#1b1033`; row `#2c194b`; hover `#38205e`.
-- Action purple `#8950ef`; lavender/focus `#cfb5ff`.
-- Text `#faf7ff`; borders `#503475`.
-- System Arial/Helvetica/sans-serif; no third-party font requests.
+Use the studio's warm paper (#faf9f5), dark ink (#252820), hairline rules and serif catalogue headings. The fire-heart marks the link back to the collection inside every game. Its shared CSS lives in `shared/studio.css`; each game bundles it independently.
 
 ## Layout and content
 
@@ -24,9 +16,7 @@ an asset source or a layout to clone. Canonical CSS tokens live in
 - Registry data supplies logos and titles. Never hard-code one game's artwork
   into the catalogue component. Logos have empty alt text when the adjacent title
   already names the game; decorative arrows are hidden from assistive technology.
-- Desktop content is at most 1040px wide. Rows use generous 28px padding and a
-  104px logo. At 600px and below, use 20px padding, a 72px logo, and a full-width
-  Play treatment below the title. Keep 320px screens free of horizontal overflow.
+- Keep titles, summaries and game logos readable at 320px and on desktop.
 - Use the same layout and palette for the English 404 page, with a direct home link.
 - No eyebrows, tiny annotations, slogans, hero pitches, category/duration badges,
   counts, coming-soon placeholders, decorative footnotes, or filler sections.

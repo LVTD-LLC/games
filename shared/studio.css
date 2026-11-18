@@ -1,0 +1,30 @@
+a.studio-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 40px;
+  padding: 4px 9px;
+  background: #faf9f5;
+  border: 1px solid #d8d6cf;
+  border-radius: 4px;
+  color: #242720;
+  text-decoration: none;
+  font:
+    600 14px/1.1 system-ui,
+    sans-serif;
+  letter-spacing: -0.025em;
+  white-space: nowrap;
+}
+.studio-link::before {
+  content: '';
+  width: 22px;
+  height: 22px;
+  background: url('./heart.png') center / contain no-repeat;
+}
+a.studio-link:hover {
+  border-color: #797c72;
+}
+a.studio-link:focus-visible {
+  outline: 2px solid #9a432a;
+  outline-offset: 3px;
+}

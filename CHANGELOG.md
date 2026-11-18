@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-11-18 — Studio navigation
+
+- Carry the LVTD fire-heart and a consistent return link through all five games. Use the studio palette and navigation in the catalogue.
+
 ## 2026-11-17 — Sequential arcade releases
 
 - Wait for the native engine before deploying the games app, then check the public catalogue and every registered game URL.
