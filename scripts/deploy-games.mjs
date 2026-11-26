@@ -1,6 +1,5 @@
 import { readFile } from 'node:fs/promises';
-import { setTimeout as delay } from 'node:timers/promises';
-import { deploy, uploadApp } from './deploy-caprover.mjs';
+import { deploy } from './deploy-caprover.mjs';
 
 const gitSha = process.argv[3];
 if (
@@ -19,7 +18,8 @@ if (
   throw new Error('Unexpected deployment target');
 
 // Separate app tokens: the native service cannot deploy the website or vice versa.
-await uploadApp({
+await deploy({
+  productionUrl,
   server,
   appName: 'games-life',
   appToken: process.env.LIFE_CAPROVER_APP_TOKEN,
@@ -27,29 +27,6 @@ await uploadApp({
   archive,
 });
 
-// The engine has no public ingress. Verify it through the website's fixed proxy.
-let verified = false;
-for (let attempt = 0; attempt < 120; attempt++) {
-  try {
-    const response = await fetch(`${productionUrl}/api/life/health`, {
-      cache: 'no-store',
-      signal: AbortSignal.timeout(10000),
-    });
-    const health = await response.json();
-    if (
-      response.ok &&
-      health.ready &&
-      health.revision === gitSha &&
-      health.protocol === 1
-    ) {
-      verified = true;
-      break;
-    }
-  } catch {}
-  await delay(5000);
-}
-if (!verified)
-  throw new Error('Native engine did not serve the tested revision');
 // Submit the web build only after the native deployment has left CapRover's queue.
 await deploy({
   server,

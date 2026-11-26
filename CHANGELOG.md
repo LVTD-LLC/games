@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-11-26 — Meadow keyboard lessons
+
+- Add English to Мышкина полянка, two new mouse activities, and four keyboard lessons with touch controls.
+- Recover from transient CapRover base-image timeouts per app and verify the tested revision before continuing.
+
 ## 2026-11-26 — Мышкина полянка
 
 - Add a Russian picture-book meadow with three untimed lessons for learning to point, click, and drag.

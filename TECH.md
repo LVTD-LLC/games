@@ -56,6 +56,8 @@ CapRover app `games` runs a Node 24 server: static game packages plus server-sid
 
 The **CI** workflow validates PRs/main against a disposable PostgreSQL service. **Deploy to CapRover** follows successful main CI, checks out the tested SHA, skips superseded commits, and uploads tracked source plus `/deploy-revision.txt`. The app-scoped `CAPROVER_APP_TOKEN` (app `games`) and `LIFE_CAPROVER_APP_TOKEN` (app `games-life`) are the only credentials needed. There is no per-game API or database deployment in CI. The server applies committed migrations before accepting traffic; startup fails if a migration fails or an applied migration was changed. Container health checks verify a database query.
 
+Each app upload waits for CapRover's build response. A Docker base-image resolution timeout retries the same archive once. If the HTTP connection times out first, deployment polls the live revision before deciding whether to resubmit. Rerunning a release skips an app already serving the tested SHA. Both apps must serve that SHA before the public checks run.
+
 The legacy hostname `games.lvtd.dev` redirects to the main domain. The backend runs on app `games` on the CapRover instance `captain.cr.lvtd.dev` (138.201.126.181). Deployment verifies the exact SHA using `https://games.cr.lvtd.dev/deploy-revision.txt`; also smoke-test the public game and health routes.
 
 ### Shared database and migrations
