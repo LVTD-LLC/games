@@ -58,5 +58,15 @@
     "path": "games/quiz-club",
     "language": "en",
     "logo": "/logos/quiz-club.webp"
+  },
+  {
+    "slug": "mouse-meadow",
+    "title": "Мышкина полянка",
+    "description": "Meet butterflies, open flowers, and pick berries while learning to move, click, and drag with a mouse.",
+    "category": "Learning games",
+    "duration": "Open-ended",
+    "path": "games/mouse-meadow",
+    "language": "ru",
+    "logo": "/logos/mouse-meadow.webp"
   }
 ]
