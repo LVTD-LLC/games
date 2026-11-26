@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-11-26 — Мышкина полянка
+
+- Add a Russian picture-book meadow with three untimed lessons for learning to point, click, and drag.
+
 ## 2026-11-18 — Quiz Club
 
 - Add ten-question multiplayer trivia in English and Russian, with invite codes, public matchmaking, free OpenRouter generation and a built-in bilingual question bank.

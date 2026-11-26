@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#faf7ee" />
+    <title>Мышкина полянка · LVTD Games</title>
+    <meta
+      name="description"
+      content="Маленькая полянка для первых игр с компьютерной мышкой."
+    />
+    <link rel="icon" href="./src/art/mouse.webp" />
+  </head>
+  <body>
+    <header class="top">
+      <div class="bar">
+        <div class="brand">
+          <img src="./src/art/mouse.webp" alt="" /><span>Мышкина полянка</span>
+        </div>
+        <div class="tools">
+          <button
+            id="sound"
+            aria-pressed="false"
+            aria-label="Звук"
+            title="Звук"
+          >
+            <span data-icon="muted"></span><span class="sound-label">Звук</span>
+          </button>
+          <button id="parents">
+            <span data-icon="help"></span><span>Родителям</span>
+          </button>
+        </div>
+      </div>
+    </header>
+    <main>
+      <div class="lesson-head">
+        <div class="lesson-tag">
+          <span class="dot"></span><span id="step"></span>
+        </div>
+        <h1 id="title"></h1>
+        <p id="instruction"></p>
+      </div>
+      <section class="frame" aria-labelledby="title">
+        <div id="field">
+          <div class="counter" aria-live="polite" aria-atomic="true">
+            <img id="count-art" alt="" /><span id="count"></span>
+          </div>
+          <div id="objects"></div>
+          <div id="hint" aria-hidden="true">
+            <span data-icon="pointer"></span>
+          </div>
+        </div>
+      </section>
+      <div id="result" role="status" hidden>
+        <strong>Получилось!</strong><button id="advance"></button
+        ><button id="again">Ещё раз</button>
+      </div>
+      <section aria-labelledby="choose">
+        <div class="section-head">
+          <h2 id="choose">Выбери урок</h2>
+          <div class="rule"></div>
+        </div>
+        <div id="lessons"></div>
+      </section>
+      <noscript>Чтобы играть, включите JavaScript.</noscript>
+    </main>
+    <dialog id="guide" aria-labelledby="guide-title">
+      <button class="close" aria-label="Закрыть">
+        <span data-icon="close"></span>
+      </button>
+      <h2 id="guide-title">Родителям</h2>
+      <p>
+        Начните с бабочек. Покажите одну, а потом дайте ребёнку самому подвести
+        к ней стрелку. На сенсорном экране можно коснуться бабочки пальцем.
+      </p>
+      <p>
+        На следующей полянке щёлкайте по бутонам, а затем попробуйте унести
+        ягодки в корзинку. Ягодку и корзинку можно также нажать по очереди.
+      </p>
+      <p>
+        Любой урок можно повторить. Кнопка со звуком включает тихие ноты и
+        подсказки, если в браузере есть русский голос.
+      </p>
+      <div class="dialog-foot">
+        <button id="resume">Продолжить игру</button
+        ><a class="studio-link" href="/games/">LVTD / Games</a>
+      </div>
+    </dialog>
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>

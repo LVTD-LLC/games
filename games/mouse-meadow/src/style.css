@@ -1,0 +1,620 @@
+@import '@fontsource-variable/nunito/wght.css';
+@import '../../../shared/studio.css';
+
+:root {
+  font-family: 'Nunito Variable', ui-rounded, system-ui, sans-serif;
+  color: #304437;
+  background: #faf7ee;
+  font-synthesis: none;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  min-width: 280px;
+}
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+button:focus-visible {
+  outline: 3px solid #254f85;
+  outline-offset: 3px;
+}
+button svg {
+  pointer-events: none;
+}
+button,
+a {
+  touch-action: manipulation;
+}
+.top {
+  border-bottom: 1px solid #dddccc;
+  background: #f5f1e5;
+}
+.bar,
+main {
+  width: min(1120px, calc(100% - 80px));
+  margin: auto;
+}
+.bar,
+.tools,
+.brand,
+.tools button,
+.dialog-foot,
+.section-head,
+.counter,
+.lesson-tag {
+  display: flex;
+  align-items: center;
+}
+.bar {
+  justify-content: space-between;
+  padding: 15px 0;
+  gap: 12px;
+}
+.brand {
+  font-weight: 900;
+  font-size: clamp(20px, 2.25vw, 29px);
+  letter-spacing: -1.2px;
+  gap: 11px;
+}
+.brand img {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: 2px solid #fff8e6;
+  box-shadow: 0 0 0 1px #cdcbb9;
+}
+.tools {
+  gap: 10px;
+}
+.tools button,
+.close,
+#resume,
+#advance,
+#again {
+  border: 1.5px solid #cccdbd;
+  background: #fffdf5;
+  border-radius: 24px;
+  font-weight: 800;
+  min-height: 42px;
+  padding: 8px 15px;
+  gap: 8px;
+}
+.tools button:hover,
+#again:hover,
+.close:hover {
+  background: #e9ecdc;
+}
+.tools button[aria-pressed='true'] {
+  background: #e0ecd9;
+}
+.glyph {
+  display: block;
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+main {
+  padding: 31px 0 40px;
+}
+.lesson-head {
+  margin-bottom: 20px;
+}
+.lesson-tag {
+  display: inline-flex;
+  color: #4f6342;
+  background: #e5ebd9;
+  font-weight: 850;
+  font-size: 13px;
+  gap: 8px;
+  padding: 4px 11px;
+  border-radius: 18px;
+}
+.dot {
+  background: #6a884c;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+h1,
+h2,
+p {
+  margin: 0;
+}
+h1 {
+  font-size: clamp(32px, 3.4vw, 48px);
+  line-height: 1.1;
+  font-weight: 900;
+  letter-spacing: -1.8px;
+  margin: 9px 0 5px;
+}
+.lesson-head p {
+  color: #596453;
+  font-size: clamp(16px, 1.5vw, 19px);
+  font-weight: 600;
+}
+.frame {
+  padding: 6px;
+  background: #fffdf5;
+  border-radius: 24px;
+  border: 1px solid #d4d2be;
+  box-shadow: 0 4px 0 #e1decb;
+}
+#field {
+  width: 100%;
+  isolation: isolate;
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 3 / 1;
+  min-height: 260px;
+  background: #b6d3bc url('./art/meadow.webp') center/100% 100% no-repeat;
+  border-radius: 18px;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+#objects {
+  position: absolute;
+  inset: 0;
+}
+.counter {
+  position: absolute;
+  top: 15px;
+  left: 16px;
+  z-index: 2;
+  gap: 8px;
+  border-radius: 20px;
+  padding: 5px 12px;
+  background: #fffbed;
+  box-shadow: 0 2px 0 #554d3024;
+  pointer-events: none;
+  font-size: 15px;
+  font-weight: 900;
+}
+.counter img {
+  width: 23px;
+  height: 23px;
+  object-fit: contain;
+}
+.piece,
+.basket {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  transform: translate(-50%, -50%);
+  width: clamp(60px, 8vw, 106px);
+  height: clamp(64px, 8.4vw, 110px);
+  border: 0;
+  background: transparent;
+  border-radius: 40%;
+  padding: 4px;
+  touch-action: none;
+}
+.piece img,
+.basket img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  filter: drop-shadow(0 3px 1px #5d58303b);
+}
+.piece.butterfly img {
+  animation: flutter 3.8s ease-in-out infinite;
+  animation-delay: var(--delay);
+}
+@keyframes flutter {
+  0%,
+  100% {
+    transform: translateY(2px) rotate(-5deg);
+  }
+  50% {
+    transform: translateY(-4px) rotate(4deg);
+  }
+}
+.butterfly.done img {
+  animation:
+    greet 0.8s ease-out,
+    flutter 3.8s 0.8s ease-in-out infinite;
+}
+@keyframes greet {
+  40% {
+    transform: translateY(-24%) rotate(-14deg) scale(1.12);
+  }
+}
+.piece.done:after {
+  content: '✓';
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  border-radius: 100%;
+  background: #fff9dc;
+  color: #45603d;
+  font-size: 16px;
+  font-weight: 900;
+  width: 22px;
+  height: 22px;
+}
+.piece.berry {
+  width: clamp(48px, 6vw, 75px);
+  height: clamp(57px, 7vw, 85px);
+  cursor: grab;
+}
+.piece.selected {
+  outline: 3px dashed #fff8df;
+  outline-offset: 2px;
+}
+.piece.dragging {
+  cursor: grabbing;
+  z-index: 3;
+}
+.basket {
+  width: clamp(86px, 13vw, 158px);
+  height: clamp(90px, 13vw, 158px);
+}
+.basket.ready {
+  outline: 3px dashed #fff8df;
+}
+.berry-in {
+  position: absolute;
+  width: 25% !important;
+  height: 27% !important;
+  left: var(--left);
+  top: 42%;
+  transform: rotate(var(--tilt));
+}
+#hint {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  pointer-events: none;
+  transform: translate(20px, 16px);
+  animation: show-how 3.4s ease-in-out infinite;
+  filter: drop-shadow(0 2px 1px #3c392b60);
+  color: #384436;
+}
+#hint .glyph {
+  width: 34px;
+  height: 34px;
+  fill: #fffdf0;
+  stroke-width: 1.7;
+}
+#hint.carry {
+  animation: show-drag 4.5s ease-in-out infinite;
+  transform: translate(-10%, -10%);
+}
+#hint.carry::before {
+  content: '';
+  position: absolute;
+  width: 24px;
+  height: 28px;
+  left: -15px;
+  top: -18px;
+  background: url('./art/berry.webp') center/contain no-repeat;
+}
+@keyframes show-drag {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  16%,
+  32% {
+    opacity: 0.85;
+    left: var(--x);
+    top: var(--y);
+  }
+  72%,
+  82% {
+    opacity: 0.85;
+    left: var(--basket-x);
+    top: var(--basket-y);
+  }
+  92% {
+    opacity: 0;
+    left: var(--basket-x);
+    top: var(--basket-y);
+  }
+}
+@keyframes show-how {
+  0%,
+  100% {
+    translate: 12px 10px;
+  }
+  50%,
+  70% {
+    translate: 0 0;
+  }
+}
+.ripple {
+  position: absolute;
+  pointer-events: none;
+  width: 15px;
+  height: 15px;
+  border: 3px solid #fff7cd;
+  border-radius: 50%;
+  animation: ripple 0.65s forwards;
+}
+@keyframes ripple {
+  from {
+    transform: translate(-50%, -50%) scale(0.4);
+    opacity: 0.9;
+  }
+  to {
+    transform: translate(-50%, -50%) scale(3.3);
+    opacity: 0;
+  }
+}
+.section-head {
+  gap: 17px;
+  margin: 24px 0 12px;
+}
+h2 {
+  font-weight: 900;
+  font-size: 23px;
+  letter-spacing: -0.8px;
+}
+.rule {
+  height: 1px;
+  background: #dadac7;
+  flex: 1;
+}
+#lessons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.lesson {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-align: left;
+  background: #fffcf3;
+  border: 1.5px solid #d9d7c6;
+  border-radius: 17px;
+  padding: 14px;
+  min-height: 87px;
+  position: relative;
+}
+.lesson:hover {
+  background: #f2f2e5;
+}
+.lesson[aria-current='true'] {
+  background: #edf1e2;
+  border: 2px solid #788a60;
+  padding: 13.5px;
+  box-shadow: 0 2px 0 #b6bfa3;
+}
+.thumb {
+  background: #f6e6d3;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  width: 57px;
+  height: 57px;
+  flex: none;
+}
+.lesson:nth-child(2) .thumb {
+  background: #f6e2d9;
+}
+.lesson:nth-child(3) .thumb {
+  background: #f2e6ca;
+}
+.thumb img {
+  width: 75%;
+  height: 78%;
+  object-fit: contain;
+}
+.lesson strong,
+.lesson small {
+  display: block;
+}
+.lesson strong {
+  font-size: 19px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+}
+.lesson small {
+  color: #5b6654;
+  font-size: 14px;
+  font-weight: 650;
+}
+.lesson .mark {
+  margin-left: auto;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: #697e51;
+  width: 21px;
+  height: 21px;
+  flex: none;
+  border-radius: 50%;
+}
+.mark .glyph {
+  width: 15px;
+  height: 15px;
+  stroke-width: 2.5;
+}
+[hidden] {
+  display: none !important;
+}
+#result {
+  margin-top: 15px;
+  padding: 10px 15px;
+  background: #edf1df;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 16px;
+}
+#result strong {
+  margin-right: auto;
+}
+#advance,
+#resume {
+  background: #506842;
+  color: white;
+  border-color: #506842;
+}
+dialog {
+  color: inherit;
+  border: 1px solid #cfccb8;
+  border-radius: 22px;
+  background: #faf7ee;
+  width: min(450px, 90vw);
+  padding: 28px;
+  box-shadow: 0 10px 50px #2b3b2c33;
+}
+dialog::backdrop {
+  background: #2d3d3290;
+}
+dialog p {
+  margin: 14px 0;
+  line-height: 1.48;
+}
+.close {
+  float: right;
+  display: grid;
+  place-items: center;
+  padding: 9px;
+}
+.dialog-foot {
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+@media (max-width: 800px) {
+  .bar,
+  main {
+    width: calc(100% - 40px);
+  }
+  .lesson {
+    gap: 8px;
+    padding: 10px;
+  }
+  .lesson[aria-current='true'] {
+    padding: 9.5px;
+  }
+  .thumb {
+    width: 44px;
+    height: 48px;
+  }
+  .lesson strong {
+    font-size: 16px;
+  }
+  .lesson small {
+    font-size: 12px;
+  }
+  .lesson .mark {
+    width: 17px;
+    height: 17px;
+  }
+}
+@media (max-width: 620px) {
+  .bar,
+  main {
+    width: calc(100% - 28px);
+  }
+  .bar {
+    padding: 11px 0;
+  }
+  .brand {
+    gap: 7px;
+    font-size: 19px;
+  }
+  .brand img {
+    width: 34px;
+    height: 34px;
+  }
+  .tools {
+    gap: 5px;
+  }
+  .tools button {
+    width: 44px;
+    height: 44px;
+    justify-content: center;
+    padding: 0;
+  }
+  .tools button span:not([data-icon]) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  main {
+    padding-top: 20px;
+  }
+  .lesson-head {
+    margin-bottom: 15px;
+  }
+  h1 {
+    font-size: 32px;
+  }
+  .frame {
+    padding: 4px;
+    border-radius: 18px;
+  }
+  #field {
+    min-height: 245px;
+    border-radius: 14px;
+    background-size: auto 100%;
+    background-position: 12% center;
+  }
+  .counter {
+    top: 9px;
+    left: 9px;
+  }
+  .section-head {
+    margin: 20px 0 10px;
+  }
+  #lessons {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .lesson,
+  .lesson[aria-current='true'] {
+    padding: 9px 13px;
+    gap: 12px;
+    min-height: 62px;
+  }
+  .lesson strong {
+    font-size: 17px;
+  }
+  .lesson small {
+    font-size: 13px;
+  }
+  .thumb {
+    width: 43px;
+    height: 43px;
+  }
+  .lesson .mark {
+    width: 21px;
+    height: 21px;
+  }
+  #result {
+    flex-wrap: wrap;
+  }
+  .dialog-foot {
+    gap: 12px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  .ripple {
+    display: none;
+  }
+}

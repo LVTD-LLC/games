@@ -12,3 +12,4 @@ A collection of browser games by LVTD. Play at [lvtd.dev/games/](https://lvtd.de
 | Game of Life       | Draw cells, explore classic patterns, and fast-forward a native Bend simulation.                              | English          | [Play](https://lvtd.dev/game-of-life/)       |
 | Jess               | Beat Jev in the fewest moves, see its move probabilities, and join the top-ten ranking.                       | English          | [Play](https://lvtd.dev/jess/)               |
 | Quiz Club          | Play ten trivia questions with up to ten people in a private or public room.                                  | English, Russian | [Play](https://lvtd.dev/quiz-club/)          |
+| Мышкина полянка    | Explore a meadow and learn to move, click, and drag with a mouse.                                             | Russian          | [Play](https://lvtd.dev/mouse-meadow/)       |
