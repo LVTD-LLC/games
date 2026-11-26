@@ -15,19 +15,27 @@
     <header class="top">
       <div class="bar">
         <div class="brand">
-          <img src="./src/art/mouse.webp" alt="" /><span>Мышкина полянка</span>
+          <img src="./src/art/mouse.webp" alt="" /><span data-copy="brand"
+            >Мышкина полянка</span
+          >
         </div>
         <div class="tools">
+          <select id="language" aria-label="Язык игры">
+            <option value="ru" lang="ru">Русский</option>
+            <option value="en" lang="en">English</option>
+          </select>
           <button
             id="sound"
             aria-pressed="false"
             aria-label="Звук"
             title="Звук"
           >
-            <span data-icon="muted"></span><span class="sound-label">Звук</span>
+            <span data-icon="muted"></span
+            ><span class="sound-label" data-copy="sound">Звук</span>
           </button>
           <button id="parents">
-            <span data-icon="help"></span><span>Родителям</span>
+            <span data-icon="help"></span
+            ><span data-copy="parents">Родителям</span>
           </button>
         </div>
       </div>
@@ -41,23 +49,26 @@
         <p id="instruction"></p>
       </div>
       <section class="frame" aria-labelledby="title">
-        <div id="field">
+        <div id="field" role="group" tabindex="-1">
           <div class="counter" aria-live="polite" aria-atomic="true">
             <img id="count-art" alt="" /><span id="count"></span>
           </div>
+          <div id="sample" hidden><img alt="" /></div>
           <div id="objects"></div>
           <div id="hint" aria-hidden="true">
             <span data-icon="pointer"></span>
           </div>
         </div>
+        <div id="key-controls" hidden></div>
       </section>
       <div id="result" role="status" hidden>
-        <strong>Получилось!</strong><button id="advance"></button
-        ><button id="again">Ещё раз</button>
+        <strong data-copy="success">Получилось!</strong
+        ><button id="advance"></button
+        ><button id="again" data-copy="again">Ещё раз</button>
       </div>
       <section aria-labelledby="choose">
         <div class="section-head">
-          <h2 id="choose">Выбери урок</h2>
+          <h2 id="choose" data-copy="choose">Выбери урок</h2>
           <div class="rule"></div>
         </div>
         <div id="lessons"></div>
@@ -68,22 +79,13 @@
       <button class="close" aria-label="Закрыть">
         <span data-icon="close"></span>
       </button>
-      <h2 id="guide-title">Родителям</h2>
-      <p>
-        Начните с бабочек. Покажите одну, а потом дайте ребёнку самому подвести
-        к ней стрелку. На сенсорном экране можно коснуться бабочки пальцем.
-      </p>
-      <p>
-        На следующей полянке щёлкайте по бутонам, а затем попробуйте унести
-        ягодки в корзинку. Ягодку и корзинку можно также нажать по очереди.
-      </p>
-      <p>
-        Любой урок можно повторить. Кнопка со звуком включает тихие ноты и
-        подсказки, если в браузере есть русский голос.
-      </p>
+      <h2 id="guide-title" data-copy="parents">Родителям</h2>
+      <div id="guide-copy"></div>
       <div class="dialog-foot">
-        <button id="resume">Продолжить игру</button
-        ><a class="studio-link" href="/games/">LVTD / Games</a>
+        <button id="resume" data-copy="resume">Продолжить игру</button
+        ><a class="studio-link" href="/games/" data-copy="collection"
+          >LVTD / Games</a
+        >
       </div>
     </dialog>
     <script type="module" src="./src/main.js"></script>

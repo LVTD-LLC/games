@@ -1,4 +1,6 @@
 import './style.css';
+import { lessons, languages } from './lessons.js';
+import { keyboardLesson } from './keyboard.js';
 
 const $ = (id) => document.getElementById(id);
 const art = import.meta.glob('./art/*.webp', {
@@ -20,54 +22,16 @@ document.querySelectorAll('[data-icon]').forEach((node) => {
   node.innerHTML = icon(node.dataset.icon);
 });
 
-const lessons = [
-  {
-    title: 'В гости к бабочкам',
-    action: 'Двигаем мышкой',
-    name: 'Бабочки',
-    prompt: 'Подведи стрелку к каждой бабочке, чтобы поздороваться.',
-    touch: 'Коснись каждой бабочки, чтобы поздороваться.',
-    cover: 'coral',
-    kind: 'butterfly',
-    label: 'Бабочка',
-    pieces: ['coral', 'blue', 'gold'],
-    spots: [
-      [32, 48],
-      [55, 29],
-      [76, 58],
-    ],
-  },
-  {
-    title: 'Разбуди цветочки',
-    action: 'Учимся щёлкать',
-    name: 'Цветочки',
-    prompt: 'Нажми на каждый бутон, и цветочек раскроется.',
-    cover: 'flower',
-    kind: 'bud',
-    label: 'Бутон',
-    pieces: ['bud', 'bud', 'bud'],
-    spots: [
-      [30, 70],
-      [51, 59],
-      [76, 71],
-    ],
-  },
-  {
-    title: 'Собери ягодки',
-    action: 'Перетаскиваем',
-    name: 'Ягодки',
-    prompt: 'Зажми ягодку, перенеси в корзинку и отпусти.',
-    cover: 'berry',
-    kind: 'berry',
-    label: 'Ягодка',
-    pieces: ['berry', 'berry', 'berry'],
-    spots: [
-      [24, 66],
-      [45, 48],
-      [51, 76],
-    ],
-  },
-];
+const languageKey = 'lvtd-mouse-meadow-v1:language';
+let language = 'ru';
+try {
+  if (localStorage.getItem(languageKey) === 'en') language = 'en';
+} catch {}
+const copy = () => languages[language];
+const words = () => copy().activities[step().kind];
+let removeKeyboard;
+let stopHold;
+const matchOrder = [1, 0, 2];
 const done = lessons.map(() => new Set());
 let current = 0;
 let selectedBerry = null;
@@ -80,18 +44,18 @@ const guide = $('guide');
 const basketSpot = [81, 68];
 const touch = matchMedia('(hover: none)');
 const step = () => lessons[current];
-const prompt = () => (touch.matches && step().touch) || step().prompt;
+const prompt = () => (touch.matches && words().touch) || words().prompt;
 
 function speak(message) {
   if (!sound || !window.speechSynthesis || !window.SpeechSynthesisUtterance)
     return;
+  speechSynthesis.cancel();
   const voice = speechSynthesis
     .getVoices()
-    .find((voice) => /^ru(-|_|$)/i.test(voice.lang));
+    .find((voice) => voice.lang.toLowerCase().split(/[-_]/)[0] === language);
   if (!voice) return;
   const phrase = new SpeechSynthesisUtterance(message);
-  Object.assign(phrase, { lang: 'ru-RU', voice, rate: 0.9 });
-  speechSynthesis.cancel();
+  Object.assign(phrase, { lang: voice.lang, voice, rate: 0.9 });
   speechSynthesis.speak(phrase);
 }
 // Load the browser's voice list before the first requested hint.
@@ -133,6 +97,10 @@ function place(node, [x, y]) {
   node.style.setProperty('--y', y + '%');
 }
 function refreshHint() {
+  if (step().key || step().kind === 'match') {
+    $('hint').hidden = true;
+    return;
+  }
   const next = step().pieces.findIndex((_, i) => !done[current].has(i));
   const hint = $('hint');
   hint.hidden = next < 0 || !!drag;
@@ -150,19 +118,36 @@ function updateProgress() {
   $('count').textContent = `${count} / 3`;
   $('result').hidden = count !== 3;
   $('advance').hidden = current === lessons.length - 1;
-  $('advance').textContent = 'Следующий урок →';
+  $('advance').textContent = copy().advance;
+  $('sample').hidden = step().kind !== 'match' || count === 3;
+  if (!$('sample').hidden) {
+    const i = matchOrder[count];
+    const img = $('sample').querySelector('img');
+    img.src = picture(step().pieces[i]);
+    img.alt = copy().match + ' · ' + butterflyColor(i);
+  }
   refreshHint();
+}
+function butterflyColor(i) {
+  return (
+    language === 'en'
+      ? ['Orange butterfly', 'Blue butterfly', 'Yellow butterfly']
+      : ['Оранжевая бабочка', 'Синяя бабочка', 'Жёлтая бабочка']
+  )[i];
 }
 function decorate(node, i) {
   const finished = done[current].has(i);
   node.classList.toggle('done', finished);
   node.hidden = step().kind === 'berry' && finished;
-  node.querySelector('img').src = picture(
-    step().kind === 'bud' && finished ? 'flower' : step().pieces[i],
-  );
+  if (step().kind === 'rain') {
+    node.querySelector('.plant').src = picture(finished ? 'flower' : 'bud');
+  }
+  const art = finished && step().kind === 'bud' ? 'flower' : step().pieces[i];
+  node.querySelector('img').src = picture(art);
+  const label = step().kind === 'match' ? butterflyColor(i) : words().label;
   node.setAttribute(
     'aria-label',
-    `${step().label} ${i + 1}${finished ? ' — готово' : ''}`,
+    `${label} ${i + 1}${finished ? ' — ' + copy().finished : ''}`,
   );
 }
 function updateBasket() {
@@ -180,15 +165,18 @@ function updateBasket() {
     basket.append(berry);
   });
 }
-function finishPiece(i) {
-  if (done[current].has(i)) return;
+function record(i) {
   done[current].add(i);
-  decorate(objects.querySelector(`[data-piece="${i}"]`), i);
-  selectedBerry = null;
-  updateBasket();
   updateProgress();
   chime(done[current].size);
-  if (done[current].size === 3) speak('Получилось!');
+  if (done[current].size === 3) speak(copy().success);
+}
+function finishPiece(i) {
+  if (done[current].has(i)) return;
+  selectedBerry = null;
+  record(i);
+  decorate(objects.querySelector(`[data-piece="${i}"]`), i);
+  updateBasket();
 }
 function selectBerry(node, i) {
   selectedBerry = i;
@@ -249,21 +237,70 @@ function attachBerry(node, i) {
     if (e.detail === 0) selectBerry(node, i);
   };
 }
-function loadLesson(index) {
+function attachCloud(node, i) {
+  function start() {
+    stopHold?.();
+    if (done[current].has(i)) return;
+    node.classList.add('watering');
+    const timer = setTimeout(() => {
+      stopHold?.();
+      finishPiece(i);
+    }, 650);
+    stopHold = () => {
+      clearTimeout(timer);
+      node.classList.remove('watering');
+      stopHold = null;
+    };
+  }
+  const stop = () => {
+    if (node.classList.contains('watering')) stopHold?.();
+  };
+  node.onpointerdown = (e) => {
+    if (e.isPrimary && e.button === 0) {
+      node.setPointerCapture(e.pointerId);
+      start();
+    }
+  };
+  node.onpointerup = node.onpointercancel = node.onlostpointercapture = stop;
+  node.onkeydown = (e) => {
+    if (['Enter', ' '].includes(e.key)) {
+      e.preventDefault();
+      if (!e.repeat) start();
+    }
+  };
+  node.onkeyup = node.onblur = stop;
+}
+function loadLesson(index, focus = false) {
+  stopHold?.();
+  removeKeyboard?.();
+  removeKeyboard = null;
   resetDrag();
   selectedBerry = null;
   current = index;
   const lesson = step();
-  $('title').textContent = lesson.title;
+  $('title').textContent = words().title;
   $('instruction').textContent = prompt();
-  $('step').textContent = `Урок ${index + 1} из 3`;
+  $('step').textContent = copy().step(index + 1, lessons.length);
   $('count-art').src = picture(lesson.cover);
   objects.replaceChildren();
+  $('key-controls').hidden = !lesson.key;
+  if (lesson.key) {
+    removeKeyboard = keyboardLesson({
+      lesson,
+      copy: copy(),
+      picture,
+      field,
+      controls: $('key-controls'),
+      scene: objects,
+      count: () => done[current].size,
+      advance: () => record(done[current].size),
+    });
+  }
   if (lesson.kind === 'berry') {
     const basket = document.createElement('button');
     basket.id = 'basket';
     basket.className = 'basket';
-    basket.setAttribute('aria-label', 'Корзинка');
+    basket.setAttribute('aria-label', copy().basket);
     basket.innerHTML = `<img alt="" draggable="false" src="${picture('basket')}">`;
     place(basket, basketSpot);
     objects.append(basket);
@@ -272,17 +309,26 @@ function loadLesson(index) {
     };
     updateBasket();
   }
-  lesson.pieces.forEach((_, i) => {
+  lesson.pieces?.forEach((_, i) => {
     const node = document.createElement('button');
     node.className = 'piece ' + lesson.kind;
     node.dataset.piece = i;
     node.innerHTML = '<img alt="" draggable="false">';
+    if (lesson.kind === 'rain')
+      node.insertAdjacentHTML(
+        'beforeend',
+        '<img class="plant" alt="" draggable="false">',
+      );
     node.style.setProperty('--delay', i * -0.87 + 's');
     place(node, lesson.spots[i]);
     decorate(node, i);
     if (lesson.kind === 'berry') attachBerry(node, i);
+    else if (lesson.kind === 'rain') attachCloud(node, i);
     else {
-      node.onclick = () => finishPiece(i);
+      node.onclick = () => {
+        if (lesson.kind !== 'match' || matchOrder[done[current].size] === i)
+          finishPiece(i);
+      };
       if (lesson.kind === 'butterfly')
         node.onpointerenter = (e) => {
           if (e.pointerType !== 'touch') finishPiece(i);
@@ -295,22 +341,59 @@ function loadLesson(index) {
     node.querySelector('.mark').hidden = i !== current;
   });
   updateProgress();
+  if (focus) {
+    field.focus({ preventScroll: true });
+    document.querySelector('.lesson-head').scrollIntoView({ block: 'nearest' });
+  }
   speak(prompt());
 }
-lessons.forEach((lesson, i) => {
-  const node = document.createElement('button');
-  node.className = 'lesson';
-  node.innerHTML = `<span class="thumb"><img alt="" src="${picture(lesson.cover)}"></span><span><strong>${lesson.name}</strong><small>${lesson.action}</small></span><span class="mark">${icon('check')}</span>`;
-  node.onclick = () => loadLesson(i);
-  $('lessons').append(node);
-});
+function renderLanguage() {
+  const c = copy();
+  document.documentElement.lang = language;
+  document.title = c.brand + ' · LVTD Games';
+  document.querySelector('meta[name="description"]').content = c.description;
+  document
+    .querySelectorAll('[data-copy]')
+    .forEach((node) => (node.textContent = c[node.dataset.copy]));
+  $('language').value = language;
+  $('language').setAttribute('aria-label', c.language);
+  $('sound').setAttribute('aria-label', c.sound);
+  $('sound').title = c.sound;
+  guide.querySelector('.close').setAttribute('aria-label', c.close);
+  field.setAttribute('aria-label', c.playArea);
+  $('guide-copy').replaceChildren(
+    ...c.help.map((text) => {
+      const p = document.createElement('p');
+      p.textContent = text;
+      return p;
+    }),
+  );
+  $('lessons').replaceChildren();
+  lessons.forEach((lesson, i) => {
+    const { name, action } = c.activities[lesson.kind];
+    const node = document.createElement('button');
+    node.className = 'lesson';
+    node.innerHTML = `<span class="thumb"><img alt="" src="${picture(lesson.cover)}"></span><span><strong>${name}</strong><small>${action}</small></span><span class="mark">${icon('check')}</span>`;
+    node.onclick = () => loadLesson(i, true);
+    $('lessons').append(node);
+  });
+}
+$('language').onchange = (e) => {
+  language = e.target.value;
+  try {
+    localStorage.setItem(languageKey, language);
+  } catch {}
+  renderLanguage();
+  loadLesson(current, Boolean(step().key));
+};
 $('again').onclick = () => {
   done[current].clear();
-  loadLesson(current);
+  loadLesson(current, true);
 };
-$('advance').onclick = () => loadLesson(current + 1);
+$('advance').onclick = () => loadLesson(current + 1, true);
 $('parents').onclick = () => {
   resetDrag();
+  stopHold?.();
   window.speechSynthesis?.cancel();
   guide.showModal();
 };
@@ -327,5 +410,9 @@ field.onpointerdown = (e) => {
   field.append(ring);
   setTimeout(() => ring.remove(), 700);
 };
-window.addEventListener('blur', resetDrag);
+window.addEventListener('blur', () => {
+  resetDrag();
+  stopHold?.();
+});
+renderLanguage();
 loadLesson(0);

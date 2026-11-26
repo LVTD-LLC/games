@@ -618,3 +618,170 @@ dialog p {
     display: none;
   }
 }
+
+#language {
+  font: inherit;
+  font-size: 15px;
+  font-weight: 800;
+  border: 1.5px solid #cccdbd;
+  border-radius: 22px;
+  background: #fffdf5;
+  color: inherit;
+  min-height: 44px;
+  padding: 0 9px;
+}
+#sample {
+  position: absolute;
+  left: 50%;
+  top: 6%;
+  transform: translateX(-50%);
+  width: clamp(58px, 7vw, 82px);
+  height: clamp(58px, 7vw, 82px);
+  border: 3px solid #f5edcf;
+  border-radius: 15px;
+  background: #fffbed;
+  box-shadow: 0 2px 0 #73774755;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+#sample img {
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+}
+#field:focus-visible {
+  outline: 3px solid #526f86;
+  outline-offset: -3px;
+}
+#key-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 9px;
+  padding: 11px 0 6px;
+  font-weight: 850;
+}
+.keycap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-width: 80px;
+  min-height: 45px;
+  font-weight: 850;
+  border-radius: 10px;
+  border: 1px solid #acb59e;
+  border-bottom-width: 4px;
+  background: #f0f2e6;
+}
+.keycap.space-bar {
+  min-width: min(56%, 210px);
+}
+.keycap b {
+  font-size: 24px;
+  line-height: 1;
+}
+.keycap[aria-pressed='true'],
+.keycap:active {
+  background: #dbe9bc;
+  border-bottom-width: 1px;
+}
+.key-picture {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: clamp(50px, 8vw, 105px);
+  height: clamp(52px, 8.4vw, 108px);
+  object-fit: contain;
+  pointer-events: none;
+}
+.mound {
+  position: absolute;
+  top: 71%;
+  transform: translateX(-50%);
+  background: #879155 url('./art/meadow.webp') 63% 79% / 920% auto;
+  border-radius: 80% 80% 32% 42%;
+  width: 15%;
+  height: 9%;
+  border-bottom: 3px solid #677147;
+}
+.hop {
+  animation: frog-hop 0.42s ease-out;
+}
+@keyframes frog-hop {
+  0% {
+    margin-left: -22%;
+  }
+  45% {
+    translate: 0 -45%;
+  }
+}
+.hatch {
+  animation: peep 0.35s ease-out;
+}
+@keyframes peep {
+  0% {
+    scale: 0.7;
+  }
+  60% {
+    scale: 1.1;
+  }
+}
+.fly {
+  animation: lift 0.55s ease-out;
+}
+@keyframes lift {
+  from {
+    top: 66%;
+    rotate: -10deg;
+  }
+}
+.watering::before {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 10%;
+  width: 80%;
+  height: 7px;
+  border-radius: 100px;
+  background: #3d8294;
+  transform-origin: left;
+  animation: water 0.65s linear;
+}
+@keyframes water {
+  from {
+    transform: scaleX(0);
+  }
+}
+@media (max-width: 620px) {
+  .bar {
+    flex-wrap: wrap;
+  }
+  .tools {
+    margin-left: auto;
+  }
+  #language {
+    font-size: 14px;
+  }
+  .brand span {
+    line-height: 1.12;
+  }
+  .brand {
+    flex: 1;
+  }
+  .brand img {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+.piece.rain .plant {
+  position: absolute;
+  left: 15%;
+  top: 110%;
+  width: 70%;
+  height: 67%;
+}
+.piece.rain.done > img:first-child {
+  opacity: 0.5;
+}

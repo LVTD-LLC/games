@@ -44,7 +44,8 @@ test('rejected uploads fail without polling production or exposing the response 
     await assert.rejects(
       deploy({
         ...fixture,
-        request: async () => {
+        request: async (_, options) => {
+          if (options.method !== 'POST') return new Response('old');
           calls++;
           return response;
         },
@@ -68,5 +69,92 @@ test('a build that never reaches production fails after a bounded number of poll
     }),
     /did not serve the expected revision/,
   );
-  assert.equal(polls, fixture.attempts);
+  assert.equal(polls, fixture.attempts + 1);
+});
+
+test('retries only the timed-out image build and verifies native readiness', async () => {
+  let uploads = 0,
+    polls = 0;
+  await deploy({
+    ...fixture,
+    appName: 'games-life',
+    request: async (url, opts) => {
+      if (opts.method === 'POST') {
+        assert.equal(new URL(url).search, '');
+        uploads++;
+        if (uploads === 1)
+          return Response.json({
+            status: 1109,
+            description:
+              'failed to resolve source metadata for node:24: context deadline exceeded',
+          });
+        return Response.json({ status: 100 });
+      }
+      assert.equal(new URL(url).pathname, '/api/life/health');
+      polls++;
+      return Response.json({
+        revision: fixture.gitSha,
+        ready: uploads === 2 && polls > 3,
+        protocol: 1,
+      });
+    },
+  });
+  assert.equal(uploads, 2);
+});
+
+test('reconciles a lost proxy response and skips already live apps', async () => {
+  let live = false,
+    uploads = 0;
+  const run = () =>
+    deploy({
+      ...fixture,
+      request: async (_, opts) => {
+        if (opts.method === 'POST') {
+          uploads++;
+          live = true;
+          return new Response(null, { status: 504 });
+        }
+        return new Response(live ? fixture.gitSha : 'old');
+      },
+    });
+  await run();
+  await run();
+  assert.equal(uploads, 1);
+});
+
+test('does not retry application build errors or expose their details', async () => {
+  let uploads = 0;
+  await assert.rejects(
+    deploy({
+      ...fixture,
+      request: async (_, opts) => {
+        if (opts.method !== 'POST') return new Response('old');
+        uploads++;
+        return Response.json({
+          status: 1109,
+          description: 'private application build error',
+        });
+      },
+    }),
+    /^Error: CapRover rejected deployment \(status 1109\)\.$/,
+  );
+  assert.equal(uploads, 1);
+});
+
+test('an unconfirmed upload that never appears gets at most one resubmission', async () => {
+  let uploads = 0;
+  await assert.rejects(
+    deploy({
+      ...fixture,
+      request: async (_, opts) => {
+        if (opts.method === 'POST') {
+          uploads++;
+          return new Response(null, { status: 504 });
+        }
+        return new Response('still old');
+      },
+    }),
+    /did not serve the expected revision/,
+  );
+  assert.equal(uploads, 2);
 });
